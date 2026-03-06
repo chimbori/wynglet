@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"strings"
 
-	"butterfly.chimbori.dev/core"
 	"butterfly.chimbori.dev/db"
 	"github.com/lmittmann/tint"
 )
@@ -123,9 +122,9 @@ func isAuthorized(authorizeAction string) *bool {
 	case "":
 		return nil
 	case "allow":
-		return core.Ptr(true)
+		return new(true)
 	case "block":
-		return core.Ptr(false)
+		return new(false)
 	}
 	return nil
 }

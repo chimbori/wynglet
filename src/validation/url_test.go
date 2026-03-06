@@ -5,7 +5,6 @@ import (
 	"os"
 	"testing"
 
-	"butterfly.chimbori.dev/core"
 	"butterfly.chimbori.dev/db"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -47,8 +46,8 @@ func TestValidateUrl_RejectsUnauthorizedDomains(t *testing.T) {
 	// Setup: Add authorized domains to database
 	_, err := queries.UpsertDomain(ctx, db.UpsertDomainParams{
 		Domain:            "chimbori.com",
-		IncludeSubdomains: core.Ptr(true),
-		Authorized:        core.Ptr(true),
+		IncludeSubdomains: new(true),
+		Authorized:        new(true),
 	})
 	if err != nil {
 		t.Fatalf("Failed to insert test domain: %v", err)
@@ -56,8 +55,8 @@ func TestValidateUrl_RejectsUnauthorizedDomains(t *testing.T) {
 
 	_, err = queries.UpsertDomain(ctx, db.UpsertDomainParams{
 		Domain:            "manas.tungare.name",
-		IncludeSubdomains: core.Ptr(false),
-		Authorized:        core.Ptr(true),
+		IncludeSubdomains: new(false),
+		Authorized:        new(true),
 	})
 	if err != nil {
 		t.Fatalf("Failed to insert test domain: %v", err)
@@ -199,8 +198,8 @@ func TestValidateUrl_AddsHttpsPrefix(t *testing.T) {
 	// Add authorized domain to database
 	_, err := queries.UpsertDomain(ctx, db.UpsertDomainParams{
 		Domain:            "chimbori.com",
-		IncludeSubdomains: core.Ptr(true),
-		Authorized:        core.Ptr(true),
+		IncludeSubdomains: new(true),
+		Authorized:        new(true),
 	})
 	if err != nil {
 		t.Fatalf("Failed to insert test domain: %v", err)
