@@ -1,6 +1,6 @@
 module butterfly.chimbori.dev
 
-go 1.25.7
+go 1.26.1
 
 require (
 	github.com/HugoSmits86/nativewebp v1.2.1
