@@ -20,7 +20,7 @@ Just one step: Paste the Butterfly `<meta>` tag into the original page, and you�
 ### Use your Own Templates
 
 1. Create a new hidden element inside your existing Web page, using whatever framework or template engine you use today.
-   E.g. here’s a [simple example](assets/example.html):
+   E.g. here’s a [simple example](docs/source/example.html):
 
     ```html
     <div id="link-preview" style="display: none; width: 1200px;">
