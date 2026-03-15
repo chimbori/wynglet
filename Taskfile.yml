@@ -96,10 +96,11 @@ tasks:
       - tailwindcss --content "**/*.templ" --input embedfs/static/src.css --output embedfs/static/gen.min.css --minify
 
   esbuild:
-    desc: Bundle and minify JavaScript with esbuild
+    desc: Bundle and minify TypeScript with esbuild
     dir: "src"
     cmds:
-      - esbuild dashboard/dashboard.js --bundle --minify --outfile=embedfs/static/dashboard.min.js --target=es2020
+      - esbuild dashboard/dashboard.ts --bundle --target=es2020 --outfile=embedfs/static/dashboard.js
+      - esbuild dashboard/dashboard.ts --bundle --target=es2020 --outfile=embedfs/static/dashboard.min.js --minify
 
   update:
     desc: Update all dependencies

@@ -1,2 +1,4 @@
 .DS_Store
 data/cache
+# Un-minified JavaScript files are generated for debugging, but should not be committed or served to users.
+src/embedfs/static/dashboard.js

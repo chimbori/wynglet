@@ -35,7 +35,11 @@ templ ContentTempl(title string, contents templ.Component) {
 				@FooterTempl()
 			</main>
 		</body>
-		<script src="/static/dashboard.min.js"></script>
+		if conf.Config.Debug {
+			<script src="/static/dashboard.js"></script>
+		} else {
+			<script src="/static/dashboard.min.js"></script>
+		}
 	</html>
 }
 

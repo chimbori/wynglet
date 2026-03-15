@@ -1,8 +1,27 @@
 /**
  * @fileoverview Renders charts for link preview statistics on the dashboard.
  */
-export function initLinkPreviewsCharts() {
-  function init() {
+
+declare const Chart: any;
+
+interface DomainStat {
+  Domain: string;
+  TotalAccesses: number;
+}
+
+interface UserAgentStat {
+  Day: string;
+  CanonicalUserAgent: string;
+  TotalAccesses: number;
+}
+
+interface ChartDatasets {
+  labels: string[];
+  datasets: { label: string; data: number[] }[];
+}
+
+export function initLinkPreviewsCharts(): void {
+  function init(): void {
     initDomainChart();
     initUserAgentChart();
   }
@@ -13,8 +32,8 @@ export function initLinkPreviewsCharts() {
   }
 }
 
-async function initDomainChart() {
-  const canvas = document.getElementById('linkpreviews-domain-chart');
+async function initDomainChart(): Promise<void> {
+  const canvas = document.getElementById('linkpreviews-domain-chart') as HTMLCanvasElement | null;
   if (!canvas) {
     return;
   }
@@ -26,7 +45,7 @@ async function initDomainChart() {
       return;
     }
 
-    const stats = await response.json();
+    const stats: DomainStat[] = await response.json();
     if (stats.length === 0) {
       console.log('No link preview data available');
       return;
@@ -61,29 +80,31 @@ async function initDomainChart() {
   }
 }
 
-function initUserAgentChart() {
-  const canvas = document.getElementById('linkpreviews-useragents-chart');
+function initUserAgentChart(): void {
+  const canvas = document.getElementById('linkpreviews-useragents-chart') as HTMLCanvasElement | null;
   if (!canvas) {
     return;
   }
 
   const rangeContainer = document.getElementById('linkpreviews-useragents-range');
-  const rangeButtons = rangeContainer ? rangeContainer.querySelectorAll('button[data-days]') : [];
+  const rangeButtons: NodeListOf<HTMLButtonElement> = rangeContainer
+    ? rangeContainer.querySelectorAll('button[data-days]')
+    : document.querySelectorAll('button[data-days].never-matches');
 
-  let chart = null;
+  let chart: any = null;
   let currentDays = 7;
 
-  function setActiveButton(days) {
+  function setActiveButton(days: number): void {
     rangeButtons.forEach(button => {
       const isActive = Number(button.dataset.days) === days;
       button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
     });
   }
 
-  function buildDatasets(stats) {
-    const labelSet = new Set();
-    const agentSet = new Set();
-    const totalsByAgent = new Map();
+  function buildDatasets(stats: UserAgentStat[]): ChartDatasets {
+    const labelSet = new Set<string>();
+    const agentSet = new Set<string>();
+    const totalsByAgent = new Map<string, number>();
 
     stats.forEach(row => {
       labelSet.add(row.Day);
@@ -96,7 +117,7 @@ function initUserAgentChart() {
 
     const labels = Array.from(labelSet).sort((a, b) => b.localeCompare(a));
     const agents = Array.from(agentSet).sort((a, b) => (totalsByAgent.get(b) || 0) - (totalsByAgent.get(a) || 0));
-    const matrix = new Map();
+    const matrix = new Map<string, number>();
 
     stats.forEach(row => {
       const key = `${row.Day}::${row.CanonicalUserAgent}`;
@@ -111,7 +132,7 @@ function initUserAgentChart() {
     return { labels, datasets };
   }
 
-  async function loadChart(days) {
+  async function loadChart(days: number): Promise<void> {
     try {
       const response = await fetch(`/dashboard/link-previews/user-agents?days=${days}`);
       if (!response.ok) {
@@ -119,7 +140,7 @@ function initUserAgentChart() {
         return;
       }
 
-      const stats = await response.json();
+      const stats: UserAgentStat[] = await response.json();
       if (stats.length === 0) {
         console.log('No user agent data available');
         return;
