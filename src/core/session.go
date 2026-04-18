@@ -16,7 +16,7 @@ type SessionStore interface {
 	Create() (string, error)
 	IsValid(id string) bool
 	Delete(id string)
-	CleanupExpired() int
+	CleanupExpired() int64
 }
 
 type InMemorySessionStore struct {
@@ -74,11 +74,11 @@ func (s *InMemorySessionStore) Delete(id string) {
 }
 
 // CleanupExpired removes all expired sessions from the map.
-func (s *InMemorySessionStore) CleanupExpired() int {
+func (s *InMemorySessionStore) CleanupExpired() int64 {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	count := 0
+	var count int64 = 0
 	now := time.Now()
 	for id, session := range s.sessions {
 		if now.Sub(session.CreatedAt) > s.ttl {
