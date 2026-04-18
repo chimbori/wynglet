@@ -3,6 +3,7 @@ package core
 import (
 	"net"
 	"net/http"
+	"strings"
 )
 
 // GetOutboundIP returns the preferred outbound IP address of this machine.
@@ -36,7 +37,15 @@ func SecurityHeaders(next http.Handler) http.Handler {
 		w.Header().Set("X-Frame-Options", "DENY")
 		w.Header().Set("Referrer-Policy", "no-referrer")
 		w.Header().Set("Permissions-Policy", "geolocation=(), microphone=(), camera=()")
-		w.Header().Set("Content-Security-Policy", "default-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'")
+		w.Header().Set("Content-Security-Policy", strings.Join([]string{
+			"default-src 'self'",
+			"img-src 'self' data:",
+			"script-src 'self'",
+			"style-src 'self' 'unsafe-inline'",
+			"object-src 'none'",
+			"base-uri 'self'",
+			"frame-ancestors 'none'",
+		}, "; "))
 
 		next.ServeHTTP(w, r)
 	})
