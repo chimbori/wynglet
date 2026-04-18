@@ -75,9 +75,6 @@
       @apply mt-6;
     }
   }
-  a:any-link {
-    @apply border-b;
-  }
   a:link:has(:not(img)) {
     @apply border-b;
   }

@@ -669,10 +669,6 @@
       margin-top: calc(var(--spacing) * 6);
     }
   }
-  a:any-link {
-    border-bottom-style: var(--tw-border-style);
-    border-bottom-width: 1px;
-  }
   a:link:has(:not(img)) {
     border-bottom-style: var(--tw-border-style);
     border-bottom-width: 1px;
