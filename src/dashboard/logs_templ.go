@@ -412,6 +412,9 @@ func LogsTableTempl(logs []db.Log) templ.Component {
 
 func calculateLogsTotalPages(totalCount int64) int64 {
 	limit := int64(conf.Config.Logs.Pagination.Limit)
+	if limit == 0 {
+		return 0
+	}
 	return (totalCount + (limit - 1)) / limit
 }
 
