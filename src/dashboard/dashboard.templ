@@ -54,6 +54,7 @@ templ NavBar() {
 		<a href="/dashboard" title="Home"><img src="/static/favicon.svg"/></a>
 		<a href={ "/dashboard/link-previews" } title="Link Previews"><img src="/static/tooltip-image.svg"/></a>
 		<a href={ "/dashboard/qr-codes" } title="QR Codes"><img src="/static/qrcode.svg"/></a>
+		<a href={ "/dashboard/ratings" } title="Ratings"><img src="/static/thumbs-up-down.svg"/></a>
 		<a href={ "/dashboard/domains" } title="Domains"><img src="/static/web.svg"/></a>
 		<a href={ "/dashboard/logs" } title="Logs"><img src="/static/clipboard-text-clock-outline.svg"/></a>
 	</nav>
@@ -70,6 +71,10 @@ templ HomeTempl(appName string) {
 			<a href={ "/dashboard/qr-codes" } title="QR Codes">
 				<img class="p-6" src={ "/static/qrcode.svg" }/>
 				<span class="mt-4">QR Codes</span>
+			</a>
+			<a href={ "/dashboard/ratings" } title="Ratings">
+				<img class="p-6" src={ "/static/thumbs-up-down.svg" }/>
+				<span class="mt-4">Ratings</span>
 			</a>
 			<a href={ "/dashboard/domains" } title="Domains">
 				<img class="p-6" src={ "/static/web.svg" }/>
