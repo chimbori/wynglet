@@ -3,11 +3,13 @@ package dashboard
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"image"
 	_ "image/png"
 	"log/slog"
 	"net/http"
+	"os"
 	"runtime"
 	"strconv"
 
@@ -102,12 +104,24 @@ func deleteLinkPreviewHandler(w http.ResponseWriter, req *http.Request) {
 
 	// Delete the cached file from disk
 	if err := linkpreviews.DeleteCached(url); err != nil {
-		slog.Warn("failed to delete cached file", tint.Err(err),
+		slog.Warn("failed to delete cached link preview file", tint.Err(err),
 			"method", req.Method,
 			"path", req.URL.Path,
 			"url", url,
 			"status", http.StatusInternalServerError)
 		// Continue anyway to remove from the database
+	}
+
+	// Delete the cached thumbnail from disk
+	if ThumbnailCache != nil {
+		if err := ThumbnailCache.Delete(url); err != nil && !errors.Is(err, os.ErrNotExist) {
+			slog.Warn("failed to delete cached thumbnail file", tint.Err(err),
+				"method", req.Method,
+				"path", req.URL.Path,
+				"url", url,
+				"status", http.StatusInternalServerError)
+			// Continue anyway to remove from the database
+		}
 	}
 
 	// Delete the row from the database

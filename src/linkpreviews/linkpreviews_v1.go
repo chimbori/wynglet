@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log/slog"
 	"net/http"
+	"os"
 	"path/filepath"
 	"regexp"
 
@@ -221,5 +222,12 @@ func recordLinkPreviewAccessed(url string, canonicalUserAgent string) {
 
 // DeleteCached removes a cached screenshot file from disk.
 func DeleteCached(url string) error {
-	return Cache.Delete(url)
+	if Cache == nil {
+		return nil
+	}
+	err := Cache.Delete(url)
+	if errors.Is(err, os.ErrNotExist) {
+		return nil
+	}
+	return err
 }
