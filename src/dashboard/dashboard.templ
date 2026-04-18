@@ -1,7 +1,11 @@
 package dashboard
 
-import "fmt"
-import "butterfly.chimbori.dev/conf"
+import (
+	"butterfly.chimbori.dev/conf"
+	"butterfly.chimbori.dev/embedfs"
+	"fmt"
+	"net/url"
+)
 
 var S = fmt.Sprint
 var F = fmt.Sprintf
@@ -90,6 +94,21 @@ templ ErrorTempl(msg string) {
 
 templ FooterTempl() {
 	<footer class="mt-16 mb-8">
+		<p class="print:hidden mb-4">
+			{{ currentURL := "https://butterfly.chimbori.dev/" }}
+			<a class="btn-sharing" target="_blank" href={ "https://bsky.app/intent/compose?text=" + url.QueryEscape(currentURL) } title="Share on BlueSky">
+				@embedfs.BlueSkyIcon
+			</a>
+			<a class="btn-sharing" target="_blank" href={ "https://www.reddit.com/submit?url=" + url.QueryEscape(currentURL) } title="Share on Reddit">
+				@embedfs.RedditIcon
+			</a>
+			<a class="btn-sharing" target="_blank" href={ "https://www.linkedin.com/shareArticle?mini=true&url=" + url.QueryEscape(currentURL) } title="Share on LinkedIn">
+				@embedfs.LinkedInIcon
+			</a>
+			<a class="btn-sharing" target="_blank" href={ "https://news.ycombinator.com/submitlink?u=" + url.QueryEscape(currentURL) } title="Share on Hacker News">
+				@embedfs.HackerNewsIcon
+			</a>
+		</p>
 		<a
 			target="_blank"
 			href="https://butterfly.chimbori.dev"

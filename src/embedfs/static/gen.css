@@ -599,6 +599,11 @@
       color: var(--color-yellow-400);
     }
   }
+  .print\:hidden {
+    @media print {
+      display: none;
+    }
+  }
 }
 @font-face {
   font-family: InterVariable;
