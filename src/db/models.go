@@ -45,3 +45,12 @@ type QrCode struct {
 	LastAccessedAt *time.Time
 	AccessCount    *int32
 }
+
+type Rating struct {
+	ID        int64
+	Url       string
+	Ui        string
+	Rating    int16
+	IpAddress string
+	RatedAt   time.Time
+}
