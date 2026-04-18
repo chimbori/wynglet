@@ -58,6 +58,9 @@ type AppConfig struct {
 			MaxSizeBytes int64         `yaml:"max_size_bytes"`
 		} `yaml:"cache"`
 	} `yaml:"qr-codes"`
+	Ratings struct {
+		Retention time.Duration `yaml:"retention"`
+	} `yaml:"ratings"`
 	Debug bool `yaml:"debug"`
 }
 
@@ -137,6 +140,10 @@ func setDefaultsAndPrint(c *AppConfig) {
 	}
 	if c.Logs.Pagination.Limit == 0 {
 		c.Logs.Pagination.Limit = 100
+	}
+
+	if c.Ratings.Retention == 0 {
+		c.Ratings.Retention = 365 * 24 * time.Hour
 	}
 
 	// Print warnings for unsafe settings, just as FYI.

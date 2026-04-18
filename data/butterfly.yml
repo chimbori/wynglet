@@ -31,3 +31,6 @@ link-previews:
 qr-codes:
   cache:
     # enabled: true
+
+ratings:
+  retention: "8760h" # 365 days
