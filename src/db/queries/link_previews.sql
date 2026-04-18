@@ -14,6 +14,10 @@ SELECT COUNT(*) FROM link_previews;
 SELECT * FROM link_previews
   WHERE url = $1;
 
+-- name: GetExistingLinkPreviewURLs :many
+SELECT url FROM link_previews
+  WHERE url = ANY($1::text[]);
+
 -- name: DeleteLinkPreview :exec
 DELETE FROM link_previews
   WHERE url = $1;

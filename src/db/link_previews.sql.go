@@ -39,6 +39,31 @@ func (q *Queries) DeleteLinkPreview(ctx context.Context, url string) error {
 	return err
 }
 
+const getExistingLinkPreviewURLs = `-- name: GetExistingLinkPreviewURLs :many
+SELECT url FROM link_previews
+  WHERE url = ANY($1::text[])
+`
+
+func (q *Queries) GetExistingLinkPreviewURLs(ctx context.Context, dollar_1 []string) ([]string, error) {
+	rows, err := q.db.Query(ctx, getExistingLinkPreviewURLs, dollar_1)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []string
+	for rows.Next() {
+		var url string
+		if err := rows.Scan(&url); err != nil {
+			return nil, err
+		}
+		items = append(items, url)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getLinkPreview = `-- name: GetLinkPreview :one
 SELECT _id, url, generated_at, last_accessed_at, access_count, canonical_user_agent FROM link_previews
   WHERE url = $1
