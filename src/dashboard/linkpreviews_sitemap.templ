@@ -1,0 +1,95 @@
+package dashboard
+
+import "butterfly.chimbori.dev/linkpreviews"
+
+templ SitemapImportPageTempl(status *linkpreviews.SitemapImportStatus, errorMessage string) {
+	@ContentTempl("Import Link Previews from Sitemap", NilTemplate()) {
+		<p>Fetch a <code>sitemap.xml</code>, validate each URL, and pre-generate cached link previews.</p>
+		<section class="flex flex-col">
+			if errorMessage != "" {
+				@ErrorTempl(errorMessage)
+			}
+			<form method="post" action="/dashboard/link-previews/sitemap" class="flex flex-wrap gap-4 items-center">
+				<input
+					class="min-w-80 grow"
+					id="sitemap_url"
+					name="sitemap_url"
+					type="url"
+					placeholder="https://example.com/sitemap.xml"
+					required
+					value={ func() string {
+								if status == nil {
+									return ""
+								}
+								return status.SitemapURL
+							}() }
+				/>
+				<button type="submit" class="btn-submit">Start Import</button>
+			</form>
+		</section>
+		<section>
+			<div
+				id="sitemap-import-status"
+				if status != nil && status.InProgress {
+					hx-get="/dashboard/link-previews/sitemap/status"
+					hx-trigger="every 1s"
+					hx-swap="outerHTML"
+				}
+			>
+				@SitemapImportStatusTempl(status)
+			</div>
+		</section>
+	}
+}
+
+templ SitemapImportStatusTempl(status *linkpreviews.SitemapImportStatus) {
+	<div
+		id="sitemap-import-status"
+		class="flex flex-col gap-4"
+		if status != nil && status.InProgress {
+			hx-get="/dashboard/link-previews/sitemap/status"
+			hx-trigger="every 1s"
+			hx-swap="outerHTML"
+		}
+	>
+		<div class="flex items-center justify-between gap-4 flex-wrap">
+			<div>
+				<p>{ sitemapImportSummary(status) }</p>
+			</div>
+			if status != nil && status.InProgress {
+				<button
+					hx-post="/dashboard/link-previews/sitemap/cancel"
+					hx-target="#sitemap-import-status"
+					hx-swap="outerHTML"
+					class="btn-neutral"
+				>Cancel</button>
+			}
+		</div>
+		<div class="flex flex-col gap-2">
+			<div class="h-4 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-gray-900">
+				<div class="h-full bg-blue-500 transition-all duration-300" style={ "width: " + F("%d%%", sitemapImportProgress(status)) }></div>
+			</div>
+			if status != nil {
+				<div class="flex flex-wrap gap-4 text-sm">
+					<span>Total: { F("%d", status.TotalURLs) }</span>
+					•
+					<span>Completed: { F("%d", status.Completed) }</span>
+					•
+					<span>Skipped: { F("%d", status.Skipped) }</span>
+					•
+					<span>Failed: { F("%d", status.Failed) }</span>
+				</div>
+			}
+		</div>
+		if status != nil && len(status.Errors) > 0 {
+			<div class="flex flex-col gap-2">
+				<h3>Recent Errors</h3>
+				<ul>
+					for _, err := range status.Errors {
+						<li>{ err }</li>
+					}
+				</ul>
+			</div>
+		}
+	</div>
+}
