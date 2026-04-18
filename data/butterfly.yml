@@ -22,6 +22,9 @@ logs:
 link-previews:
   screenshot:
     # timeout: 20s
+  sitemap:
+    # concurrent_urls: 4
+    # max_urls: 1000
   cache:
     # enabled: false
 

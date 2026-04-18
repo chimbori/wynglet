@@ -41,6 +41,10 @@ type AppConfig struct {
 		Screenshot struct {
 			Timeout time.Duration `yaml:"timeout"`
 		} `yaml:"screenshot"`
+		Sitemap struct {
+			ConcurrentURLs int `yaml:"concurrent_urls"`
+			MaxURLs        int `yaml:"max_urls"`
+		} `yaml:"sitemap"`
 		Cache struct {
 			Enabled      *bool         `yaml:"enabled"`
 			TTL          time.Duration `yaml:"ttl"`
@@ -111,6 +115,12 @@ func setDefaultsAndPrint(c *AppConfig) {
 	}
 	if c.LinkPreviews.Screenshot.Timeout == 0 {
 		c.LinkPreviews.Screenshot.Timeout = 20 * time.Second
+	}
+	if c.LinkPreviews.Sitemap.ConcurrentURLs == 0 {
+		c.LinkPreviews.Sitemap.ConcurrentURLs = 4
+	}
+	if c.LinkPreviews.Sitemap.MaxURLs == 0 {
+		c.LinkPreviews.Sitemap.MaxURLs = 1000
 	}
 
 	// Cache for QR Codes is enabled by default; only disable it when testing or debugging.
