@@ -1,4 +1,6 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+
+@source "**/*.{md,html,templ}";
 
 @font-face {
   font-family: InterVariable;
@@ -51,17 +53,21 @@
     @apply font-sans;
   }
   body {
-    @apply
-      box-border text-sm/8
+    @apply box-border text-sm/8
       bg-slate-100 dark:bg-slate-900
       text-slate-500 dark:text-slate-400
       flex flex-col md:flex-row;
   }
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-semibold text-slate-950 dark:text-slate-200;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display font-medium text-slate-950 dark:text-slate-200;
   }
   h1 {
-    @apply text-2xl my-4;
+    @apply text-3xl my-4;
   }
   h2 {
     @apply text-xl mb-4;
@@ -69,11 +75,23 @@
       @apply mt-6;
     }
   }
+  a:any-link {
+    @apply border-b;
+  }
   a:link:has(:not(img)) {
     @apply border-b;
   }
   p {
-    @apply mb-6;
+    @apply mb-4;
+  }
+  ul {
+    @apply list-disc my-4 ml-2 pl-4;
+  }
+  ol {
+    @apply list-decimal my-4 ml-2 pl-4;
+  }
+  li {
+    @apply pl-2;
   }
   section {
     @apply rounded-xl border border-solid shadow overflow-x-auto
@@ -81,10 +99,21 @@
         bg-white dark:bg-slate-800
         border-slate-200 dark:border-slate-900;
   }
-  pre {
-    @apply text-xs;
+  blockquote {
+    @apply my-6 px-6 py-4 rounded-xl max-w-full overflow-x-auto
+      text-gray-800 dark:text-blue-200
+      bg-blue-50 dark:bg-blue-950;
   }
-  td, th {
+  pre {
+    @apply my-6 px-6 py-4 rounded-xl max-w-full overflow-x-auto text-xs
+      text-gray-800 dark:text-blue-200
+      bg-blue-50 dark:bg-blue-950;
+  }
+  table {
+    @apply mt-2 mb-4;
+  }
+  td,
+  th {
     @apply text-left align-top p-0.5;
   }
   th {
@@ -123,7 +152,8 @@
       px-4;
   }
   table {
-    th, td {
+    th,
+    td {
       @apply px-2;
     }
     tr:nth-child(odd) {
@@ -161,14 +191,15 @@
   select {
     @apply px-3 py-1 appearance-auto
       rounded-lg border shadow
-      focus:outline-none focus:ring-2 focus:ring-theme-dark
+      focus:outline-none focus:ring-1 focus:ring-theme-dark
       text-sm leading-relaxed
-      bg-white dark:bg-slate-800
+      bg-white dark:bg-slate-900
       border-slate-200 dark:border-slate-900
       text-slate-900 dark:text-slate-100;
   }
   .btn-neutral {
-    @apply btn-common text-slate-800 dark:text-slate-400
+    @apply btn-common text-slate-800 dark:text-slate-200
+      hover:text-theme-dark
       border border-theme-dark disabled:border-0
       hover:border-theme-lighter hover:dark:border-theme-light;
   }
@@ -184,6 +215,23 @@
       hover:bg-linear-to-br hover:from-red-700 hover:to-red-800
       dark:hover:bg-linear-to-br dark:hover:from-red-500 dark:hover:to-red-600;
   }
+  .btn-sharing {
+    @apply inline-block p-4 border-0 rounded-full no-underline
+      transition-all duration-200 hover:bg-red-400;
+    svg {
+      @apply size-8;
+    }
+  }
+  .footer-links {
+    p,
+    ul,
+    ol {
+      @apply my-2 text-xs;
+    }
+    a:any-link {
+      @apply border-0 hover:border-b transition-all;
+    }
+  }
   .error-message {
     @apply my-4 p-4 rounded-lg
       bg-red-100 dark:bg-red-900/30
@@ -197,6 +245,14 @@
     .htmx-indicator,
     &.htmx-indicator {
       @apply opacity-100 visible;
+    }
+  }
+  aside {
+    @apply flex flex-col w-full md:w-64 xl:w-80 md:shrink-0;
+    a {
+      @apply px-4 py-2 rounded-lg border-0 transition-all
+        text-slate-800 dark:text-slate-200
+        hover:bg-slate-200 dark:hover:bg-slate-800;
     }
   }
 }
