@@ -19,6 +19,8 @@ templ ContentTempl(title string, contents templ.Component) {
 		<head>
 			<title>{ title } </title>
 			<meta name="viewport" content="width=device-width,initial-scale=1"/>
+			<link rel="preload" href="/static/InterVariable.woff2" as="font" crossorigin="" type="font/woff2"/>
+			<link rel="preload" href="/static/GoogleSansFlex.woff2" as="font" crossorigin="" type="font/woff2"/>
 			<link rel="manifest" href="/app.webmanifest"/>
 			<script src="/static/htmx.min.js"></script>
 			<script src="/static/chart.min.js"></script>

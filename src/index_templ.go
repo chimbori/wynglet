@@ -31,7 +31,7 @@ func IndexTempl() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html lang=\"en\"><head><title>Butterfly</title><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><link rel=\"manifest\" href=\"/app.webmanifest\"><link rel=\"stylesheet\" href=\"/static/gen.min.css\"><link rel=\"icon\" href=\"/static/favicon.svg\"></head><body class=\"text-base mx-auto\"><main><h1 class=\"text-2xl mt-16 mb-4\">Butterfly</h1><p class=\"text-6xl text-center mt-12\">🦋</p></main></body></html>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html lang=\"en\"><head><title>Butterfly</title><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><link rel=\"preload\" href=\"/static/InterVariable.woff2\" as=\"font\" crossorigin=\"\" type=\"font/woff2\"><link rel=\"preload\" href=\"/static/GoogleSansFlex.woff2\" as=\"font\" crossorigin=\"\" type=\"font/woff2\"><link rel=\"manifest\" href=\"/app.webmanifest\"><link rel=\"stylesheet\" href=\"/static/gen.min.css\"><link rel=\"icon\" href=\"/static/favicon.svg\"></head><body class=\"text-base mx-auto\"><main><h1 class=\"text-2xl mt-16 mb-4\">Butterfly</h1><p class=\"text-6xl text-center mt-12\">🦋</p></main></body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

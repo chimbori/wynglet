@@ -8,13 +8,26 @@
   src: url('InterVariable.woff2?v=4.1') format('woff2');
 }
 
+@font-face {
+  font-family: 'Google Sans Flex';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('GoogleSansFlex.woff2') format('woff2');
+}
+
 @supports (font-variation-settings: normal) {
-  :root { font-family: InterVariable, sans-serif; }
+  :root {
+    font-family: InterVariable, sans-serif;
+  }
 }
 
 @theme {
-  --font-sans: Inter,InterVariable,sans-serif;
-  --font-sans--font-feature-settings: 'liga' 1, 'calt' 1; /* fix for Chrome */
+  --font-sans: InterVariable, sans-serif;
+  --font-sans--font-feature-settings: 'liga' 1, 'calt' 1, 'cv01' 1, 'ss03' 1,
+    'tnum' 1; /* fix for Chrome */
+  --font-display: 'Google Sans Flex', sans-serif;
+  --font-mono: Inconsolata, monospace;
 
   --color-theme-lighter: #5191fd;
   --color-theme-light: #2575fc;
