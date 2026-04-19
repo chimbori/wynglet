@@ -1,0 +1,59 @@
+package dashboard
+
+templ RatingsPageTempl(page int) {
+	@ContentTempl("Ratings", NilTemplate()) {
+		<p>A ratings widget to capture user feedback for any URL. Thumbs (up/down), or Stars (1 to 5).</p>
+		<section>
+			<h2>Get Embeddable <code>&lt;iframe&gt;</code> Code</h2>
+			<form
+				class="flex flex-col md:flex-row gap-4 md:items-end"
+				hx-get="/dashboard/ratings/embed"
+				hx-target="#ratings-embed-result"
+				hx-swap="innerHTML transition:true"
+			>
+				<div class="grow">
+					<label for="rating-embed-url" class="text-sm">URL</label>
+					<input
+						id="rating-embed-url"
+						name="url"
+						type="url"
+						required
+						placeholder="https://example.com/article"
+						class="input-primary w-full"
+					/>
+				</div>
+				<div>
+					<label for="rating-embed-ui" class="text-sm">UI</label>
+					<select id="rating-embed-ui" name="ui" class="input-primary">
+						<option value="thumbs">thumbs</option>
+						<option value="stars">stars</option>
+					</select>
+				</div>
+				<button type="submit" class="btn-neutral">Generate Code</button>
+			</form>
+			<div id="ratings-embed-result"></div>
+		</section>
+	}
+}
+
+templ RatingsIFrameCodeTempl(iframeCode string) {
+	<div class="flex gap-2 mt-4">
+		<textarea id="ratings-embed-code" readonly class="grow rounded-xl shadow-lg h-24 p-4 text-xs font-mono">{ iframeCode }</textarea>
+		<button id="ratings-copy-btn" class="btn-neutral px-4 h-24 flex items-center" onclick="copyEmbedCode()">Copy</button>
+	</div>
+	<script>
+		function copyEmbedCode() {
+			const textarea = document.getElementById('ratings-embed-code');
+			textarea.select();
+			document.execCommand('copy');
+			const btn = document.getElementById('ratings-copy-btn');
+			const origText = btn.textContent;
+			btn.textContent = 'Copied!';
+			setTimeout(() => { btn.textContent = origText; }, 2000);
+		}
+	</script>
+}
+
+templ RatingsIframeCodeErrorTempl(message string) {
+	<div class="error-message">{ message }</div>
+}
