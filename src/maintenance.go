@@ -46,6 +46,17 @@ func performMaintenance() {
 		slog.Info(fmt.Sprintf("%d logs deleted", deletedLogs))
 	}
 
+	ratingRetentionInterval := pgtype.Interval{
+		Microseconds: int64(conf.Config.Ratings.Retention / time.Microsecond),
+		Valid:        true,
+	}
+	deletedRatings, err := queries.DeleteOldRatings(ctx, ratingRetentionInterval)
+	if err != nil {
+		slog.Error("failed to delete old ratings", tint.Err(err))
+	} else {
+		slog.Info(fmt.Sprintf("%d ratings deleted", deletedRatings))
+	}
+
 	// Prune caches
 	if linkpreviews.Cache != nil {
 		if err := linkpreviews.Cache.Prune(); err != nil {
