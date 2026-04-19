@@ -17,14 +17,14 @@ templ RatingWidget(url string, ui string, buttons []ratingButton, minifiedCSS st
 			@templ.Raw("<style type='text/css'>" + minifiedCSS + "</style>")
 		</head>
 		<body role="group" aria-label="Rate this URL">
-			<form class="rating-form" method="post" action="/rating/v1/rate">
-				<input type="hidden" name="url" value={ url }/>
-				<input type="hidden" name="ui" value={ ui }/>
-				for _, btn := range buttons {
+			for _, btn := range buttons {
+				<form class="rating-form" method="post" action="/rating/v1/rate">
+					<input type="hidden" name="url" value={ url }/>
+					<input type="hidden" name="ui" value={ ui }/>
 					<input type="hidden" name="rating" value={ fmt.Sprintf("%d", btn.Value) }/>
 					<button class={ "rating-button " + ui } type="submit" title={ btn.AltText } aria-label={ btn.AltText }>{ btn.Emoji }</button>
-				}
-			</form>
+				</form>
+			}
 		</body>
 	</html>
 }
