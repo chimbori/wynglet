@@ -50,3 +50,18 @@ func SecurityHeaders(next http.Handler) http.Handler {
 		next.ServeHTTP(w, r)
 	})
 }
+
+// NormalizeClientIP normalizes a client IP address string.
+// It trims whitespace, extracts the first IP from X-Forwarded-For headers,
+// and removes the port from the host if present.
+func NormalizeClientIP(raw string) string {
+	first := strings.TrimSpace(raw)
+	if strings.Contains(first, ",") {
+		first, _, _ = strings.Cut(first, ",")
+		first = strings.TrimSpace(first)
+	}
+	if host, _, err := net.SplitHostPort(first); err == nil {
+		first = host
+	}
+	return first
+}
