@@ -94,6 +94,8 @@ tasks:
     cmds:
       - tailwindcss --content "**/*.templ" --input embedfs/static/src.css --output embedfs/static/gen.css
       - tailwindcss --content "**/*.templ" --input embedfs/static/src.css --output embedfs/static/gen.min.css --minify
+      - tailwindcss --input rating/widget.css --output rating/widget.min.css --minify
+      - tailwindcss --input rating/success.css --output rating/success.min.css --minify
 
   esbuild:
     desc: Bundle and minify TypeScript with esbuild

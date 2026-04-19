@@ -24,6 +24,7 @@ import (
 	"butterfly.chimbori.dev/github"
 	"butterfly.chimbori.dev/linkpreviews"
 	"butterfly.chimbori.dev/qrcode"
+	"butterfly.chimbori.dev/rating"
 	"butterfly.chimbori.dev/slogdb"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/lmittmann/tint"
@@ -115,6 +116,7 @@ func main() {
 	linkpreviews.Init(mux)
 	qrcode.Init(mux)
 	github.Init(mux)
+	rating.Init(mux)
 	dashboard.Init(mux)
 
 	// Set up cron task for routine maintenance.
