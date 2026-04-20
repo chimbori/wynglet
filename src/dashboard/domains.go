@@ -159,10 +159,16 @@ func toggleDebugModeHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Toggle debug mode
-	if conf.IsDebugModeActive(domain) {
-		conf.DisableDebugMode(domain)
-	} else {
+	enabling := !conf.IsDebugModeActive(domain)
+	slog.Warn("Debug Mode toggled",
+		"method", req.Method,
+		"path", req.URL.Path,
+		"domain", domain,
+		"enabled", enabling)
+	if enabling {
 		conf.EnableDebugMode(domain)
+	} else {
+		conf.DisableDebugMode(domain)
 	}
 
 	// Return the updated list

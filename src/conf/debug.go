@@ -1,6 +1,7 @@
 package conf
 
 import (
+	"log/slog"
 	"sync"
 	"time"
 )
@@ -81,6 +82,7 @@ func CleanupExpiredDebugModes() {
 	now := time.Now()
 	for domain, activatedAt := range debugTracker.modes {
 		if now.Sub(activatedAt) > debugModeDuration {
+			slog.Warn("debug mode expired", "domain", domain, "activated_at", activatedAt)
 			delete(debugTracker.modes, domain)
 		}
 	}
