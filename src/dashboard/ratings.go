@@ -6,8 +6,11 @@ import (
 	"math"
 	"net/http"
 	"net/url"
+	"sort"
 	"strconv"
+	"strings"
 
+	"butterfly.chimbori.dev/conf"
 	"butterfly.chimbori.dev/db"
 	"butterfly.chimbori.dev/validation"
 	"github.com/lmittmann/tint"
@@ -23,7 +26,8 @@ func ratingsPageHandler(w http.ResponseWriter, req *http.Request) {
 			page = p
 		}
 	}
-	RatingsPageTempl(page).Render(req.Context(), w)
+	days := parseRatingDays(req.URL.Query().Get("days"))
+	RatingsPageTempl(page, days).Render(req.Context(), w)
 }
 
 // GET /dashboard/ratings/embed?url=...&ui=thumbs|stars
@@ -88,19 +92,127 @@ func buildRatingsIframeEmbed(req *http.Request, validatedURL string, ui string) 
 		iframeSrc, width, height)
 }
 
-func formatThumbsSummary(thumbsUp int64, thumbsDown int64) string {
-	total := thumbsUp + thumbsDown
-	if total == 0 {
-		return "No votes"
+// GET /dashboard/ratings/list?days=0&page=1&sortBy=rating&sortOrder=desc
+func ratingsListHandler(w http.ResponseWriter, req *http.Request) {
+	slog.Debug("ratingsListHandler", "url", req.Method+" "+req.URL.String())
+
+	ctx := req.Context()
+	queries := db.New(db.Pool)
+
+	page := 1
+	if pageStr := req.URL.Query().Get("page"); pageStr != "" {
+		if p, err := strconv.Atoi(pageStr); err == nil && p > 0 {
+			page = p
+		}
 	}
-	upPct := (float64(thumbsUp) * 100) / float64(total)
-	downPct := (float64(thumbsDown) * 100) / float64(total)
-	return fmt.Sprintf("👍 %.0f%% / 👎 %.0f%%", math.Round(upPct), math.Round(downPct))
+	days := parseRatingDays(req.URL.Query().Get("days"))
+	sortBy := req.URL.Query().Get("sortBy")
+	sortOrder := req.URL.Query().Get("sortOrder")
+
+	totalCount, err := queries.CountRatingGroups(ctx, int32(days))
+	if err != nil {
+		slog.Error("failed to count ratings", tint.Err(err),
+			"method", req.Method,
+			"path", req.URL.Path,
+			"url", req.URL.String(),
+			"status", http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	offset := int32((page - 1) * conf.Config.Dashboard.Pagination.Limit)
+	ratings, err := queries.ListRatingsWithDistribution(ctx, db.ListRatingsWithDistributionParams{
+		Days:             int32(days),
+		PaginationLimit:  int32(conf.Config.Dashboard.Pagination.Limit),
+		PaginationOffset: offset,
+	})
+	if err != nil {
+		slog.Error("failed to list ratings", tint.Err(err),
+			"method", req.Method,
+			"path", req.URL.Path,
+			"url", req.URL.String(),
+			"status", http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Client-side sorting
+	sortRatings(ratings, sortBy, sortOrder)
+
+	RatingsListTempl(ratings, page, days, totalCount, sortBy, sortOrder).Render(ctx, w)
 }
 
-func formatStarsSummary(avg float64, total int64) string {
-	if total == 0 {
-		return "No votes"
+// sortRatings sorts the ratings in-place based on the specified sort column and order.
+func sortRatings(ratings []db.ListRatingsWithDistributionRow, sortBy, sortOrder string) {
+	if sortBy == "" {
+		sortBy = "rating" // Default sort by rating
 	}
-	return fmt.Sprintf("%.2f/5 (%d)", avg, total)
+	if sortOrder == "" {
+		sortOrder = "desc" // Default order
+	}
+
+	ascending := sortOrder == "asc"
+
+	switch sortBy {
+	case "url":
+		sort.SliceStable(ratings, func(i, j int) bool {
+			cmp := strings.Compare(ratings[i].Url, ratings[j].Url)
+			if ascending {
+				return cmp < 0
+			}
+			return cmp > 0
+		})
+	case "votes":
+		sort.SliceStable(ratings, func(i, j int) bool {
+			if ascending {
+				return ratings[i].TotalRatings < ratings[j].TotalRatings
+			}
+			return ratings[i].TotalRatings > ratings[j].TotalRatings
+		})
+	case "rating":
+		fallthrough
+	default:
+		sort.SliceStable(ratings, func(i, j int) bool {
+			if ascending {
+				return ratings[i].NormalizedScore < ratings[j].NormalizedScore
+			}
+			return ratings[i].NormalizedScore > ratings[j].NormalizedScore
+		})
+	}
+}
+
+// parseRatingDays parses the days query parameter for ratings time filtering.
+// Returns 0 for "All" (default), or 1/7/28 for specific ranges.
+func parseRatingDays(daysParam string) int {
+	switch daysParam {
+	case "1":
+		return 1
+	case "7":
+		return 7
+	case "28":
+		return 28
+	default:
+		return 0
+	}
+}
+
+func pctOf(n, total int64) float64 {
+	if total == 0 {
+		return 0
+	}
+	return math.Round(float64(n) * 100 / float64(total))
+}
+
+func formatAverageRating(r db.ListRatingsWithDistributionRow) string {
+	if r.TotalRatings == 0 {
+		return "—"
+	}
+	switch r.Ui {
+	case "thumbs":
+		return fmt.Sprintf("👍 %.0f%%", pctOf(r.ThumbsUp, r.TotalRatings))
+	case "stars":
+		return fmt.Sprintf("⭐ %.1f / 5", r.AverageStars)
+	default:
+		return "—"
+	}
 }
