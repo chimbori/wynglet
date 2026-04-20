@@ -85,26 +85,7 @@ func handleRatingWidget(w http.ResponseWriter, req *http.Request) {
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.Header().Set("Cache-Control", "no-store")
-
-	// Build CSP header, excluding frame-ancestors if debug mode is active for this domain
-	cspParts := []string{
-		"default-src 'self'",
-		"img-src 'self' data:",
-		"script-src 'self'",
-		"style-src 'self' 'unsafe-inline'",
-		"object-src 'none'",
-		"base-uri 'self'",
-	}
-	if conf.IsDebugModeActive(hostname) {
-		// In Debug mode, override restrictive middleware headers to allow iframe embedding.
-		w.Header().Del("X-Frame-Options")
-		cspParts = append(cspParts, "frame-ancestors *")
-	} else {
-		// Normal mode: keep restrictive headers set in [core.SecurityHeaders] middleware.
-		w.Header().Set("X-Frame-Options", "DENY")
-		cspParts = append(cspParts, "frame-ancestors 'https://"+hostname+"'")
-	}
-	w.Header().Set("Content-Security-Policy", strings.Join(cspParts, "; "))
+	setFrameHeadersForDebugMode(w, hostname)
 
 	if err := RatingWidget(url, ui, buttons, widgetCSS).Render(req.Context(), w); err != nil {
 		slog.Error("failed to render rating widget", tint.Err(err),
@@ -215,6 +196,7 @@ func handleRate(w http.ResponseWriter, req *http.Request) {
 		"status", http.StatusCreated)
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	setFrameHeadersForDebugMode(w, hostname)
 	w.WriteHeader(http.StatusCreated)
 	if err := RatingSuccess(successCSS).Render(req.Context(), w); err != nil {
 		slog.Error("failed to render rating success page", tint.Err(err),
@@ -225,6 +207,30 @@ func handleRate(w http.ResponseWriter, req *http.Request) {
 			"ip", ipAddress,
 			"status", http.StatusInternalServerError)
 	}
+}
+
+// setFrameHeadersForDebugMode sets CSP and X-Frame-Options headers based on debug mode status.
+// When debug mode is active for the hostname, it allows unrestricted iframe embedding.
+// Otherwise, it maintains restrictive security headers.
+func setFrameHeadersForDebugMode(w http.ResponseWriter, hostname string) {
+	cspParts := []string{
+		"default-src 'self'",
+		"img-src 'self' data:",
+		"script-src 'self'",
+		"style-src 'self' 'unsafe-inline'",
+		"object-src 'none'",
+		"base-uri 'self'",
+	}
+	if conf.IsDebugModeActive(hostname) {
+		// In Debug mode, override restrictive middleware headers to allow iframe embedding.
+		w.Header().Del("X-Frame-Options")
+		cspParts = append(cspParts, "frame-ancestors *")
+	} else {
+		// Normal mode: keep restrictive headers set in [core.SecurityHeaders] middleware.
+		w.Header().Set("X-Frame-Options", "DENY")
+		cspParts = append(cspParts, "frame-ancestors 'https://"+hostname+"'")
+	}
+	w.Header().Set("Content-Security-Policy", strings.Join(cspParts, "; "))
 }
 
 // recordRating inserts a rating into the database with duplicate detection.
