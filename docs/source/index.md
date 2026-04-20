@@ -27,6 +27,7 @@ To prevent abuse and to conserve resources, Butterfly blocks all domains by defa
 ### Use the Default Template
 
 Just one step: Paste the Butterfly `<meta>` tag into the original page, and you’re done!
+
 ```html
 <meta property="og:image" content="https://butterfly.your-server.com/link-previews/v1?url=your-site.com/some/page">
 ```
@@ -44,6 +45,7 @@ Just one step: Paste the Butterfly `<meta>` tag into the original page, and you�
     ```
 
 2. Use Butterfly to craft a URL, and paste the `<meta>` tag into the original page.
+
     ```html
     <meta property="og:image" content="https://butterfly.your-server.com/link-previews/v1?url=your-site.com/some/page">
     ```
@@ -120,15 +122,19 @@ We strongly recommend deploying using the official container image, which includ
 Butterfly ships with a couple of built-in command-line helpers:
 
 - **Generate a bcrypt password hash** (for use in `butterfly.yml`):
+
   ```shell
   butterfly --bcrypt
   ```
+
   Enter your desired password when prompted. The output hash can be pasted directly into the `dashboard.password` field.
 
 - **Health check** (useful for container health checks):
+
   ```shell
   butterfly --healthcheck
   ```
+
   Pings the running service and exits `0` on success or `1` on failure.
 
 ### Sample `compose.yml` (for Docker and Podman)
@@ -175,12 +181,14 @@ go install butterfly.chimbori.dev@latest
 Butterfly requires basic configuration to be provided via a config file.
 
 - **PostgreSQL Database URL** _(required)_
+
   ```yml
   database:
     url: postgresql://chimbori:chimbori@butterfly-db:5432/butterfly
   ```
 
 - **Dashboard credentials** (encrypted via `bcrypt`) _(required)_
+
   ```yml
   dashboard:
     username: admin
@@ -205,8 +213,8 @@ Butterfly requires basic configuration to be provided via a config file.
     screenshot:
       timeout: 20s
     sitemap:
-      concurrent_urls: 4   # Number of URLs processed in parallel during sitemap import
-      max_urls: 1000        # Maximum URLs fetched from a sitemap
+      concurrent_urls: 4  # Number of URLs processed in parallel during sitemap import
+      max_urls: 1000      # Maximum URLs fetched from a sitemap
     cache:
       enabled: true
       ttl: 720h0m0s
@@ -232,9 +240,27 @@ Butterfly requires basic configuration to be provided via a config file.
     retention: 8760h  # How long to keep rating data (default: 365 days)
   ```
 
+- Logs config _(optional)_
+
+  ```yml
+  logs:
+    retention: 720h  # How long to keep error logs (default: 30 days)
+    pagination:
+      limit: 10
+  ```
+
+- Dashboard pagination _(optional)_
+
+  ```yml
+  dashboard:
+    pagination:
+      limit: 10
+  ```
+
 - Debug Mode _(optional)_
 
   Turn on additional logging in Debug Mode. Debug mode can also be toggled per-domain from within the Dashboard UI.
+
   ```yml
   debug: true
   ```
@@ -253,6 +279,23 @@ butterfly.your-server.com {
 You can manage Butterfly from the Dashboard UI at `https://butterfly.your-server.com/dashboard`.
 The Dashboard is available as an installable PWA (Progressive Web Application) that can be "installed" locally using any modern browser.
 
+The Dashboard includes the following sections:
+
+- **Link Previews**:
+  Browse all generated link preview images, delete individual ones, view access statistics, and inspect a breakdown of user agents (social platforms, bots, etc.) that have requested them.
+- **Sitemap Import**:
+  Bulk pre-generate link previews for an entire site by importing a sitemap URL.
+  The import runs concurrently in the background; you can monitor progress or cancel it at any time.
+- **QR Codes**:
+  Browse and delete generated QR codes.
+- **Domains**:
+  Manage the authorized domains allowlist. Add or remove domains and toggle per-domain debug mode.
+- **Ratings**:
+  View collected ratings for any authorized URL.
+  Use the built-in embed builder to generate ready-to-paste `<iframe>` code for your pages.
+- **Logs**:
+  View recent error-level log entries.
+
 <img src="screenshot-pwa.webp">
 
 # License
@@ -262,6 +305,7 @@ This project is licensed under the Apache License 2.0.
 # Comparison with Alternatives
 
 There are a lot of paid SaaS tools in this space. Notable among them are:
+
   - BannerBear
   - RenderForm
   - Templated.io
@@ -275,6 +319,7 @@ They all work roughly the same way: you design a template using their custom too
 This model works great if you do not have access to the source of the page, or have no influence over the developers who build your website.
 
 But now,
+
 - You’ve got to learn a whole new tool.
 - That tool exposes a certain amount of design expressiveness, but nowhere near what the Web platform offers natively.
 - Anytime you need to change the preview image, you have to visit a completely separate website.
