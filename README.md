@@ -69,7 +69,7 @@ Butterfly Social can also generate QR Codes for your authorized URLs that you ca
 Use this URL format:
 
 ```html
-<img src="https://butterfly.your-server.com/qr-codes/v1?url=your-site.com/some/page">
+<img src="https://butterfly.your-server.com/qrcode/v1?url=your-site.com/some/page">
 ```
 
 ## Install & Deploy
