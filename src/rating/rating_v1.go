@@ -27,8 +27,9 @@ var widgetCSS string
 var successCSS string
 
 const (
-	uiThumbs = "thumbs"
-	uiStars  = "stars"
+	uiThumbs               = "thumbs"
+	uiStars                = "stars"
+	globalRateLimitPerHour = 10
 )
 
 // ratingButton represents a single rating button in the UI.
@@ -78,9 +79,32 @@ func handleRatingWidget(w http.ResponseWriter, req *http.Request) {
 
 	ipAddress := core.NormalizeClientIP(req.RemoteAddr)
 
-	// Determine if we should show rating buttons based on duplicate detection
+	// Determine if we should show rating buttons based on duplicate detection and global throttling.
 	showButtons := true
-	if !conf.IsDebugModeActive(hostname) {
+	recentRatingsCount, err := queries.CountRecentRatingsByIP(req.Context(), ipAddress)
+	if err != nil {
+		slog.Error("failed to check global rating throttle", tint.Err(err),
+			"method", req.Method,
+			"path", req.URL.Path,
+			"url", url,
+			"hostname", hostname,
+			"ip", ipAddress)
+		// Continue anyway, showing empty widget on error.
+		showButtons = false
+	} else if recentRatingsCount >= globalRateLimitPerHour {
+		slog.Warn("global rating throttle activated for widget",
+			"method", req.Method,
+			"path", req.URL.Path,
+			"url", url,
+			"hostname", hostname,
+			"ip", ipAddress,
+			"count", recentRatingsCount,
+			"limit", globalRateLimitPerHour,
+			"window", "1 hour")
+		showButtons = false
+	}
+
+	if showButtons && !conf.IsDebugModeActive(hostname) {
 		// Check if user already has a recent rating for this URL
 		exists, err := queries.HasRecentRatingByIPForURL(req.Context(), db.HasRecentRatingByIPForURLParams{
 			Url:       url,
@@ -91,7 +115,8 @@ func handleRatingWidget(w http.ResponseWriter, req *http.Request) {
 				"method", req.Method,
 				"path", req.URL.Path,
 				"url", url,
-				"hostname", hostname)
+				"hostname", hostname,
+				"ip", ipAddress)
 			// Continue anyway, showing empty widget on error
 		}
 		showButtons = !exists
@@ -107,6 +132,7 @@ func handleRatingWidget(w http.ResponseWriter, req *http.Request) {
 				"path", req.URL.Path,
 				"url", url,
 				"hostname", hostname,
+				"ip", ipAddress,
 				"status", http.StatusBadRequest)
 			// Set CSP headers even for UI validation errors, otherwise clients won’t see it.
 			setFrameAncestorsHeaders(w, hostname)
@@ -195,6 +221,7 @@ func handleRate(w http.ResponseWriter, req *http.Request) {
 			"path", req.URL.Path,
 			"url", url,
 			"hostname", hostname,
+			"ip", ipAddress,
 			"status", http.StatusBadRequest)
 		// Set CSP headers even for UI validation errors, otherwise clients won’t see it.
 		setFrameAncestorsHeaders(w, hostname)
@@ -203,7 +230,7 @@ func handleRate(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	duplicate, err := recordRating(req.Context(), url, ui, rating, ipAddress)
+	duplicate, throttled, err := recordRating(req.Context(), url, hostname, ui, rating, ipAddress)
 	if err != nil {
 		slog.Error("failed to record rating", tint.Err(err),
 			"method", req.Method,
@@ -216,6 +243,22 @@ func handleRate(w http.ResponseWriter, req *http.Request) {
 		setFrameAncestorsHeaders(w, hostname)
 		w.WriteHeader(http.StatusInternalServerError)
 		RatingResponse("🚫", successCSS).Render(req.Context(), w)
+		return
+	}
+
+	if throttled {
+		slog.Warn("global rating throttle blocked",
+			"method", req.Method,
+			"path", req.URL.Path,
+			"url", url,
+			"hostname", hostname,
+			"ip", ipAddress,
+			"limit", globalRateLimitPerHour,
+			"window", "1 hour",
+			"status", http.StatusTooManyRequests)
+		setFrameAncestorsHeaders(w, hostname)
+		w.WriteHeader(http.StatusTooManyRequests)
+		RatingResponse("⏱️", successCSS).Render(req.Context(), w)
 		return
 	}
 
@@ -282,28 +325,36 @@ func setFrameAncestorsHeaders(w http.ResponseWriter, hostname string) {
 	w.Header().Set("Content-Security-Policy", strings.Join(cspParts, "; "))
 }
 
-// recordRating inserts a rating into the database with duplicate detection.
-// It checks for recent ratings from the same IP, except in debug mode (conf.Config.Debug),
-// duplicate detection is skipped to allow unlimited ratings.
-// Returns (isDuplicate, error): isDuplicate is true if a recent rating was found from this IP.
-func recordRating(ctx context.Context, url string, ui string, rating int16, ipAddress string) (bool, error) {
+// recordRating inserts a rating into the database with abuse protection.
+// It always enforces a global rolling 1-hour per-IP rate limit, and enforces
+// same-URL duplicate detection unless per-domain debug mode is active.
+// Returns (isDuplicate, isThrottled, error).
+func recordRating(ctx context.Context, url string, hostname string, ui string, rating int16, ipAddress string) (isDuplicate bool, isThrottled bool, e error) {
 	tx, err := db.Pool.Begin(ctx)
 	if err != nil {
-		return false, err
+		return false, false, err
 	}
 	defer tx.Rollback(ctx)
 
 	q := db.New(tx)
+	recentRatingsCount, err := q.CountRecentRatingsByIP(ctx, ipAddress)
+	if err != nil {
+		return false, false, err
+	}
+	if recentRatingsCount >= globalRateLimitPerHour {
+		return false, true, nil
+	}
+
 	if !conf.IsDebugModeActive(hostname) {
 		exists, err := q.HasRecentRatingByIPForURL(ctx, db.HasRecentRatingByIPForURLParams{
 			Url:       url,
 			IpAddress: ipAddress,
 		})
 		if err != nil {
-			return false, err
+			return false, false, err
 		}
 		if exists {
-			return true, nil
+			return true, false, nil
 		}
 	}
 
@@ -314,13 +365,13 @@ func recordRating(ctx context.Context, url string, ui string, rating int16, ipAd
 		IpAddress: ipAddress,
 	})
 	if err != nil {
-		return false, err
+		return false, false, err
 	}
 
 	if err := tx.Commit(ctx); err != nil {
-		return false, err
+		return false, false, err
 	}
-	return false, nil
+	return false, false, nil
 }
 
 // ratingButtonsForUI returns the button definitions for the specified UI type.

@@ -10,6 +10,11 @@ SELECT EXISTS (
     AND rated_at >= NOW() - INTERVAL '24 hours'
 );
 
+-- name: CountRecentRatingsByIP :one
+SELECT COUNT(*) FROM ratings
+WHERE ip_address = @ip_address
+  AND rated_at >= NOW() - INTERVAL '1 hour';
+
 -- name: CountRatingGroups :one
 SELECT COUNT(*) FROM (
   SELECT 1 FROM ratings

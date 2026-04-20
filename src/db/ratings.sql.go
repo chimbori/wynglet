@@ -26,6 +26,19 @@ func (q *Queries) CountRatingGroups(ctx context.Context, days interface{}) (int6
 	return count, err
 }
 
+const countRecentRatingsByIP = `-- name: CountRecentRatingsByIP :one
+SELECT COUNT(*) FROM ratings
+WHERE ip_address = $1
+  AND rated_at >= NOW() - INTERVAL '1 hour'
+`
+
+func (q *Queries) CountRecentRatingsByIP(ctx context.Context, ipAddress string) (int64, error) {
+	row := q.db.QueryRow(ctx, countRecentRatingsByIP, ipAddress)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const deleteOldRatings = `-- name: DeleteOldRatings :execrows
 DELETE FROM ratings
   WHERE rated_at < NOW() - $1::interval
