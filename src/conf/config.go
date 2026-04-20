@@ -146,9 +146,14 @@ func setDefaultsAndPrint(c *AppConfig) {
 		c.Ratings.Retention = 365 * 24 * time.Hour
 	}
 
+	// Print the config at startup for observability, with sensitive fields redacted.
+	redacted := *c
+	redacted.Database.Url = "[redacted]"
+	redacted.Dashboard.Password = "[redacted]"
+	yamlBytes, _ := yaml.Marshal(redacted)
+	fmt.Println(string(yamlBytes))
+
 	// Print warnings for unsafe settings, just as FYI.
-	yaml, _ := yaml.Marshal(*c)
-	fmt.Println(string(yaml))
 	if c.Debug {
 		slog.Warn("Debug mode is enabled")
 	}
