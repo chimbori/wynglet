@@ -97,6 +97,7 @@ func handleRatingWidget(w http.ResponseWriter, req *http.Request) {
 	}
 
 	var buttons []ratingButton
+	css := ""
 	if showButtons {
 		buttons, err = ratingButtonsForUI(ui)
 		if err != nil {
@@ -111,14 +112,12 @@ func handleRatingWidget(w http.ResponseWriter, req *http.Request) {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-	} else {
-		// Don’t send CSS if we are not going to render any buttons.
-		widgetCSS = ""
+		css = widgetCSS
 	}
 
 	w.Header().Set("Cache-Control", "no-store")
 	setFrameHeadersForDebugMode(w, hostname)
-	if err := RatingWidget(url, ui, buttons, widgetCSS).Render(req.Context(), w); err != nil {
+	if err := RatingWidget(url, ui, buttons, css).Render(req.Context(), w); err != nil {
 		slog.Error("failed to render rating widget", tint.Err(err),
 			"method", req.Method,
 			"path", req.URL.Path,
