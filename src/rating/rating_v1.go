@@ -71,16 +71,43 @@ func handleRatingWidget(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	buttons, err := ratingButtonsForUI(ui)
-	if err != nil {
-		slog.Error("invalid rating UI", tint.Err(err),
-			"method", req.Method,
-			"path", req.URL.Path,
-			"url", url,
-			"hostname", hostname,
-			"status", http.StatusBadRequest)
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
+	ipAddress := core.NormalizeClientIP(core.ReadUserIP(req))
+
+	// Determine if we should show rating buttons based on duplicate detection
+	showButtons := true
+	if !conf.Config.Debug && !conf.IsDebugModeActive(hostname) {
+		// Check if user already has a recent rating for this URL
+		exists, err := queries.HasRecentRatingByIPForURL(req.Context(), db.HasRecentRatingByIPForURLParams{
+			Url:       url,
+			IpAddress: ipAddress,
+		})
+		if err != nil {
+			slog.Error("failed to check for duplicate rating", tint.Err(err),
+				"method", req.Method,
+				"path", req.URL.Path,
+				"url", url,
+				"hostname", hostname)
+			// Continue anyway, showing empty widget on error
+		}
+		showButtons = !exists
+	}
+
+	var buttons []ratingButton
+	if showButtons {
+		buttons, err = ratingButtonsForUI(ui)
+		if err != nil {
+			slog.Error("invalid rating UI", tint.Err(err),
+				"method", req.Method,
+				"path", req.URL.Path,
+				"url", url,
+				"hostname", hostname,
+				"status", http.StatusBadRequest)
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+	} else {
+		// Don’t send CSS if we are not going to render any buttons.
+		widgetCSS = ""
 	}
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
