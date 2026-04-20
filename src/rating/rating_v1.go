@@ -76,7 +76,7 @@ func handleRatingWidget(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	ipAddress := core.NormalizeClientIP(core.ReadUserIP(req))
+	ipAddress := core.NormalizeClientIP(req.RemoteAddr)
 
 	// Determine if we should show rating buttons based on duplicate detection
 	showButtons := true
@@ -188,7 +188,7 @@ func handleRate(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	ipAddress := core.NormalizeClientIP(core.ReadUserIP(req))
+	ipAddress := core.NormalizeClientIP(req.RemoteAddr)
 	if ipAddress == "" {
 		slog.Error("unable to read client IP",
 			"method", req.Method,
