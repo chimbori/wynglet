@@ -80,7 +80,7 @@ func handleRatingWidget(w http.ResponseWriter, req *http.Request) {
 
 	// Determine if we should show rating buttons based on duplicate detection
 	showButtons := true
-	if !conf.Config.Debug && !conf.IsDebugModeActive(hostname) {
+	if !conf.IsDebugModeActive(hostname) {
 		// Check if user already has a recent rating for this URL
 		exists, err := queries.HasRecentRatingByIPForURL(req.Context(), db.HasRecentRatingByIPForURLParams{
 			Url:       url,
@@ -226,7 +226,7 @@ func handleRate(w http.ResponseWriter, req *http.Request) {
 			"url", url,
 			"hostname", hostname,
 			"ip", ipAddress,
-			"debug", conf.Config.Debug,
+			"domain_debug_mode", conf.IsDebugModeActive(hostname),
 			"status", http.StatusTooManyRequests)
 		// Set CSP headers even for UI validation errors, otherwise clients won’t see it.
 		setFrameAncestorsHeaders(w, hostname)
@@ -294,8 +294,7 @@ func recordRating(ctx context.Context, url string, ui string, rating int16, ipAd
 	defer tx.Rollback(ctx)
 
 	q := db.New(tx)
-	// In debug mode (conf.Config.Debug set), skip duplicate check and allow unlimited ratings per IP.
-	if !conf.Config.Debug {
+	if !conf.IsDebugModeActive(hostname) {
 		exists, err := q.HasRecentRatingByIPForURL(ctx, db.HasRecentRatingByIPForURLParams{
 			Url:       url,
 			IpAddress: ipAddress,
