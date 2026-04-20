@@ -29,11 +29,12 @@ templ RatingWidget(url string, ui string, buttons []ratingButton, minifiedCSS st
 	</html>
 }
 
-// RatingSuccess renders a success confirmation page displayed after a rating is submitted.
-// It shows a thank-you message and confirmation of the user’s feedback.
+// RatingResponse renders a response page displayed after a rating is submitted or an error occurs.
+// It shows an emoji and message to the user providing feedback about the action.
 // Parameters:
+//   - emoji: A single emoji character to display
 //   - minifiedCSS: Minified CSS to be inlined in the page
-templ RatingSuccess(minifiedCSS string) {
+templ RatingResponse(emoji string, minifiedCSS string) {
 	<!DOCTYPE html>
 	<html lang="en">
 		<head>
@@ -42,7 +43,7 @@ templ RatingSuccess(minifiedCSS string) {
 			@templ.Raw("<style type='text/css'>" + minifiedCSS + "</style>")
 		</head>
 		<body>
-			<h1>🙏</h1>
+			<h1>{ emoji }</h1>
 		</body>
 	</html>
 }

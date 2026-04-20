@@ -166,11 +166,12 @@ func RatingWidget(url string, ui string, buttons []ratingButton, minifiedCSS str
 	})
 }
 
-// RatingSuccess renders a success confirmation page displayed after a rating is submitted.
-// It shows a thank-you message and confirmation of the user’s feedback.
+// RatingResponse renders a response page displayed after a rating is submitted or an error occurs.
+// It shows an emoji and message to the user providing feedback about the action.
 // Parameters:
+//   - emoji: A single emoji character to display
 //   - minifiedCSS: Minified CSS to be inlined in the page
-func RatingSuccess(minifiedCSS string) templ.Component {
+func RatingResponse(emoji string, minifiedCSS string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -199,7 +200,20 @@ func RatingSuccess(minifiedCSS string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "</head><body><h1>🙏</h1></body></html>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "</head><body><h1>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var11 string
+		templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(emoji)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `rating/rating.templ`, Line: 46, Col: 14}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "</h1></body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

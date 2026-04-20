@@ -71,7 +71,8 @@ func handleRatingWidget(w http.ResponseWriter, req *http.Request) {
 			"url", reqURL,
 			"hostname", hostname,
 			"status", http.StatusUnauthorized)
-		http.Error(w, err.Error(), http.StatusUnauthorized)
+		w.WriteHeader(http.StatusUnauthorized)
+		RatingResponse("🚫", successCSS).Render(req.Context(), w)
 		return
 	}
 
@@ -109,7 +110,8 @@ func handleRatingWidget(w http.ResponseWriter, req *http.Request) {
 				"status", http.StatusBadRequest)
 			// Set CSP headers even for UI validation errors, otherwise clients won’t see it.
 			setFrameHeadersForDebugMode(w, hostname)
-			http.Error(w, err.Error(), http.StatusBadRequest)
+			w.WriteHeader(http.StatusBadRequest)
+			RatingResponse("🚫", successCSS).Render(req.Context(), w)
 			return
 		}
 		css = widgetCSS
@@ -124,7 +126,8 @@ func handleRatingWidget(w http.ResponseWriter, req *http.Request) {
 			"url", url,
 			"hostname", hostname,
 			"status", http.StatusInternalServerError)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
+		RatingResponse("🚫", successCSS).Render(req.Context(), w)
 	}
 }
 
@@ -165,7 +168,8 @@ func handleRate(w http.ResponseWriter, req *http.Request) {
 		if hostname != "" {
 			setFrameHeadersForDebugMode(w, hostname)
 		}
-		http.Error(w, err.Error(), http.StatusUnauthorized)
+		w.WriteHeader(http.StatusUnauthorized)
+		RatingResponse("🚫", successCSS).Render(req.Context(), w)
 		return
 	}
 
@@ -179,7 +183,8 @@ func handleRate(w http.ResponseWriter, req *http.Request) {
 			"status", http.StatusBadRequest)
 		// Set CSP headers even for UI validation errors, otherwise clients won’t see it.
 		setFrameHeadersForDebugMode(w, hostname)
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		w.WriteHeader(http.StatusBadRequest)
+		RatingResponse("🚫", successCSS).Render(req.Context(), w)
 		return
 	}
 
@@ -193,7 +198,8 @@ func handleRate(w http.ResponseWriter, req *http.Request) {
 			"status", http.StatusBadRequest)
 		// Set CSP headers even for UI validation errors, otherwise clients won’t see it.
 		setFrameHeadersForDebugMode(w, hostname)
-		http.Error(w, "unable to read client IP", http.StatusBadRequest)
+		w.WriteHeader(http.StatusBadRequest)
+		RatingResponse("🚫", successCSS).Render(req.Context(), w)
 		return
 	}
 
@@ -208,7 +214,8 @@ func handleRate(w http.ResponseWriter, req *http.Request) {
 			"status", http.StatusInternalServerError)
 		// Set CSP headers even for UI validation errors, otherwise clients won’t see it.
 		setFrameHeadersForDebugMode(w, hostname)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
+		RatingResponse("🚫", successCSS).Render(req.Context(), w)
 		return
 	}
 
@@ -223,7 +230,8 @@ func handleRate(w http.ResponseWriter, req *http.Request) {
 			"status", http.StatusTooManyRequests)
 		// Set CSP headers even for UI validation errors, otherwise clients won’t see it.
 		setFrameHeadersForDebugMode(w, hostname)
-		http.Error(w, "rating already recorded for this URL", http.StatusTooManyRequests)
+		w.WriteHeader(http.StatusTooManyRequests)
+		RatingResponse("⏱️", successCSS).Render(req.Context(), w)
 		return
 	}
 
@@ -239,8 +247,8 @@ func handleRate(w http.ResponseWriter, req *http.Request) {
 
 	setFrameHeadersForDebugMode(w, hostname)
 	w.WriteHeader(http.StatusCreated)
-	if err := RatingSuccess(successCSS).Render(req.Context(), w); err != nil {
-		slog.Error("failed to render rating success page", tint.Err(err),
+	if err := RatingResponse("🙏", successCSS).Render(req.Context(), w); err != nil {
+		slog.Error("failed to render rating response page", tint.Err(err),
 			"method", req.Method,
 			"path", req.URL.Path,
 			"url", url,
