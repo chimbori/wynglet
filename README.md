@@ -190,6 +190,9 @@ Butterfly requires basic configuration to be provided via a config file.
   link-previews:
     screenshot:
       timeout: 20s
+    sitemap:
+      concurrent_urls: 4   # Number of URLs processed in parallel during sitemap import
+      max_urls: 1000        # Maximum URLs fetched from a sitemap
     cache:
       enabled: true
       ttl: 720h0m0s
