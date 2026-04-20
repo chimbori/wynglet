@@ -143,7 +143,6 @@ func handleRatingWidget(w http.ResponseWriter, req *http.Request) {
 		css = widgetCSS
 	}
 
-	w.Header().Set("Cache-Control", "no-store")
 	setFrameAncestorsHeaders(w, hostname)
 	if err := RatingWidget(url, ui, buttons, css).Render(req.Context(), w); err != nil {
 		slog.Error("failed to render rating widget", tint.Err(err),
@@ -305,6 +304,7 @@ func handleRate(w http.ResponseWriter, req *http.Request) {
 // When debug mode is active for the hostname, it allows unrestricted iframe embedding.
 // Otherwise, it maintains restrictive security headers.
 func setFrameAncestorsHeaders(w http.ResponseWriter, hostname string) {
+	w.Header().Set("Cache-Control", "no-store")
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.Header().Del("X-Frame-Options") // Remove blanket DENY header in both Normal & Debug modes.
 	cspParts := []string{
