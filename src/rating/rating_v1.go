@@ -85,15 +85,20 @@ func handleRatingWidget(w http.ResponseWriter, req *http.Request) {
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.Header().Set("Cache-Control", "no-store")
-	w.Header().Set("Content-Security-Policy", strings.Join([]string{
+
+	// Build CSP header, excluding frame-ancestors if debug mode is active for this domain
+	cspParts := []string{
 		"default-src 'self'",
 		"img-src 'self' data:",
 		"script-src 'self'",
 		"style-src 'self' 'unsafe-inline'",
 		"object-src 'none'",
 		"base-uri 'self'",
-		"frame-ancestors 'https://" + hostname + "'",
-	}, "; "))
+	}
+	if !conf.IsDebugModeActive(hostname) {
+		cspParts = append(cspParts, "frame-ancestors 'https://"+hostname+"'")
+	}
+	w.Header().Set("Content-Security-Policy", strings.Join(cspParts, "; "))
 
 	if err := RatingWidget(url, ui, buttons, widgetCSS).Render(req.Context(), w); err != nil {
 		slog.Error("failed to render rating widget", tint.Err(err),

@@ -1,6 +1,12 @@
 package dashboard
 
-import "butterfly.chimbori.dev/db"
+import (
+	"fmt"
+	"time"
+
+	"butterfly.chimbori.dev/conf"
+	"butterfly.chimbori.dev/db"
+)
 
 templ DomainsPageTempl(domains []db.Domain) {
 	@ContentTempl("Domains", NilTemplate()) {
@@ -43,6 +49,7 @@ templ DomainsTempl(domains []db.Domain) {
 				<th>Domain</th>
 				<th class="text-center">Include Subdomains</th>
 				<th>Updated</th>
+				<th class="text-center">Debug Mode</th>
 				<th class="text-center">Allow</th>
 				<th class="text-center">Block</th>
 			</tr>
@@ -63,6 +70,21 @@ templ DomainsTempl(domains []db.Domain) {
 						/>
 					</td>
 					<td>{ d.UpdatedAt.Format("2006-01-02 15:04:05") }</td>
+					<td class="text-center">
+						<input
+							hx-post="/dashboard/domains/debug"
+							hx-include="closest tr"
+							type="checkbox"
+							name="debug_mode"
+							checked?={ conf.IsDebugModeActive(d.Domain) }
+							title="Enable Debug Mode (1 hour)"
+						/>
+						if conf.IsDebugModeActive(d.Domain) {
+							<span class="text-xs">
+								{ formatDuration(conf.GetDebugModeRemainingTime(d.Domain)) }
+							</span>
+						}
+					</td>
 					<td class="text-center">
 						<input type="hidden" name="authorized" value={ getAuthorizedAttrValue(d) }/>
 						<button
@@ -101,4 +123,13 @@ func getAuthorizedAttrValue(d db.Domain) string {
 	} else {
 		return "block"
 	}
+}
+
+func formatDuration(d time.Duration) string {
+	minutes := int(d.Minutes())
+	seconds := int(d.Seconds()) % 60
+	if minutes > 0 {
+		return fmt.Sprintf("%dm %ds", minutes, seconds)
+	}
+	return fmt.Sprintf("%ds", seconds)
 }

@@ -48,6 +48,7 @@ func Init(mux *http.ServeMux) {
 	mux.Handle("GET /dashboard/domains", chain.ThenFunc(domainsPageHandler))
 	mux.Handle("PUT /dashboard/domains/domain", chain.ThenFunc(putDomainHandler))
 	mux.Handle("DELETE /dashboard/domains/domain", chain.ThenFunc(deleteDomainHandler))
+	mux.Handle("POST /dashboard/domains/debug", chain.ThenFunc(toggleDebugModeHandler))
 
 	mux.Handle("GET /dashboard/logs", chain.ThenFunc(logsHandler))
 	mux.Handle("GET /dashboard/logs/data", chain.ThenFunc(logsDataHandler))

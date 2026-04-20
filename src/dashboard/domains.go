@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strings"
 
+	"butterfly.chimbori.dev/conf"
 	"butterfly.chimbori.dev/db"
 	"github.com/lmittmann/tint"
 )
@@ -127,4 +128,53 @@ func isAuthorized(authorizeAction string) *bool {
 		return new(false)
 	}
 	return nil
+}
+
+// POST /dashboard/domains/debug - Toggle debug mode for a domain
+func toggleDebugModeHandler(w http.ResponseWriter, req *http.Request) {
+	ctx := req.Context()
+	queries := db.New(db.Pool)
+
+	err := req.ParseForm()
+	if err != nil {
+		slog.Error("failed to parse form", tint.Err(err),
+			"method", req.Method,
+			"path", req.URL.Path,
+			"url", req.URL.String(),
+			"status", http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	domain := strings.TrimSpace(req.FormValue("domain"))
+	if domain == "" {
+		err := fmt.Errorf("empty domain")
+		slog.Error(err.Error(), tint.Err(err),
+			"method", req.Method,
+			"path", req.URL.Path,
+			"url", req.URL.String(),
+			"status", http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// Toggle debug mode
+	if conf.IsDebugModeActive(domain) {
+		conf.DisableDebugMode(domain)
+	} else {
+		conf.EnableDebugMode(domain)
+	}
+
+	// Return the updated list
+	domains, err := queries.ListDomains(ctx)
+	if err != nil {
+		slog.Error("failed to list domains", tint.Err(err),
+			"method", req.Method,
+			"path", req.URL.Path,
+			"url", req.URL.String(),
+			"status", http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	DomainsTempl(domains).Render(ctx, w)
 }
