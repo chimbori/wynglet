@@ -95,7 +95,13 @@ func handleRatingWidget(w http.ResponseWriter, req *http.Request) {
 		"object-src 'none'",
 		"base-uri 'self'",
 	}
-	if !conf.IsDebugModeActive(hostname) {
+	if conf.IsDebugModeActive(hostname) {
+		// In Debug mode, override restrictive middleware headers to allow iframe embedding.
+		w.Header().Del("X-Frame-Options")
+		cspParts = append(cspParts, "frame-ancestors *")
+	} else {
+		// Normal mode: keep restrictive headers set in [core.SecurityHeaders] middleware.
+		w.Header().Set("X-Frame-Options", "DENY")
 		cspParts = append(cspParts, "frame-ancestors 'https://"+hostname+"'")
 	}
 	w.Header().Set("Content-Security-Policy", strings.Join(cspParts, "; "))
