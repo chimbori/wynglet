@@ -101,6 +101,22 @@ We strongly recommend deploying using the official container image, which includ
 - Butterfly is designed to be used behind a TLS reverse proxy for SSL termination (among other things). We recommend [Caddy](https://caddyserver.com/); see sample Caddyfile below.
 - If you expect a lot of traffic, consider putting a CDN in front.
 
+### CLI Utilities
+
+Butterfly ships with a couple of built-in command-line helpers:
+
+- **Generate a bcrypt password hash** (for use in `butterfly.yml`):
+  ```shell
+  butterfly --bcrypt
+  ```
+  Enter your desired password when prompted. The output hash can be pasted directly into the `dashboard.password` field.
+
+- **Health check** (useful for container health checks):
+  ```shell
+  butterfly --healthcheck
+  ```
+  Pings the running service and exits `0` on success or `1` on failure.
+
 ### Sample `compose.yml` (for Docker and Podman)
 
 ```yml
