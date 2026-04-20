@@ -83,8 +83,30 @@ Butterfly Social can also generate QR Codes for your authorized URLs that you ca
 Use this URL format:
 
 ```html
-<img src="https://butterfly.your-server.com/qr-codes/v1?url=your-site.com/some/page">
+<img src="https://butterfly.your-server.com/qrcode/v1?url=your-site.com/some/page">
 ```
+
+## Rating Widget
+
+Butterfly includes an embeddable rating widget that your visitors can use to rate any page on your site.
+Ratings are not public, but are visible on your Butterfly Dashboard.
+It provides a lightweight mechanism to monitor the quality of content, e.g. for Help Articles.
+It supports two UI styles:
+
+- **Thumbs** (`ui=thumbs`): 👍 / 👎 buttons _(default)_
+- **Stars** (`ui=stars`): ⭐ 1–5 star rating
+
+Embed the widget on your page using an `<iframe>`:
+
+```html
+<iframe src="https://butterfly.your-server.com/rating/v1?ui=thumbs&url=https://your-site.com/some/page"
+  style="border: none; width: 200px; height: 60px;"></iframe>
+```
+
+Ratings are validated against the authorized domains allowlist.
+To prevent abuse, a single IP is limited to submitting one rating for a URL per 24 hours, and 10 ratings across all URLs per hour).
+
+Use the Dashboard's **Ratings** section to view collected ratings and generate the correct `<iframe>` embed code for any authorized URL.
 
 ## Install & Deploy
 
@@ -184,9 +206,16 @@ Butterfly requires basic configuration to be provided via a config file.
       max_size_bytes: 1073741824
   ```
 
+- Ratings config _(optional)_
+
+  ```yml
+  ratings:
+    retention: 8760h  # How long to keep rating data (default: 365 days)
+  ```
+
 - Debug Mode _(optional)_
 
-  Turn on additional logging in Debug Mode.
+  Turn on additional logging in Debug Mode. Debug mode can also be toggled per-domain from within the Dashboard UI.
   ```yml
   debug: true
   ```
@@ -202,7 +231,8 @@ butterfly.your-server.com {
 
 # Dashboard UI
 
-You can configure the Authorized Domains list using the Dashboard UI at `https://butterfly.your-server.com/dashboard`. The Dashboard is available as an installable PWA (Progressive Web Application) that can be “installed” locally using any modern browser.
+You can manage Butterfly from the Dashboard UI at `https://butterfly.your-server.com/dashboard`.
+The Dashboard is available as an installable PWA (Progressive Web Application) that can be "installed" locally using any modern browser.
 
 <img src="screenshot-pwa.webp">
 
