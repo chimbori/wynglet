@@ -98,12 +98,6 @@ func main() {
 	// Set up a graceful cleanup for when the process is terminated.
 	signalCh := make(chan os.Signal, 1)
 	signal.Notify(signalCh, os.Interrupt, syscall.SIGTERM, syscall.SIGINT)
-	go func() {
-		<-signalCh
-		fmt.Println()
-		slog.Info("Shutdown successfully!")
-		os.Exit(0)
-	}()
 
 	// Set up the Web server and start serving.
 	mux := http.NewServeMux()
@@ -131,6 +125,27 @@ func main() {
 	}()
 
 	addr := net.JoinHostPort("", strconv.Itoa(conf.Config.Web.Port))
+	server := &http.Server{
+		Addr:    addr,
+		Handler: core.SecurityHeaders(mux),
+	}
+
+	go func() {
+		<-signalCh
+		fmt.Println()
+		slog.Info("Shutting down…")
+		shutdownCtx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		defer cancel()
+		if err := server.Shutdown(shutdownCtx); err != nil {
+			slog.Error("HTTP server shutdown error", tint.Err(err))
+		}
+		db.Pool.Close()
+		slog.Info("Shutdown successfully!")
+		os.Exit(0)
+	}()
+
 	slog.Info("Listening", "url", "http://localhost"+addr) // Not "https://", since this app does not terminate SSL.
-	log.Fatal(http.ListenAndServe(addr, core.SecurityHeaders(mux)))
+	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		log.Fatal(err)
+	}
 }
