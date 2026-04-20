@@ -13,12 +13,14 @@ import (
 
 const countRatingGroups = `-- name: CountRatingGroups :one
 SELECT COUNT(*) FROM (
-  SELECT 1 FROM ratings GROUP BY url, ui
+  SELECT 1 FROM ratings
+  WHERE ($1 = 0 OR rated_at >= NOW() - ($1 * INTERVAL '1 day'))
+  GROUP BY url, ui
 ) AS grouped
 `
 
-func (q *Queries) CountRatingGroups(ctx context.Context) (int64, error) {
-	row := q.db.QueryRow(ctx, countRatingGroups)
+func (q *Queries) CountRatingGroups(ctx context.Context, days interface{}) (int64, error) {
+	row := q.db.QueryRow(ctx, countRatingGroups, days)
 	var count int64
 	err := row.Scan(&count)
 	return count, err
@@ -35,105 +37,6 @@ func (q *Queries) DeleteOldRatings(ctx context.Context, dollar_1 pgtype.Interval
 		return 0, err
 	}
 	return result.RowsAffected(), nil
-}
-
-const getRatingsByDay = `-- name: GetRatingsByDay :many
-SELECT
-    to_char(date_trunc('day', rated_at), 'YYYY-MM-DD') AS day,
-    ui,
-    COUNT(*)::bigint AS total_ratings,
-    COALESCE(SUM(CASE WHEN rating = 1 THEN 1 ELSE 0 END), 0)::bigint AS thumbs_up,
-    COALESCE(SUM(CASE WHEN rating = -1 THEN 1 ELSE 0 END), 0)::bigint AS thumbs_down,
-    COALESCE(AVG(CASE WHEN ui = 'stars' THEN rating::float8 ELSE NULL END), 0)::float8 AS average_stars
-  FROM ratings
-  WHERE rated_at >= NOW() - ($1 * INTERVAL '1 day')
-  GROUP BY day, ui
-  ORDER BY day DESC, ui ASC
-`
-
-type GetRatingsByDayRow struct {
-	Day          string
-	Ui           string
-	TotalRatings int64
-	ThumbsUp     int64
-	ThumbsDown   int64
-	AverageStars float64
-}
-
-func (q *Queries) GetRatingsByDay(ctx context.Context, dollar_1 interface{}) ([]GetRatingsByDayRow, error) {
-	rows, err := q.db.Query(ctx, getRatingsByDay, dollar_1)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []GetRatingsByDayRow
-	for rows.Next() {
-		var i GetRatingsByDayRow
-		if err := rows.Scan(
-			&i.Day,
-			&i.Ui,
-			&i.TotalRatings,
-			&i.ThumbsUp,
-			&i.ThumbsDown,
-			&i.AverageStars,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getRatingsByURL = `-- name: GetRatingsByURL :many
-SELECT
-    url,
-    ui,
-    COUNT(*)::bigint AS total_ratings,
-    COALESCE(SUM(CASE WHEN rating = 1 THEN 1 ELSE 0 END), 0)::bigint AS thumbs_up,
-    COALESCE(SUM(CASE WHEN rating = -1 THEN 1 ELSE 0 END), 0)::bigint AS thumbs_down,
-    COALESCE(AVG(CASE WHEN ui = 'stars' THEN rating::float8 ELSE NULL END), 0)::float8 AS average_stars
-  FROM ratings
-  GROUP BY url, ui
-  ORDER BY total_ratings DESC, url ASC
-`
-
-type GetRatingsByURLRow struct {
-	Url          string
-	Ui           string
-	TotalRatings int64
-	ThumbsUp     int64
-	ThumbsDown   int64
-	AverageStars float64
-}
-
-func (q *Queries) GetRatingsByURL(ctx context.Context) ([]GetRatingsByURLRow, error) {
-	rows, err := q.db.Query(ctx, getRatingsByURL)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []GetRatingsByURLRow
-	for rows.Next() {
-		var i GetRatingsByURLRow
-		if err := rows.Scan(
-			&i.Url,
-			&i.Ui,
-			&i.TotalRatings,
-			&i.ThumbsUp,
-			&i.ThumbsDown,
-			&i.AverageStars,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
 }
 
 const hasRecentRatingByIPForURL = `-- name: HasRecentRatingByIPForURL :one
@@ -179,53 +82,75 @@ func (q *Queries) InsertRating(ctx context.Context, arg InsertRatingParams) erro
 	return err
 }
 
-const listRatingGroupsPaginated = `-- name: ListRatingGroupsPaginated :many
+const listRatingsWithDistribution = `-- name: ListRatingsWithDistribution :many
 SELECT
     url,
     ui,
     COUNT(*)::bigint AS total_ratings,
-    COALESCE(SUM(CASE WHEN rating = 1 THEN 1 ELSE 0 END), 0)::bigint AS thumbs_up,
-    COALESCE(SUM(CASE WHEN rating = -1 THEN 1 ELSE 0 END), 0)::bigint AS thumbs_down,
+    COALESCE(SUM(CASE WHEN ui = 'thumbs' AND rating = 1 THEN 1 ELSE 0 END), 0)::bigint AS thumbs_up,
+    COALESCE(SUM(CASE WHEN ui = 'thumbs' AND rating = -1 THEN 1 ELSE 0 END), 0)::bigint AS thumbs_down,
+    COALESCE(SUM(CASE WHEN ui = 'stars' AND rating = 1 THEN 1 ELSE 0 END), 0)::bigint AS stars_1,
+    COALESCE(SUM(CASE WHEN ui = 'stars' AND rating = 2 THEN 1 ELSE 0 END), 0)::bigint AS stars_2,
+    COALESCE(SUM(CASE WHEN ui = 'stars' AND rating = 3 THEN 1 ELSE 0 END), 0)::bigint AS stars_3,
+    COALESCE(SUM(CASE WHEN ui = 'stars' AND rating = 4 THEN 1 ELSE 0 END), 0)::bigint AS stars_4,
+    COALESCE(SUM(CASE WHEN ui = 'stars' AND rating = 5 THEN 1 ELSE 0 END), 0)::bigint AS stars_5,
     COALESCE(AVG(CASE WHEN ui = 'stars' THEN rating::float8 ELSE NULL END), 0)::float8 AS average_stars,
-    MAX(rated_at) AS last_rated_at
+    CASE
+      WHEN ui = 'thumbs' THEN
+        SUM(CASE WHEN rating = 1 THEN 1 ELSE 0 END)::float8 / NULLIF(COUNT(*), 0)::float8
+      ELSE
+        COALESCE(AVG(rating::float8), 0) / 5.0
+    END::float8 AS normalized_score
   FROM ratings
+  WHERE ($1 = 0 OR rated_at >= NOW() - ($1 * INTERVAL '1 day'))
   GROUP BY url, ui
-  ORDER BY last_rated_at DESC
-  LIMIT $1 OFFSET $2
+  ORDER BY normalized_score DESC, url ASC
+  LIMIT $3 OFFSET $2
 `
 
-type ListRatingGroupsPaginatedParams struct {
-	Limit  int32
-	Offset int32
+type ListRatingsWithDistributionParams struct {
+	Days             interface{}
+	PaginationOffset int32
+	PaginationLimit  int32
 }
 
-type ListRatingGroupsPaginatedRow struct {
-	Url          string
-	Ui           string
-	TotalRatings int64
-	ThumbsUp     int64
-	ThumbsDown   int64
-	AverageStars float64
-	LastRatedAt  interface{}
+type ListRatingsWithDistributionRow struct {
+	Url             string
+	Ui              string
+	TotalRatings    int64
+	ThumbsUp        int64
+	ThumbsDown      int64
+	Stars1          int64
+	Stars2          int64
+	Stars3          int64
+	Stars4          int64
+	Stars5          int64
+	AverageStars    float64
+	NormalizedScore float64
 }
 
-func (q *Queries) ListRatingGroupsPaginated(ctx context.Context, arg ListRatingGroupsPaginatedParams) ([]ListRatingGroupsPaginatedRow, error) {
-	rows, err := q.db.Query(ctx, listRatingGroupsPaginated, arg.Limit, arg.Offset)
+func (q *Queries) ListRatingsWithDistribution(ctx context.Context, arg ListRatingsWithDistributionParams) ([]ListRatingsWithDistributionRow, error) {
+	rows, err := q.db.Query(ctx, listRatingsWithDistribution, arg.Days, arg.PaginationOffset, arg.PaginationLimit)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []ListRatingGroupsPaginatedRow
+	var items []ListRatingsWithDistributionRow
 	for rows.Next() {
-		var i ListRatingGroupsPaginatedRow
+		var i ListRatingsWithDistributionRow
 		if err := rows.Scan(
 			&i.Url,
 			&i.Ui,
 			&i.TotalRatings,
 			&i.ThumbsUp,
 			&i.ThumbsDown,
+			&i.Stars1,
+			&i.Stars2,
+			&i.Stars3,
+			&i.Stars4,
+			&i.Stars5,
 			&i.AverageStars,
-			&i.LastRatedAt,
+			&i.NormalizedScore,
 		); err != nil {
 			return nil, err
 		}
