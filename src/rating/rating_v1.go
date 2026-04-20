@@ -63,7 +63,7 @@ func handleRatingWidget(w http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		// Set CSP headers even for UI validation errors, otherwise clients won’t see it.
 		if hostname != "" {
-			setFrameHeadersForDebugMode(w, hostname)
+			setFrameAncestorsHeaders(w, hostname)
 		}
 		slog.Error("URL validation failed", tint.Err(err),
 			"method", req.Method,
@@ -109,7 +109,7 @@ func handleRatingWidget(w http.ResponseWriter, req *http.Request) {
 				"hostname", hostname,
 				"status", http.StatusBadRequest)
 			// Set CSP headers even for UI validation errors, otherwise clients won’t see it.
-			setFrameHeadersForDebugMode(w, hostname)
+			setFrameAncestorsHeaders(w, hostname)
 			w.WriteHeader(http.StatusBadRequest)
 			RatingResponse("🚫", successCSS).Render(req.Context(), w)
 			return
@@ -118,7 +118,7 @@ func handleRatingWidget(w http.ResponseWriter, req *http.Request) {
 	}
 
 	w.Header().Set("Cache-Control", "no-store")
-	setFrameHeadersForDebugMode(w, hostname)
+	setFrameAncestorsHeaders(w, hostname)
 	if err := RatingWidget(url, ui, buttons, css).Render(req.Context(), w); err != nil {
 		slog.Error("failed to render rating widget", tint.Err(err),
 			"method", req.Method,
@@ -166,7 +166,7 @@ func handleRate(w http.ResponseWriter, req *http.Request) {
 			"status", http.StatusUnauthorized)
 		// Set CSP headers even for UI validation errors, otherwise clients won’t see it.
 		if hostname != "" {
-			setFrameHeadersForDebugMode(w, hostname)
+			setFrameAncestorsHeaders(w, hostname)
 		}
 		w.WriteHeader(http.StatusUnauthorized)
 		RatingResponse("🚫", successCSS).Render(req.Context(), w)
@@ -182,7 +182,7 @@ func handleRate(w http.ResponseWriter, req *http.Request) {
 			"hostname", hostname,
 			"status", http.StatusBadRequest)
 		// Set CSP headers even for UI validation errors, otherwise clients won’t see it.
-		setFrameHeadersForDebugMode(w, hostname)
+		setFrameAncestorsHeaders(w, hostname)
 		w.WriteHeader(http.StatusBadRequest)
 		RatingResponse("🚫", successCSS).Render(req.Context(), w)
 		return
@@ -197,7 +197,7 @@ func handleRate(w http.ResponseWriter, req *http.Request) {
 			"hostname", hostname,
 			"status", http.StatusBadRequest)
 		// Set CSP headers even for UI validation errors, otherwise clients won’t see it.
-		setFrameHeadersForDebugMode(w, hostname)
+		setFrameAncestorsHeaders(w, hostname)
 		w.WriteHeader(http.StatusBadRequest)
 		RatingResponse("🚫", successCSS).Render(req.Context(), w)
 		return
@@ -213,7 +213,7 @@ func handleRate(w http.ResponseWriter, req *http.Request) {
 			"ip", ipAddress,
 			"status", http.StatusInternalServerError)
 		// Set CSP headers even for UI validation errors, otherwise clients won’t see it.
-		setFrameHeadersForDebugMode(w, hostname)
+		setFrameAncestorsHeaders(w, hostname)
 		w.WriteHeader(http.StatusInternalServerError)
 		RatingResponse("🚫", successCSS).Render(req.Context(), w)
 		return
@@ -229,7 +229,7 @@ func handleRate(w http.ResponseWriter, req *http.Request) {
 			"debug", conf.Config.Debug,
 			"status", http.StatusTooManyRequests)
 		// Set CSP headers even for UI validation errors, otherwise clients won’t see it.
-		setFrameHeadersForDebugMode(w, hostname)
+		setFrameAncestorsHeaders(w, hostname)
 		w.WriteHeader(http.StatusTooManyRequests)
 		RatingResponse("⏱️", successCSS).Render(req.Context(), w)
 		return
@@ -245,7 +245,7 @@ func handleRate(w http.ResponseWriter, req *http.Request) {
 		"ui", ui,
 		"status", http.StatusCreated)
 
-	setFrameHeadersForDebugMode(w, hostname)
+	setFrameAncestorsHeaders(w, hostname)
 	w.WriteHeader(http.StatusCreated)
 	if err := RatingResponse("🙏", successCSS).Render(req.Context(), w); err != nil {
 		slog.Error("failed to render rating response page", tint.Err(err),
@@ -258,11 +258,12 @@ func handleRate(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-// setFrameHeadersForDebugMode sets CSP and X-Frame-Options headers based on debug mode status.
+// setFrameAncestorsHeaders sets CSP and X-Frame-Options headers based on debug mode status.
 // When debug mode is active for the hostname, it allows unrestricted iframe embedding.
 // Otherwise, it maintains restrictive security headers.
-func setFrameHeadersForDebugMode(w http.ResponseWriter, hostname string) {
+func setFrameAncestorsHeaders(w http.ResponseWriter, hostname string) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.Header().Del("X-Frame-Options") // Remove blanket DENY header in both Normal & Debug modes.
 	cspParts := []string{
 		"default-src 'self'",
 		"img-src 'self' data:",
@@ -273,11 +274,9 @@ func setFrameHeadersForDebugMode(w http.ResponseWriter, hostname string) {
 	}
 	if conf.IsDebugModeActive(hostname) {
 		// In Debug mode, override restrictive middleware headers to allow iframe embedding.
-		w.Header().Del("X-Frame-Options")
 		cspParts = append(cspParts, "frame-ancestors *")
 	} else {
 		// Normal mode: keep restrictive headers set in [core.SecurityHeaders] middleware.
-		w.Header().Set("X-Frame-Options", "DENY")
 		cspParts = append(cspParts, "frame-ancestors 'https://"+hostname+"'")
 	}
 	w.Header().Set("Content-Security-Policy", strings.Join(cspParts, "; "))
