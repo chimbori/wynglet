@@ -277,7 +277,7 @@ func setFrameAncestorsHeaders(w http.ResponseWriter, hostname string) {
 		cspParts = append(cspParts, "frame-ancestors *")
 	} else {
 		// Normal mode: keep restrictive headers set in [core.SecurityHeaders] middleware.
-		cspParts = append(cspParts, "frame-ancestors 'https://"+hostname+"'")
+		cspParts = append(cspParts, "frame-ancestors https://"+hostname)
 	}
 	w.Header().Set("Content-Security-Policy", strings.Join(cspParts, "; "))
 }
