@@ -1,6 +1,6 @@
 debug: true
 title: Butterfly Social
-description: "Self-hosted OpenGraph social link preview image generation tool. Open source, fully customizable, & free."
+description: 'The Dynamic Companion for your Static Sites: a self-hosted single-binary toolkit of embeddable services: OpenGraph preview images, QR codes, and Rating widgets'
 urls:
   root: https://butterfly.chimbori.dev
   css: //chimbori.com/css/gen.css

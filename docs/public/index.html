@@ -8,12 +8,12 @@
   <meta name="robots" content="noodp,noydir">
   <meta name="mobile-web-app-capable" content="yes">
   <title itemprop="name">Butterfly Social</title>
-  <meta name="description" itemprop="description" content="Self-hosted OpenGraph social link preview image generation tool. Open source, fully customizable, &amp; free.">
+  <meta name="description" itemprop="description" content="The Dynamic Companion for your Static Sites: a self-hosted single-binary toolkit of embeddable services: OpenGraph preview images, QR codes, and Rating widgets">
   <meta name="theme-color" content="#fe7a4d">
 
   <meta property="og:url" content="https://butterfly.chimbori.dev/">
   <meta property="og:title" content="Butterfly Social">
-  <meta property="og:description" content="Self-hosted OpenGraph social link preview image generation tool. Open source, fully customizable, &amp; free.">
+  <meta property="og:description" content="The Dynamic Companion for your Static Sites: a self-hosted single-binary toolkit of embeddable services: OpenGraph preview images, QR codes, and Rating widgets">
   <meta property="og:image" content="https://bfly.chimbori.net/link-previews/v1?url=https://butterfly.chimbori.dev/">
 
   <link rel="canonical" href="https://butterfly.chimbori.dev/">
@@ -51,28 +51,51 @@
 </nav></div>
   </header>
   <article class="my-8 md:my-16 width-limit prose-lite"><h1 id="butterfly-social">Butterfly Social</h1>
+<p>The dynamic companion for your static site: a self-hosted toolkit that brings dynamic capabilities to static websites without depending on paid third-party services.</p>
+<p>Static site generators are great at producing fast, secure, cheap-to-host websites.
+But they have one inherent limitation: they’re static.
+Features like social preview images, QR codes, and rating widgets traditionally each require a separate paid SaaS subscription: each with its own account, pricing model, and data silo.</p>
+<p>Butterfly bundles all of these into a single containerized open-source binary:</p>
+<ul>
+<li>
+<p><strong><a href="#open-graph-link-previews">OpenGraph Link Previews</a></strong>:
+Auto-generate OpenGraph social preview images for every page, using your own HTML/CSS templates.</p>
+</li>
+<li>
+<p><strong><a href="#qr-codes">QR Codes</a></strong>:
+Generate and cache QR codes for any authorized URL.</p>
+</li>
+<li>
+<p><strong><a href="#rating-widget">Rating Widget</a></strong>:
+Embed a 👍/👎 or ⭐ rating widget on any page via a lightweight <code>&lt;iframe&gt;</code>.</p>
+</li>
+</ul>
+<p><strong>One instance serves many sites.</strong> A single Butterfly deployment can power all your static sites simultaneously.
+Every tool is gated by a domain allowlist: only explicitly authorized domains can embed or use your instance, preventing unauthorized use.</p>
+<p><strong>Self-hosted.</strong> Your data stays on your own infrastructure.
+You can host Butterfly on a cheap VPS from any provider (here’s $200 in credits with a <a href="https://www.digitalocean.com/?refcode=e76ea0927117">DigitalOcean referral code</a>).
+No vendor lock-in, no per-request billing, no privacy trade-offs.</p>
+<p><strong>Open source.</strong> Apache 2.0 licensed, free forever.</p>
+<h2 id="open-graph-link-previews">Open Graph Link Previews</h2>
 <p>Butterfly Social is a quick way to auto-generate OpenGraph link preview images in bulk for all your sites, without the use of a separate template editor or API integration at no cost.
-The source of truth for the image data &amp; design remains within your primary website, so you can use tools you are already familiar with &amp; assets that are already well-integrated into your workflow.</p>
-<p>Self-hosted OpenGraph / social link preview image generation tool. Open source, fully customizable, yet works out of the box with minimal configuration.</p>
-<h2 id="how-to-use-butterfly-social-link-previews">How to use Butterfly Social Link Previews</h2>
-<p>You can self-host Butterfly Social on a cheap VPS from any provider (here’s $200 in credits with a <a href="https://www.digitalocean.com/?refcode=e76ea0927117">DigitalOcean referral code</a>.)</p>
+The source of truth for the image data &amp; design remains within your primary website, so you can use tools you are already familiar with &amp; assets that</p>
 <p>To prevent abuse and to conserve resources, Butterfly blocks all domains by default, until you explicitly authorize each domain you care about.</p>
 <h3 id="use-the-default-template">Use the Default Template</h3>
 <p>Just one step: Paste the Butterfly <code>&lt;meta&gt;</code> tag into the original page, and you’re done!</p>
-<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;"><code><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">meta</span> <span style="color:#50fa7b">property</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;og:image&#34;</span> <span style="color:#50fa7b">content</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;https://butterfly.your-server.com/link-previews/v1?url=your-site.com/some/page&#34;</span>&gt;
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">meta</span> <span style="color:#50fa7b">property</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;og:image&#34;</span> <span style="color:#50fa7b">content</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;https://butterfly.your-server.com/link-previews/v1?url=your-site.com/some/page&#34;</span>&gt;
 </span></span></code></pre><h3 id="use-your-own-templates">Use your Own Templates</h3>
 <ol>
 <li>
 <p>Create a new hidden element inside your existing Web page, using whatever framework or template engine you use today.
-E.g. here’s a simple example:</p>
-<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;"><code><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">id</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;link-preview&#34;</span> <span style="color:#50fa7b">style</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;display: none; width: 1200px;&#34;</span>&gt;
+E.g.</p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">id</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;link-preview&#34;</span> <span style="color:#50fa7b">style</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;display: none; width: 1200px;&#34;</span>&gt;
 </span></span><span style="display:flex;"><span>  &lt;<span style="color:#ff79c6">h1</span>&gt;Butterfly Social&lt;/<span style="color:#ff79c6">h1</span>&gt;
 </span></span><span style="display:flex;"><span>  &lt;<span style="color:#ff79c6">p</span>&gt;Self-hosted OpenGraph / social link preview image generation tool. Fully customizable, yet works out of the box with zero configuration.&lt;/<span style="color:#ff79c6">p</span>&gt;
 </span></span><span style="display:flex;"><span>&lt;/<span style="color:#ff79c6">div</span>&gt;
 </span></span></code></pre></li>
 <li>
 <p>Use Butterfly to craft a URL, and paste the <code>&lt;meta&gt;</code> tag into the original page.</p>
-<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;"><code><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">meta</span> <span style="color:#50fa7b">property</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;og:image&#34;</span> <span style="color:#50fa7b">content</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;https://butterfly.your-server.com/link-previews/v1?url=your-site.com/some/page&#34;</span>&gt;
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">meta</span> <span style="color:#50fa7b">property</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;og:image&#34;</span> <span style="color:#50fa7b">content</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;https://butterfly.your-server.com/link-previews/v1?url=your-site.com/some/page&#34;</span>&gt;
 </span></span></code></pre><p>If you can’t use the default selector (<code>#link-preview</code>) for any reason, you can provide an alternate one using the <code>&amp;sel=</code> parameter.</p>
 </li>
 <li>
@@ -94,19 +117,62 @@ E.g. here’s a simple example:</p>
 </ul>
 <p>Why limit yourself to the customization possible in a random WYSIWYG editor, when you have the entire Web platform available to you!</p>
 <p>Anything you can design for the Web, you can use to create a link preview image.
-The infinite is possible at Zombocom. The unattainable is unknown at Zombocom.</p>
-<h2 id="bonus-features-qr-codes">Bonus Features: QR Codes</h2>
-<p>Butterfly Social can also generate QR Codes for your authorized URLs that you can embed on your site wherever appropriate.</p>
+The infinite is possible at Zombocom.
+The unattainable is unknown at Zombocom.</p>
+<h2 id="qr-codes">QR Codes</h2>
+<p>Butterfly generates QR Codes for your authorized URLs that you can embed on your site wherever appropriate.</p>
 <p>Use this URL format:</p>
-<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;"><code><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">img</span> <span style="color:#50fa7b">src</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;https://butterfly.your-server.com/qr-codes/v1?url=your-site.com/some/page&#34;</span>&gt;
-</span></span></code></pre><h2 id="install--deploy">Install &amp; Deploy</h2>
-<p>We strongly recommend deploying using the official container image, which includes Chrome Headless for convenience. Thanks to the <a href="https://github.com/chromedp/chromedp">chromedp</a> project for making this possible!</p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">img</span> <span style="color:#50fa7b">src</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;https://butterfly.your-server.com/qrcode/v1?url=your-site.com/some/page&#34;</span>&gt;
+</span></span></code></pre><h2 id="rating-widget">Rating Widget</h2>
+<p>Butterfly includes an embeddable rating widget that your visitors can use to rate any page on your site.
+Ratings are not public, but are visible on your Butterfly Dashboard.
+It provides a lightweight mechanism to monitor the quality of content, e.g. for Help Articles.
+It supports two UI styles:</p>
 <ul>
-<li>Butterfly is designed to be used behind a TLS reverse proxy for SSL termination (among other things). We recommend <a href="https://caddyserver.com/">Caddy</a>; see sample Caddyfile below.</li>
-<li>If you expect a lot of traffic, consider using a CDN.</li>
+<li><strong>Thumbs</strong> (<code>ui=thumbs</code>): 👍 / 👎 buttons <em>(default)</em></li>
+<li><strong>Stars</strong> (<code>ui=stars</code>): ⭐ 1–5 star rating</li>
+</ul>
+<p>Embed the widget on your page using an <code>&lt;iframe&gt;</code>:</p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">iframe</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#50fa7b">src</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;https://butterfly.your-server.com/rating/v1?ui=thumbs&amp;url=https://your-site.com/some/page&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#50fa7b">style</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;border:none; width:200px; height:50px;&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#ff79c6">iframe</span>&gt;
+</span></span></code></pre><p>Ratings are validated against the authorized domains allowlist.
+To prevent abuse, a single IP is limited to submitting one rating for a URL per 24 hours, and 10 ratings across all URLs per hour).</p>
+<p>Use the Dashboard’s <strong>Ratings</strong> section to view collected ratings and generate the correct <code>&lt;iframe&gt;</code> embed code for any authorized URL.</p>
+<h2 id="cli-utilities">CLI Utilities</h2>
+<p>Butterfly ships with a couple of built-in command-line helpers:</p>
+<ul>
+<li>
+<p><strong>Generate a bcrypt password hash</strong> (for use in <code>butterfly.yml</code>):</p>
+<p>Enter your desired password when prompted.
+The output hash can be pasted directly into the <code>dashboard.password</code> field.</p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>butterfly --bcrypt
+</span></span></code></pre></li>
+<li>
+<p><strong>Health check</strong> (useful for container health checks):</p>
+<p>Pings the running service and exits <code>0</code> on success or <code>1</code> on failure.</p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>butterfly --healthcheck
+</span></span></code></pre></li>
+</ul>
+<h2 id="install--deploy">Install &amp; Deploy</h2>
+<ul>
+<li>
+<p>We strongly recommend deploying using the official container image, which includes Chrome Headless for convenience.</p>
+<ul>
+<li>Thanks to the <a href="https://github.com/chromedp/chromedp">chromedp</a> project for making this possible!</li>
+</ul>
+</li>
+<li>
+<p>Butterfly is designed to be used behind a TLS reverse proxy for SSL termination (among other things).</p>
+<ul>
+<li>We recommend <a href="https://caddyserver.com/">Caddy</a>; see sample Caddyfile below.</li>
+<li>If you expect a lot of traffic, consider putting a CDN in front.</li>
+</ul>
+</li>
 </ul>
 <h3 id="sample-composeyml-for-docker-and-podman">Sample <code>compose.yml</code> (for Docker and Podman)</h3>
-<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;"><code><span style="display:flex;"><span><span style="color:#ff79c6">services</span>:
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#ff79c6">services</span>:
 </span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">butterfly</span>:
 </span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">container_name</span>: butterfly
 </span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">image</span>: ghcr.io/chimbori/butterfly:latest
@@ -130,35 +196,38 @@ The infinite is possible at Zombocom. The unattainable is unknown at Zombocom.</
 </span></span><span style="display:flex;"><span><span style="color:#ff79c6">volumes</span>:
 </span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">butterfly-data</span>:
 </span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">butterfly-db-data</span>:
-</span></span></code></pre><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;"><code><span style="display:flex;"><span>sudo chmod -R a+rw butterfly-data
 </span></span></code></pre><h4 id="if-you-prefer-to-install-using-the-go-binary-on-raw-metal-use-go-install">If you prefer to install using the Go binary on raw metal, use <code>go install</code></h4>
-<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;"><code><span style="display:flex;"><span>go install butterfly.chimbori.dev@latest
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>go install butterfly.chimbori.dev@latest
 </span></span></code></pre><h3 id="sample-butterflyyml">Sample <code>butterfly.yml</code></h3>
 <p>Butterfly requires basic configuration to be provided via a config file.</p>
 <ul>
 <li>
 <p><strong>PostgreSQL Database URL</strong> <em>(required)</em></p>
-<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;"><code><span style="display:flex;"><span><span style="color:#ff79c6">database</span>:
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#ff79c6">database</span>:
 </span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">url</span>: postgresql://chimbori:chimbori@butterfly-db:5432/butterfly
 </span></span></code></pre></li>
 <li>
 <p><strong>Dashboard credentials</strong> (encrypted via <code>bcrypt</code>) <em>(required)</em></p>
-<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;"><code><span style="display:flex;"><span><span style="color:#ff79c6">dashboard</span>:
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#ff79c6">dashboard</span>:
 </span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">username</span>: admin
 </span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">password</span>: <span style="color:#f1fa8c">&#34;$2a$10$a8LnUkK1UiB.9yQrUp3wyuGsH1AAHhlHVy1cjIaaIUVAwCtGvaX7q&#34;</span> <span style="color:#6272a4"># &#34;test&#34;</span>
 </span></span></code></pre></li>
 <li>
 <p>Web config <em>(optional)</em></p>
 <p>Assuming there’s a reverse proxy in front of Butterfly Social, there should be no need to change the port here; just configure the reverse proxy to forward requests to port 9999.</p>
-<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;"><code><span style="display:flex;"><span><span style="color:#ff79c6">web</span>:
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#ff79c6">web</span>:
 </span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">port</span>: <span style="color:#bd93f9">9999</span>
 </span></span></code></pre></li>
 <li>
 <p>Link Previews config <em>(optional)</em></p>
-<p>Performance will be seriously affected by disabling the cache. This is only to be used during development.</p>
-<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;"><code><span style="display:flex;"><span><span style="color:#ff79c6">link-previews</span>:
+<p>Performance will be seriously affected by disabling the cache.
+Only turn off during development.</p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#ff79c6">link-previews</span>:
 </span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">screenshot</span>:
 </span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">timeout</span>: 20s
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">sitemap</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">concurrent_urls</span>: <span style="color:#bd93f9">4</span>  <span style="color:#6272a4"># Number of URLs processed in parallel during sitemap import</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">max_urls</span>: <span style="color:#bd93f9">1000</span>      <span style="color:#6272a4"># Maximum URLs fetched from a sitemap</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">cache</span>:
 </span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">enabled</span>: <span style="color:#ff79c6">true</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">ttl</span>: 720h0m0s
@@ -166,31 +235,83 @@ The infinite is possible at Zombocom. The unattainable is unknown at Zombocom.</
 </span></span></code></pre></li>
 <li>
 <p>QR Codes config <em>(optional)</em></p>
-<p>Performance will be seriously affected by disabling the cache. This is only to be used during development.</p>
-<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;"><code><span style="display:flex;"><span><span style="color:#ff79c6">qr-codes</span>:
+<p>Performance will be seriously affected by disabling the cache.
+Only turn off during development.</p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#ff79c6">qr-codes</span>:
 </span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">cache</span>:
 </span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">enabled</span>: <span style="color:#ff79c6">true</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">ttl</span>: 720h0m0s
 </span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">max_size_bytes</span>: <span style="color:#bd93f9">1073741824</span>
 </span></span></code></pre></li>
 <li>
+<p>Ratings config <em>(optional)</em></p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#ff79c6">ratings</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">retention: 8760h  # How long to keep rating data (default</span>: <span style="color:#bd93f9">365</span> days)
+</span></span></code></pre></li>
+<li>
+<p>Logs config <em>(optional)</em></p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#ff79c6">logs</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">retention: 720h  # How long to keep error logs (default</span>: <span style="color:#bd93f9">30</span> days)
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">pagination</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">limit</span>: <span style="color:#bd93f9">10</span>
+</span></span></code></pre></li>
+<li>
+<p>Dashboard pagination <em>(optional)</em></p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#ff79c6">dashboard</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">pagination</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">limit</span>: <span style="color:#bd93f9">10</span>
+</span></span></code></pre></li>
+<li>
 <p>Debug Mode <em>(optional)</em></p>
-<p>Turn on additional logging in Debug Mode.</p>
-<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;"><code><span style="display:flex;"><span><span style="color:#ff79c6">debug</span>: <span style="color:#ff79c6">true</span>
+<p>Turn on additional logging in Debug Mode.
+Debug mode can also be toggled per-domain from within the Dashboard UI.</p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#ff79c6">debug</span>: <span style="color:#ff79c6">true</span>
 </span></span></code></pre></li>
 </ul>
 <h3 id="sample-caddyfile">Sample <code>Caddyfile</code></h3>
-<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;"><code><span style="display:flex;"><span><span style="font-weight:bold">butterfly.your-server.com</span> {
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="font-weight:bold">butterfly.your-server.com</span> {
 </span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">reverse_proxy</span> butterfly:<span style="color:#bd93f9">9999</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">encode</span> <span style="color:#f1fa8c">zstd</span> <span style="color:#f1fa8c">gzip</span>
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre><h1 id="dashboard-ui">Dashboard UI</h1>
-<p>You can configure the Authorized Domains list using the Dashboard UI at <code>https://butterfly.your-server.com/dashboard</code>. The Dashboard is available as an installable PWA (Progressive Web Application) that can be “installed” locally using any modern browser.</p>
+<p>You can manage Butterfly from the Dashboard UI at <code>https://butterfly.your-server.com/dashboard</code>.
+The Dashboard is available as an installable PWA (Progressive Web Application) that can be &ldquo;installed&rdquo; locally using any modern browser.</p>
+<p>The Dashboard includes the following sections:</p>
+<ul>
+<li>
+<p><strong>Link Previews</strong>:
+Browse all generated link preview images, delete individual ones, view access statistics, and inspect a breakdown of user agents (social platforms, bots, etc.)
+that have requested them.</p>
+<ul>
+<li><strong>Sitemap Import</strong>:
+Bulk pre-generate link previews for an entire site by importing a sitemap URL.
+The import runs concurrently in the background; you can monitor progress or cancel it at any time.</li>
+</ul>
+</li>
+<li>
+<p><strong>QR Codes</strong>:
+Browse and delete generated QR codes.</p>
+</li>
+<li>
+<p><strong>Ratings</strong>:
+View collected ratings for any authorized URL.
+Use the built-in embed builder to generate ready-to-paste <code>&lt;iframe&gt;</code> code for your pages.</p>
+</li>
+<li>
+<p><strong>Domains</strong>:
+Manage the authorized domains allowlist.
+Add or remove domains and toggle per-domain debug mode.</p>
+</li>
+<li>
+<p><strong>Logs</strong>:
+View recent error-level log entries.</p>
+</li>
+</ul>
 <img src="screenshot-pwa.webp">
 <h1 id="license">License</h1>
 <p>This project is licensed under the Apache License 2.0.</p>
 <h1 id="comparison-with-alternatives">Comparison with Alternatives</h1>
-<p>There are a lot of paid SaaS tools in this space. Notable among them are:</p>
+<p>There are a lot of paid SaaS tools in this space.</p>
 <ul>
 <li>BannerBear</li>
 <li>RenderForm</li>
@@ -229,7 +350,7 @@ The infinite is possible at Zombocom. The unattainable is unknown at Zombocom.</
   </footer>
 <div class="hidden relative mx-auto px-24 py-16 w-[1200px] h-[630px] text-white background-orange" id="link-preview">
   <h1 class="text-shadow-lg mb-12 text-7xl/21 line-clamp-3">Butterfly Social</h1>
-  <h2 class="text-shadow-md pr-24 text-5xl/18 line-clamp-3">Self-hosted OpenGraph social link preview image generation tool. Open source, fully customizable, &amp; free.</h2>
+  <h2 class="text-shadow-md pr-24 text-5xl/18 line-clamp-3">The Dynamic Companion for your Static Sites: a self-hosted single-binary toolkit of embeddable services: OpenGraph preview images, QR codes, and Rating widgets</h2>
   <img class="right-24 bottom-16 absolute size-24" style="filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.2));" src="//chimbori.com/media/favicon.png">
 </div>
 </body>
