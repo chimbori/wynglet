@@ -75,10 +75,12 @@ func authHandler(next http.Handler) http.Handler {
 
 		reqUsername, reqPassword, ok := req.BasicAuth()
 		if !ok || reqUsername != conf.Config.Dashboard.Username {
-			slog.Warn("no credentials provided", tint.Err(fmt.Errorf("no credentials (from: %s)", core.ReadUserIP(req))),
+			slog.Warn("no credentials", tint.Err(fmt.Errorf("no credentials")),
 				"method", req.Method,
 				"path", req.URL.Path,
-				"status", http.StatusUnauthorized)
+				"url", req.URL,
+				"status", http.StatusUnauthorized,
+				"ip", core.ReadUserIP(req))
 			w.Header().Add("WWW-Authenticate", fmt.Sprintf(`Basic realm="%s"`, conf.AppName))
 			w.WriteHeader(http.StatusUnauthorized)
 			ContentTempl("Unauthorized", ErrorTempl("Please provide valid credentials to access this section.")).Render(req.Context(), w)
@@ -87,10 +89,12 @@ func authHandler(next http.Handler) http.Handler {
 
 		err := bcrypt.CompareHashAndPassword([]byte(conf.Config.Dashboard.Password), []byte(reqPassword))
 		if err != nil {
-			slog.Error("invalid credentials provided", tint.Err(fmt.Errorf("invalid credentials (from: %s)", core.ReadUserIP(req))),
+			slog.Error("invalid credentials", tint.Err(fmt.Errorf("invalid credentials: %w", err)),
 				"method", req.Method,
 				"path", req.URL.Path,
-				"status", http.StatusUnauthorized)
+				"url", req.URL,
+				"status", http.StatusUnauthorized,
+				"ip", core.ReadUserIP(req))
 			w.WriteHeader(http.StatusUnauthorized)
 			ContentTempl("Unauthorized", ErrorTempl("Please provide valid credentials to access this section.")).Render(req.Context(), w)
 			return
