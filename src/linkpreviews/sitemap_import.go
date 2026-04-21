@@ -94,10 +94,7 @@ func StartSitemapImport(parent context.Context, sitemapURL string) error {
 		existing[existingURL] = struct{}{}
 	}
 
-	concurrency := conf.Config.LinkPreviews.Sitemap.ConcurrentURLs
-	if concurrency < 1 {
-		concurrency = 1
-	}
+	concurrency := max(conf.Config.LinkPreviews.Sitemap.ConcurrentURLs, 1)
 
 	go runSitemapImport(ctx, status, urls, existing, concurrency)
 	return nil
@@ -123,9 +120,7 @@ func runSitemapImport(ctx context.Context, status *SitemapImportStatus, urls []s
 	var failed int64
 
 	for range concurrency {
-		waitGroup.Add(1)
-		go func() {
-			defer waitGroup.Done()
+		waitGroup.Go(func() {
 			queries := db.New(db.Pool)
 			for url := range jobs {
 				select {
@@ -174,7 +169,7 @@ func runSitemapImport(ctx context.Context, status *SitemapImportStatus, urls []s
 				atomic.AddInt64(&completed, 1)
 				updateSitemapImportCounts(status, int(atomic.LoadInt64(&completed)), int(atomic.LoadInt64(&skipped)), int(atomic.LoadInt64(&failed)))
 			}
-		}()
+		})
 	}
 
 	for _, url := range urls {

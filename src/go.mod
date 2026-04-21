@@ -8,7 +8,7 @@ require (
 	github.com/chromedp/chromedp v0.15.1
 	github.com/disintegration/imaging v1.6.2
 	github.com/dustin/go-humanize v1.0.1
-	github.com/jackc/pgx/v5 v5.9.1
+	github.com/jackc/pgx/v5 v5.9.2
 	github.com/justinas/alice v1.2.0
 	github.com/lmittmann/tint v1.1.3
 	github.com/pressly/goose/v3 v3.27.0
