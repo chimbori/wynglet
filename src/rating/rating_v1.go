@@ -168,10 +168,7 @@ func handleRate(w http.ResponseWriter, req *http.Request) {
 		slog.Error("failed to parse form", tint.Err(err),
 			"method", req.Method,
 			"path", req.URL.Path,
-			"status", http.StatusBadRequest,
-			"url", "",
-			"hostname", "",
-			"ip", "")
+			"status", http.StatusBadRequest)
 		http.Error(w, "invalid form payload", http.StatusBadRequest)
 		return
 	}

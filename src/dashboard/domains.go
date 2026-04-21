@@ -160,16 +160,20 @@ func toggleDebugModeHandler(w http.ResponseWriter, req *http.Request) {
 
 	// Toggle debug mode
 	enabling := !conf.IsDebugModeActive(domain)
-	slog.Warn("Debug Mode toggled",
-		"method", req.Method,
-		"path", req.URL.Path,
-		"domain", domain,
-		"enabled", enabling)
+	var msg string
 	if enabling {
+		msg = "Debug Mode enabled"
 		conf.EnableDebugMode(domain)
 	} else {
+		msg = "Debug Mode disabled"
 		conf.DisableDebugMode(domain)
 	}
+	slog.Warn(msg,
+		"method", req.Method,
+		"path", req.URL.Path,
+		"url", req.URL.String(),
+		"status", http.StatusOK,
+		"hostname", domain)
 
 	// Return the updated list
 	domains, err := queries.ListDomains(ctx)

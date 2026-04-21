@@ -82,7 +82,9 @@ func CleanupExpiredDebugModes() {
 	now := time.Now()
 	for domain, activatedAt := range debugTracker.modes {
 		if now.Sub(activatedAt) > debugModeDuration {
-			slog.Warn("debug mode expired", "domain", domain, "activated_at", activatedAt)
+			slog.Warn("debug mode expired",
+				"hostname", domain,
+				"activated_at", activatedAt)
 			delete(debugTracker.modes, domain)
 		}
 	}
