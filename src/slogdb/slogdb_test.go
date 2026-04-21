@@ -49,6 +49,7 @@ func TestDBHandler(t *testing.T) {
 		"status", 500,
 		"url", "https://example.com/test",
 		"hostname", "example.com",
+		"ip", "1.1.1.1",
 	)
 
 	// Query the database to verify the error was logged
@@ -85,6 +86,10 @@ func TestDBHandler(t *testing.T) {
 
 	if lastLog.Hostname == nil || *lastLog.Hostname != "example.com" {
 		t.Errorf("Expected hostname 'example.com', got '%v'", lastLog.Hostname)
+	}
+
+	if lastLog.Ip == nil || *lastLog.Ip != "1.1.1.1" {
+		t.Errorf("Expected ip_address '1.1.1.1', got '%v'", lastLog.Ip)
 	}
 
 	t.Logf("Successfully logged error to database with ID: %d", lastLog.ID)

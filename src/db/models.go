@@ -36,6 +36,7 @@ type Log struct {
 	Message       *string
 	Err           *string
 	UserAgent     *string
+	Ip            *string
 }
 
 type QrCode struct {

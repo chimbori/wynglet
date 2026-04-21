@@ -36,7 +36,7 @@ func (q *Queries) DeleteOldLogs(ctx context.Context, dollar_1 pgtype.Interval) (
 }
 
 const getRecentLogs = `-- name: GetRecentLogs :many
-SELECT _id, logged_at, request_method, request_path, http_status, url, hostname, message, err, user_agent FROM logs
+SELECT _id, logged_at, request_method, request_path, http_status, url, hostname, message, err, user_agent, ip FROM logs
   ORDER BY logged_at DESC
   LIMIT $1
 `
@@ -61,6 +61,7 @@ func (q *Queries) GetRecentLogs(ctx context.Context, limit int32) ([]Log, error)
 			&i.Message,
 			&i.Err,
 			&i.UserAgent,
+			&i.Ip,
 		); err != nil {
 			return nil, err
 		}
@@ -73,7 +74,7 @@ func (q *Queries) GetRecentLogs(ctx context.Context, limit int32) ([]Log, error)
 }
 
 const getRecentLogsPaginated = `-- name: GetRecentLogsPaginated :many
-SELECT _id, logged_at, request_method, request_path, http_status, url, hostname, message, err, user_agent FROM logs
+SELECT _id, logged_at, request_method, request_path, http_status, url, hostname, message, err, user_agent, ip FROM logs
   ORDER BY logged_at DESC
   LIMIT $1 OFFSET $2
 `
@@ -103,6 +104,7 @@ func (q *Queries) GetRecentLogsPaginated(ctx context.Context, arg GetRecentLogsP
 			&i.Message,
 			&i.Err,
 			&i.UserAgent,
+			&i.Ip,
 		); err != nil {
 			return nil, err
 		}
@@ -117,9 +119,9 @@ func (q *Queries) GetRecentLogsPaginated(ctx context.Context, arg GetRecentLogsP
 const insertLog = `-- name: InsertLog :exec
 INSERT INTO logs (
   request_method, request_path, http_status,
-  url, hostname, user_agent,
+  url, hostname, user_agent, ip,
   message, err
-) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
 `
 
 type InsertLogParams struct {
@@ -129,6 +131,7 @@ type InsertLogParams struct {
 	Url           *string
 	Hostname      *string
 	UserAgent     *string
+	Ip            *string
 	Message       *string
 	Err           *string
 }
@@ -141,6 +144,7 @@ func (q *Queries) InsertLog(ctx context.Context, arg InsertLogParams) error {
 		arg.Url,
 		arg.Hostname,
 		arg.UserAgent,
+		arg.Ip,
 		arg.Message,
 		arg.Err,
 	)

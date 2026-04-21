@@ -93,6 +93,7 @@ func (h *DBHandler) writeToDatabase(ctx context.Context, r slog.Record) {
 		url           *string
 		hostname      *string
 		userAgent     *string
+		ip            *string
 	)
 
 	r.Attrs(func(a slog.Attr) bool {
@@ -121,6 +122,10 @@ func (h *DBHandler) writeToDatabase(ctx context.Context, r slog.Record) {
 			if s := a.Value.String(); s != "" {
 				userAgent = &s
 			}
+		case "ip":
+			if s := a.Value.String(); s != "" {
+				ip = &s
+			}
 		case "status":
 			if v := a.Value.Any(); v != nil {
 				var i int32
@@ -148,6 +153,7 @@ func (h *DBHandler) writeToDatabase(ctx context.Context, r slog.Record) {
 		Url:           url,
 		Hostname:      hostname,
 		UserAgent:     userAgent,
+		Ip:            ip,
 		Message:       &message,
 		Err:           slogErr,
 	})
