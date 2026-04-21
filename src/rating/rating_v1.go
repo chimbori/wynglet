@@ -13,7 +13,6 @@ import (
 	"net/http"
 	"strings"
 
-	"butterfly.chimbori.dev/conf"
 	"butterfly.chimbori.dev/core"
 	"butterfly.chimbori.dev/db"
 	"butterfly.chimbori.dev/validation"
@@ -104,7 +103,7 @@ func handleRatingWidget(w http.ResponseWriter, req *http.Request) {
 		showButtons = false
 	}
 
-	if showButtons && !conf.IsDebugModeActive(hostname) {
+	if showButtons && !core.IsDebugModeActive(hostname) {
 		// Check if user already has a recent rating for this URL
 		exists, err := queries.HasRecentRatingByIPForURL(req.Context(), db.HasRecentRatingByIPForURLParams{
 			Url:       url,
@@ -265,7 +264,7 @@ func handleRate(w http.ResponseWriter, req *http.Request) {
 			"url", url,
 			"hostname", hostname,
 			"ip", ipAddress,
-			"domain_debug_mode", conf.IsDebugModeActive(hostname),
+			"domain_debug_mode", core.IsDebugModeActive(hostname),
 			"status", http.StatusTooManyRequests)
 		// Set CSP headers even for UI validation errors, otherwise clients won’t see it.
 		setFrameAncestorsHeaders(w, hostname)
@@ -312,7 +311,7 @@ func setFrameAncestorsHeaders(w http.ResponseWriter, hostname string) {
 		"object-src 'none'",
 		"base-uri 'self'",
 	}
-	if conf.IsDebugModeActive(hostname) {
+	if core.IsDebugModeActive(hostname) {
 		// In Debug mode, override restrictive middleware headers to allow iframe embedding.
 		cspParts = append(cspParts, "frame-ancestors *")
 	} else {
@@ -342,7 +341,7 @@ func recordRating(ctx context.Context, url string, hostname string, ui string, r
 		return false, true, nil
 	}
 
-	if !conf.IsDebugModeActive(hostname) {
+	if !core.IsDebugModeActive(hostname) {
 		exists, err := q.HasRecentRatingByIPForURL(ctx, db.HasRecentRatingByIPForURLParams{
 			Url:       url,
 			IpAddress: ipAddress,

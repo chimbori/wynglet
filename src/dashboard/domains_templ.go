@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"time"
 
-	"butterfly.chimbori.dev/conf"
+	"butterfly.chimbori.dev/core"
 	"butterfly.chimbori.dev/db"
 	"github.com/a-h/templ"
 	templruntime "github.com/a-h/templ/runtime"
@@ -155,7 +155,7 @@ func DomainsTempl(domains []db.Domain) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				if conf.IsDebugModeActive(d.Domain) {
+				if core.IsDebugModeActive(d.Domain) {
 					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, " checked")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
@@ -165,13 +165,13 @@ func DomainsTempl(domains []db.Domain) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				if conf.IsDebugModeActive(d.Domain) {
+				if core.IsDebugModeActive(d.Domain) {
 					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "<span class=\"text-xs\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var7 string
-					templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(formatDuration(conf.GetDebugModeRemainingTime(d.Domain)))
+					templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(formatDuration(core.GetDebugModeRemainingTime(d.Domain)))
 					if templ_7745c5c3_Err != nil {
 						return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/domains.templ`, Line: 84, Col: 66}
 					}

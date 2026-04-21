@@ -1,7 +1,8 @@
-package conf
+package core
 
 import (
 	"log/slog"
+	"net/http"
 	"sync"
 	"time"
 )
@@ -56,21 +57,39 @@ func GetDebugModeRemainingTime(domain string) time.Duration {
 	return debugModeDuration - elapsed
 }
 
-// EnableDebugMode activates debug mode for the given domain.
-// It will remain active for 1 hour from the current time.
-func EnableDebugMode(domain string) {
+// ToggleDebugMode enables or disables debug mode for the given domain.
+// When enabled, it remains active for 1 hour from the current time.
+// - domain: hostname whose debug mode state should be changed.
+// - enable: whether debug mode should be turned on (true) or off (false).
+// - req (optional): the triggering HTTP request used for logging context; it may be nil.
+func ToggleDebugMode(domain string, enable bool, req *http.Request) {
+	var msg string
+	if enable {
+		msg = "Debug Mode enabled"
+	} else {
+		msg = "Debug Mode disabled"
+	}
+
+	if req != nil {
+		slog.Warn(msg,
+			"method", req.Method,
+			"path", req.URL.Path,
+			"url", req.URL.String(),
+			"status", http.StatusOK,
+			"ip", ReadUserIP(req),
+			"hostname", domain)
+	} else {
+		slog.Warn(msg, "hostname", domain)
+	}
+
 	debugTracker.mu.Lock()
 	defer debugTracker.mu.Unlock()
 
-	debugTracker.modes[domain] = time.Now()
-}
-
-// DisableDebugMode deactivates debug mode for the given domain.
-func DisableDebugMode(domain string) {
-	debugTracker.mu.Lock()
-	defer debugTracker.mu.Unlock()
-
-	delete(debugTracker.modes, domain)
+	if enable {
+		debugTracker.modes[domain] = time.Now()
+	} else {
+		delete(debugTracker.modes, domain)
+	}
 }
 
 // CleanupExpiredDebugModes removes expired debug mode entries.
@@ -82,7 +101,7 @@ func CleanupExpiredDebugModes() {
 	now := time.Now()
 	for domain, activatedAt := range debugTracker.modes {
 		if now.Sub(activatedAt) > debugModeDuration {
-			slog.Warn("debug mode expired",
+			slog.Warn("Debug Mode expired",
 				"hostname", domain,
 				"activated_at", activatedAt)
 			delete(debugTracker.modes, domain)

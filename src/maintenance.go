@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"butterfly.chimbori.dev/conf"
+	"butterfly.chimbori.dev/core"
 	"butterfly.chimbori.dev/dashboard"
 	"butterfly.chimbori.dev/db"
 	"butterfly.chimbori.dev/github"
@@ -21,7 +22,7 @@ func performMaintenance() {
 	queries := db.New(db.Pool)
 
 	dashboard.CleanupExpiredSessions()
-	conf.CleanupExpiredDebugModes()
+	core.CleanupExpiredDebugModes()
 
 	// Delete domains that haven’t been triaged in a while; they are blocked by default,
 	// and do not need to be included on the dashboard.

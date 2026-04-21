@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strings"
 
-	"butterfly.chimbori.dev/conf"
+	"butterfly.chimbori.dev/core"
 	"butterfly.chimbori.dev/db"
 	"github.com/lmittmann/tint"
 )
@@ -158,22 +158,7 @@ func toggleDebugModeHandler(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	// Toggle debug mode
-	enabling := !conf.IsDebugModeActive(domain)
-	var msg string
-	if enabling {
-		msg = "Debug Mode enabled"
-		conf.EnableDebugMode(domain)
-	} else {
-		msg = "Debug Mode disabled"
-		conf.DisableDebugMode(domain)
-	}
-	slog.Warn(msg,
-		"method", req.Method,
-		"path", req.URL.Path,
-		"url", req.URL.String(),
-		"status", http.StatusOK,
-		"hostname", domain)
+	core.ToggleDebugMode(domain, !core.IsDebugModeActive(domain), req)
 
 	// Return the updated list
 	domains, err := queries.ListDomains(ctx)

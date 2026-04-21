@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"butterfly.chimbori.dev/conf"
+	"butterfly.chimbori.dev/core"
 	"butterfly.chimbori.dev/db"
 )
 
@@ -76,12 +76,12 @@ templ DomainsTempl(domains []db.Domain) {
 							hx-include="closest tr"
 							type="checkbox"
 							name="debug_mode"
-							checked?={ conf.IsDebugModeActive(d.Domain) }
+							checked?={ core.IsDebugModeActive(d.Domain) }
 							title="Enable Debug Mode (1 hour)"
 						/>
-						if conf.IsDebugModeActive(d.Domain) {
+						if core.IsDebugModeActive(d.Domain) {
 							<span class="text-xs">
-								{ formatDuration(conf.GetDebugModeRemainingTime(d.Domain)) }
+								{ formatDuration(core.GetDebugModeRemainingTime(d.Domain)) }
 							</span>
 						}
 					</td>
