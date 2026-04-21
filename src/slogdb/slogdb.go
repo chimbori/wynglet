@@ -41,15 +41,15 @@ func (h *DBHandler) Handle(ctx context.Context, r slog.Record) error {
 }
 
 // shouldLogToDatabase determines whether a log record should be written to the database.
-// Returns true for ERROR level logs and INFO logs with a status code.
+// Returns true for WARN level logs and above, and INFO logs with a status code.
 func shouldLogToDatabase(r slog.Record) bool {
-	// Log ERROR level logs
-	if r.Level >= slog.LevelError {
+	// Log WARN level logs and above
+	if r.Level >= slog.LevelWarn {
 		return true
 	}
 
 	// Log INFO logs with a status code
-	if r.Level == slog.LevelInfo {
+	if r.Level >= slog.LevelInfo {
 		hasStatus := false
 		r.Attrs(func(a slog.Attr) bool {
 			if a.Key == "status" && a.Value.Any() != nil {
