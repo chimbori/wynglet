@@ -26,8 +26,6 @@ import (
 // compressionSem limits the number of concurrent image compression tasks.
 var compressionSem chan struct{}
 
-var ThumbnailCache *core.DiskCache
-
 func init() {
 	compressionSem = make(chan struct{}, runtime.NumCPU()*4)
 }
@@ -103,7 +101,7 @@ func deleteLinkPreviewHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Delete the cached file from disk
-	if err := linkpreviews.DeleteCached(url); err != nil {
+	if err := linkpreviews.Cache.Delete(core.ComputeKey(url, "png", false)); err != nil && !errors.Is(err, os.ErrNotExist) {
 		slog.Warn("failed to delete cached link preview file", tint.Err(err),
 			"method", req.Method,
 			"path", req.URL.Path,
@@ -113,15 +111,13 @@ func deleteLinkPreviewHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Delete the cached thumbnail from disk
-	if ThumbnailCache != nil {
-		if err := ThumbnailCache.Delete(url); err != nil && !errors.Is(err, os.ErrNotExist) {
-			slog.Warn("failed to delete cached thumbnail file", tint.Err(err),
-				"method", req.Method,
-				"path", req.URL.Path,
-				"url", url,
-				"status", http.StatusInternalServerError)
-			// Continue anyway to remove from the database
-		}
+	if err := linkpreviews.Cache.Delete(core.ComputeKey(url, "webp", true)); err != nil && !errors.Is(err, os.ErrNotExist) {
+		slog.Warn("failed to delete cached thumbnail file", tint.Err(err),
+			"method", req.Method,
+			"path", req.URL.Path,
+			"url", url,
+			"status", http.StatusInternalServerError)
+		// Continue anyway to remove from the database
 	}
 
 	// Delete the row from the database
@@ -195,30 +191,15 @@ func serveLinkPreviewHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	url := u.String()
-
-	if ThumbnailCache != nil {
-		if webp, err := ThumbnailCache.Find(url); err == nil && webp != nil {
-			slog.Debug("serving from thumbnail cache", "url", url)
-			w.Header().Set("Content-Type", "image/webp")
-			w.Header().Set("Cache-Control", "public, max-age=31536000") // 1 year cache
-			w.Write(webp)
-			return
-		}
-	}
-
-	if linkpreviews.Cache == nil {
-		err := fmt.Errorf("preview unavailable for %s", url)
-		slog.Error("cache disabled", tint.Err(err),
-			"method", req.Method,
-			"path", req.URL.Path,
-			"url", url,
-			"hostname", u.Hostname(),
-			"status", http.StatusInternalServerError)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+	if webp, err := linkpreviews.Cache.Find(core.ComputeKey(url, "webp", true)); err == nil && webp != nil {
+		slog.Debug("serving from thumbnail cache", "url", url)
+		w.Header().Set("Content-Type", "image/webp")
+		w.Header().Set("Cache-Control", "public, max-age=31536000") // 1 year cache
+		w.Write(webp)
 		return
 	}
 
-	png, err := linkpreviews.Cache.Find(url)
+	png, err := linkpreviews.Cache.Find(core.ComputeKey(url, "png", false))
 	if err != nil {
 		err = fmt.Errorf("url: %s, %w", url, err)
 		slog.Error("error during cache lookup", tint.Err(err),
@@ -281,9 +262,8 @@ func serveLinkPreviewHandler(w http.ResponseWriter, req *http.Request) {
 	}
 	webpData := webpBuf.Bytes()
 
-	if ThumbnailCache != nil {
-		go ThumbnailCache.Write(url, webpData)
-	}
+	thumbnailKey := core.ComputeKey(url, "webp", true)
+	go linkpreviews.Cache.Write(thumbnailKey, webpData)
 
 	w.Header().Set("Content-Type", "image/webp")
 	w.Header().Set("Cache-Control", "public, max-age=31536000") // 1 year cache

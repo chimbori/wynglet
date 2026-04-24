@@ -12,7 +12,7 @@ import (
 	"github.com/dustin/go-humanize"
 )
 
-// DiskCache provides file-based caching with SHA-256-based sharding.
+// DiskCache provides file-based caching organized by domain/path with URL hashing.
 type DiskCache struct {
 	Root    string
 	TTL     time.Duration
@@ -48,10 +48,11 @@ func NewDiskCache(root string, opts ...Option) *DiskCache {
 	return c
 }
 
-// Find attempts to retrieve a cached file for the given key.
+// Find attempts to retrieve a cached file for the given cache key.
+// The cache key should be a fully-qualified path relative to the cache root (e.g., "domain/path.hash.ext").
 // Returns nil, nil for a cache miss (not an error).
-func (c *DiskCache) Find(key string) ([]byte, error) {
-	cachePath := c.buildPath(key)
+func (c *DiskCache) Find(cacheKey string) ([]byte, error) {
+	cachePath := filepath.Join(c.Root, cacheKey)
 	absPath, err := filepath.Abs(cachePath)
 	if err != nil {
 		return nil, err
@@ -83,9 +84,10 @@ func (c *DiskCache) Find(key string) ([]byte, error) {
 	return cached, nil
 }
 
-// Write stores data in the cache for the given key (URL).
-func (c *DiskCache) Write(key string, data []byte) error {
-	cachePath := c.buildPath(key)
+// Write stores data in the cache for the given cache key.
+// The cache key should be a fully-qualified path relative to the cache root (e.g., "domain/path.hash.ext").
+func (c *DiskCache) Write(cacheKey string, data []byte) error {
+	cachePath := filepath.Join(c.Root, cacheKey)
 	absPath, err := filepath.Abs(cachePath)
 	if err != nil {
 		return err
@@ -104,21 +106,15 @@ func (c *DiskCache) Write(key string, data []byte) error {
 	return nil
 }
 
-// Delete removes a cached file for the given key (URL).
-func (c *DiskCache) Delete(key string) error {
-	cachePath := c.buildPath(key)
+// Delete removes a cached file for the given cache key.
+// The cache key should be a fully-qualified path relative to the cache root (e.g., "domain/path.hash.ext").
+func (c *DiskCache) Delete(cacheKey string) error {
+	cachePath := filepath.Join(c.Root, cacheKey)
 	absPath, err := filepath.Abs(cachePath)
 	if err != nil {
 		return err
 	}
 	return os.Remove(absPath)
-}
-
-// buildPath shards files using the first two characters of the SHA-256
-// to prevent too many files in one directory.
-func (c *DiskCache) buildPath(key string) string {
-	sha := SHA256(key)
-	return filepath.Join(c.Root, sha[:2], sha)
 }
 
 // pruningFile represents a file in the cache for pruning purposes.

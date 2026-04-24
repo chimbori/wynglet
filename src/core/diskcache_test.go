@@ -19,16 +19,16 @@ func TestNewDiskCache(t *testing.T) {
 func TestDiskCacheWrite(t *testing.T) {
 	root := t.TempDir()
 	cache := NewDiskCache(root)
-	key := "test-key"
+	cacheKey := "domain/file.abc12345.png"
 	data := []byte("test data")
 
-	err := cache.Write(key, data)
+	err := cache.Write(cacheKey, data)
 	if err != nil {
 		t.Fatalf("Write failed: %v", err)
 	}
 
 	// Verify file exists
-	cachePath := cache.buildPath(key)
+	cachePath := filepath.Join(root, cacheKey)
 	absPath, _ := filepath.Abs(cachePath)
 	if _, err := os.Stat(absPath); err != nil {
 		t.Errorf("Cache file not found: %v", err)
@@ -38,12 +38,12 @@ func TestDiskCacheWrite(t *testing.T) {
 func TestDiskCacheFind_Hit(t *testing.T) {
 	root := t.TempDir()
 	cache := NewDiskCache(root)
-	key := "test-key"
+	cacheKey := "domain/file.abc12345.png"
 	data := []byte("test data")
 
-	cache.Write(key, data)
+	cache.Write(cacheKey, data)
 
-	found, err := cache.Find(key)
+	found, err := cache.Find(cacheKey)
 	if err != nil {
 		t.Fatalf("Find failed: %v", err)
 	}
@@ -56,9 +56,9 @@ func TestDiskCacheFind_Hit(t *testing.T) {
 func TestDiskCacheFind_Miss(t *testing.T) {
 	root := t.TempDir()
 	cache := NewDiskCache(root)
-	key := "nonexistent-key"
+	cacheKey := "domain/nonexistent.abc12345.png"
 
-	found, err := cache.Find(key)
+	found, err := cache.Find(cacheKey)
 	if err != nil {
 		t.Fatalf("Find should not error on miss: %v", err)
 	}
@@ -71,18 +71,18 @@ func TestDiskCacheFind_Miss(t *testing.T) {
 func TestDiskCacheDelete(t *testing.T) {
 	root := t.TempDir()
 	cache := NewDiskCache(root)
-	key := "test-key"
+	cacheKey := "domain/file.abc12345.png"
 	data := []byte("test data")
 
-	cache.Write(key, data)
+	cache.Write(cacheKey, data)
 
-	err := cache.Delete(key)
+	err := cache.Delete(cacheKey)
 	if err != nil {
 		t.Fatalf("Delete failed: %v", err)
 	}
 
 	// Verify file is deleted
-	found, err := cache.Find(key)
+	found, err := cache.Find(cacheKey)
 	if err != nil {
 		t.Fatalf("Find after delete failed: %v", err)
 	}
@@ -95,15 +95,14 @@ func TestDiskCacheDelete(t *testing.T) {
 func TestDiskCacheBuildPath_Sharding(t *testing.T) {
 	root := t.TempDir()
 	cache := NewDiskCache(root)
-	key := "test-key"
+	cacheKey := "example.com/path_to_file.abc12345.png"
 
-	path := cache.buildPath(key)
-	md5 := SHA256(key)
+	// DiskCache just joins root with the cache key
+	expectedPath := filepath.Join(root, cacheKey)
+	actualPath := filepath.Join(cache.Root, cacheKey)
 
-	// Verify sharding structure
-	expected := filepath.Join(root, md5[:2], md5)
-	if path != expected {
-		t.Errorf("Expected path %s, got %s", expected, path)
+	if expectedPath != actualPath {
+		t.Errorf("Expected path %s, got %s", expectedPath, actualPath)
 	}
 }
 
@@ -111,7 +110,7 @@ func TestDiskCacheMultipleKeys(t *testing.T) {
 	root := t.TempDir()
 	cache := NewDiskCache(root)
 
-	keys := []string{"key1", "key2", "key3"}
+	keys := []string{"domain1/file1.abc12345.png", "domain2/file2.def67890.png", "domain3/file3.ghi24680.webp"}
 	dataMap := make(map[string][]byte)
 
 	// Write multiple keys
@@ -138,15 +137,15 @@ func TestDiskCacheMultipleKeys(t *testing.T) {
 func TestDiskCacheWriteEmptyData(t *testing.T) {
 	root := t.TempDir()
 	cache := NewDiskCache(root)
-	key := "empty-key"
+	cacheKey := "domain/empty.abc12345.png"
 	data := []byte{}
 
-	err := cache.Write(key, data)
+	err := cache.Write(cacheKey, data)
 	if err != nil {
 		t.Fatalf("Write empty data failed: %v", err)
 	}
 
-	found, err := cache.Find(key)
+	found, err := cache.Find(cacheKey)
 	if err != nil {
 		t.Fatalf("Find empty data failed: %v", err)
 	}
@@ -159,18 +158,18 @@ func TestDiskCacheWriteEmptyData(t *testing.T) {
 func TestDiskCacheWriteLargeData(t *testing.T) {
 	root := t.TempDir()
 	cache := NewDiskCache(root)
-	key := "large-key"
+	cacheKey := "domain/large.abc12345.png"
 	data := make([]byte, 1024*1024) // 1MB
 	for i := range data {
 		data[i] = byte(i % 256)
 	}
 
-	err := cache.Write(key, data)
+	err := cache.Write(cacheKey, data)
 	if err != nil {
 		t.Fatalf("Write large data failed: %v", err)
 	}
 
-	found, err := cache.Find(key)
+	found, err := cache.Find(cacheKey)
 	if err != nil {
 		t.Fatalf("Find large data failed: %v", err)
 	}
@@ -183,9 +182,9 @@ func TestDiskCacheWriteLargeData(t *testing.T) {
 func TestDiskCacheDeleteNonexistent(t *testing.T) {
 	root := t.TempDir()
 	cache := NewDiskCache(root)
-	key := "nonexistent-key"
+	cacheKey := "domain/nonexistent.abc12345.png"
 
-	err := cache.Delete(key)
+	err := cache.Delete(cacheKey)
 	if err == nil {
 		t.Errorf("Expected error when deleting nonexistent key")
 	}
@@ -194,14 +193,14 @@ func TestDiskCacheDeleteNonexistent(t *testing.T) {
 func TestDiskCacheOverwrite(t *testing.T) {
 	root := t.TempDir()
 	cache := NewDiskCache(root)
-	key := "test-key"
+	cacheKey := "domain/file.abc12345.png"
 	data1 := []byte("original data")
 	data2 := []byte("new data")
 
-	cache.Write(key, data1)
-	cache.Write(key, data2)
+	cache.Write(cacheKey, data1)
+	cache.Write(cacheKey, data2)
 
-	found, err := cache.Find(key)
+	found, err := cache.Find(cacheKey)
 	if err != nil {
 		t.Fatalf("Find failed: %v", err)
 	}
@@ -216,15 +215,15 @@ func TestDiskCacheTTL(t *testing.T) {
 	ttl := 200 * time.Millisecond
 	cache := NewDiskCache(root, WithTTL(ttl))
 
-	key := "ttl-key"
+	cacheKey := "domain/ttl.abc12345.png"
 	data := []byte("content")
 
-	if err := cache.Write(key, data); err != nil {
+	if err := cache.Write(cacheKey, data); err != nil {
 		t.Fatalf("Write failed: %v", err)
 	}
 
 	// Immediate check
-	found, err := cache.Find(key)
+	found, err := cache.Find(cacheKey)
 	if err != nil {
 		t.Fatalf("Find failed immediate: %v", err)
 	}
@@ -235,7 +234,7 @@ func TestDiskCacheTTL(t *testing.T) {
 	// Wait for expiration
 	time.Sleep(300 * time.Millisecond)
 
-	found, err = cache.Find(key)
+	found, err = cache.Find(cacheKey)
 	if err != nil {
 		t.Fatalf("Find failed after wait: %v", err)
 	}
@@ -244,8 +243,8 @@ func TestDiskCacheTTL(t *testing.T) {
 	}
 
 	// Verify file deleted
-	path := cache.buildPath(key)
-	if _, err := os.Stat(path); !os.IsNotExist(err) {
+	absPath, _ := filepath.Abs(filepath.Join(root, cacheKey))
+	if _, err := os.Stat(absPath); !os.IsNotExist(err) {
 		t.Error("File should be deleted after TTL expired read")
 	}
 }

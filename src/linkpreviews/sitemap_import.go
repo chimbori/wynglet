@@ -143,7 +143,7 @@ func runSitemapImport(ctx context.Context, status *SitemapImportStatus, urls []s
 					continue
 				}
 
-				cached, err := Cache.Find(validatedURL)
+				cached, err := Cache.Find(core.ComputeKey(validatedURL, "png", false))
 				if err != nil {
 					atomic.AddInt64(&failed, 1)
 					appendSitemapImportError(status, fmt.Sprintf("%s: %v", validatedURL, err))
@@ -220,7 +220,7 @@ func generateAndCacheSitemapPreview(parent context.Context, url string) error {
 		compressed = screenshot
 	}
 
-	return Cache.Write(url, compressed)
+	return Cache.Write(core.ComputeKey(url, "png", false), compressed)
 }
 
 func updateSitemapImportCounts(status *SitemapImportStatus, completed, skipped, failed int) {

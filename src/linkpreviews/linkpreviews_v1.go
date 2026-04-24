@@ -78,7 +78,7 @@ func handleLinkPreview(w http.ResponseWriter, req *http.Request) {
 	// Only check cache if enabled
 	if *conf.Config.LinkPreviews.Cache.Enabled {
 		var err error
-		cached, err = Cache.Find(url)
+		cached, err = Cache.Find(core.ComputeKey(url, "png", false))
 		if err != nil {
 			err = fmt.Errorf("url: %s, %w", url, err)
 			slog.Error("error during cache lookup", tint.Err(err),
@@ -176,7 +176,7 @@ func handleLinkPreview(w http.ResponseWriter, req *http.Request) {
 					slog.Error("PNG compression failed", tint.Err(err), "url", url)
 				}
 
-				if err := Cache.Write(url, dataToWrite); err != nil {
+				if err := Cache.Write(core.ComputeKey(url, "png", false), dataToWrite); err != nil {
 					err = fmt.Errorf("error writing to cache: %s, %w", url, err)
 					slog.Error("error writing to cache", tint.Err(err),
 						"method", req.Method,

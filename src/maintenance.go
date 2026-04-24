@@ -65,11 +65,6 @@ func performMaintenance() {
 			slog.Error("failed to prune linkpreviews cache", tint.Err(err))
 		}
 	}
-	if dashboard.ThumbnailCache != nil {
-		if err := dashboard.ThumbnailCache.Prune(); err != nil {
-			slog.Error("failed to prune linkpreview thumbnail cache", tint.Err(err))
-		}
-	}
 	if qrcode.Cache != nil {
 		if err := qrcode.Cache.Prune(); err != nil {
 			slog.Error("failed to prune qrcode cache", tint.Err(err))
