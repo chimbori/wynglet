@@ -162,6 +162,39 @@ func deleteLinkPreviewHandler(w http.ResponseWriter, req *http.Request) {
 	LinkPreviewsListTempl(linkPreviews, 1, totalCount).Render(ctx, w)
 }
 
+// DELETE /dashboard/link-previews/all - Delete all cached link previews
+func deleteAllLinkPreviewsHandler(w http.ResponseWriter, req *http.Request) {
+	slog.Debug("deleteAllLinkPreviewsHandler", "url", req.Method+" "+req.URL.String())
+
+	ctx := req.Context()
+	queries := db.New(db.Pool)
+
+	// Delete all cached files from disk
+	if linkpreviews.Cache != nil {
+		if err := linkpreviews.Cache.DeleteAll(); err != nil {
+			slog.Warn("failed to delete all cached link preview files", tint.Err(err),
+				"method", req.Method,
+				"path", req.URL.Path,
+				"status", http.StatusInternalServerError)
+			// Continue anyway to remove from the database
+		}
+	}
+
+	// Delete all rows from the database
+	err := queries.DeleteAllLinkPreviews(ctx)
+	if err != nil {
+		slog.Error("failed to delete all cached link previews", tint.Err(err),
+			"method", req.Method,
+			"path", req.URL.Path,
+			"status", http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Return the updated list (empty state)
+	LinkPreviewsListTempl([]db.LinkPreview{}, 1, 0).Render(ctx, w)
+}
+
 // GET /dashboard/link-previews/image?url={url}
 // Serves a resized and compressed version of the cached link preview image.
 func serveLinkPreviewHandler(w http.ResponseWriter, req *http.Request) {

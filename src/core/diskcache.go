@@ -117,6 +117,26 @@ func (c *DiskCache) Delete(cacheKey string) error {
 	return os.Remove(absPath)
 }
 
+// DeleteAll removes all cached files by removing the entire cache directory and recreating it.
+func (c *DiskCache) DeleteAll() error {
+	absPath, err := filepath.Abs(c.Root)
+	if err != nil {
+		return err
+	}
+
+	// Remove the entire cache directory
+	if err := os.RemoveAll(absPath); err != nil {
+		return err
+	}
+
+	// Recreate the cache directory
+	if err := os.MkdirAll(absPath, 0o755); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // pruningFile represents a file in the cache for pruning purposes.
 type pruningFile struct {
 	path    string

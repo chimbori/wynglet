@@ -9,6 +9,19 @@ import (
 templ LinkPreviewsPageTempl(page int) {
 	@ContentTempl("Link Previews", NilTemplate()) {
 		<section>
+			<div class="flex justify-between items-center gap-4">
+				<button
+					hx-confirm="Delete all cached link previews? This will delete all database entries and cached files."
+					hx-delete="/dashboard/link-previews/all"
+					hx-target="#link-previews-section"
+					hx-swap="innerHTML transition:true"
+					title="Delete All"
+					class="btn-submit"
+				>Delete All</button>
+				<a href="/dashboard/link-previews/sitemap" class="btn-neutral">Import from Sitemap</a>
+			</div>
+		</section>
+		<section>
 			<h2>Requests by Domain</h2>
 			<div class="flex justify-center">
 				<canvas id="linkpreviews-domain-chart" class="max-w-200 max-h-64"></canvas>
@@ -37,11 +50,6 @@ templ LinkPreviewsPageTempl(page int) {
 		>
 			<div class="flex items-center justify-center p-8">
 				<img class="htmx-indicator inline" src="/static/3-dots-move.svg" alt="Loading..."/>
-			</div>
-		</section>
-		<section>
-			<div class="flex justify-end">
-				<a href="/dashboard/link-previews/sitemap" class="btn-neutral">Import from Sitemap</a>
 			</div>
 		</section>
 	}

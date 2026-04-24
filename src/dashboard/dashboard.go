@@ -32,6 +32,7 @@ func Init(mux *http.ServeMux) {
 	mux.Handle("GET /dashboard/link-previews/stats", chain.ThenFunc(linkPreviewsStatsHandler))
 	mux.Handle("GET /dashboard/link-previews/user-agents", chain.ThenFunc(linkPreviewsUserAgentsHandler))
 	mux.Handle("DELETE /dashboard/link-previews/url", chain.ThenFunc(deleteLinkPreviewHandler))
+	mux.Handle("DELETE /dashboard/link-previews/all", chain.ThenFunc(deleteAllLinkPreviewsHandler))
 
 	mux.Handle("GET /dashboard/qr-codes", chain.ThenFunc(listQrCodesHandler))
 	mux.Handle("DELETE /dashboard/qr-codes/url", chain.ThenFunc(deleteQrCodeHandler))

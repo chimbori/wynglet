@@ -47,20 +47,20 @@ func LinkPreviewsPageTempl(page int) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<section><h2>Requests by Domain</h2><div class=\"flex justify-center\"><canvas id=\"linkpreviews-domain-chart\" class=\"max-w-200 max-h-64\"></canvas></div></section><section><h2>Requests by User Agent</h2><div class=\"flex flex-wrap items-center gap-2 mb-2\"><span class=\"text-sm\">Range:</span><div id=\"linkpreviews-useragents-range\" class=\"flex flex-wrap gap-2\"><button class=\"btn-neutral\" data-days=\"1\" aria-pressed=\"false\">1 day</button> <button class=\"btn-neutral\" data-days=\"7\" aria-pressed=\"true\">7 days</button> <button class=\"btn-neutral\" data-days=\"28\" aria-pressed=\"false\">28 days</button> <button class=\"btn-neutral\" data-days=\"60\" aria-pressed=\"false\">60 days</button></div></div><div class=\"flex justify-center\"><canvas id=\"linkpreviews-useragents-chart\" class=\"max-w-200 max-h-64\"></canvas></div></section><section id=\"link-previews-section\" hx-get=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<section><div class=\"flex justify-between items-center gap-4\"><button hx-confirm=\"Delete all cached link previews? This will delete all database entries and cached files.\" hx-delete=\"/dashboard/link-previews/all\" hx-target=\"#link-previews-section\" hx-swap=\"innerHTML transition:true\" title=\"Delete All\" class=\"btn-submit\">Delete All</button> <a href=\"/dashboard/link-previews/sitemap\" class=\"btn-neutral\">Import from Sitemap</a></div></section><section><h2>Requests by Domain</h2><div class=\"flex justify-center\"><canvas id=\"linkpreviews-domain-chart\" class=\"max-w-200 max-h-64\"></canvas></div></section><section><h2>Requests by User Agent</h2><div class=\"flex flex-wrap items-center gap-2 mb-2\"><span class=\"text-sm\">Range:</span><div id=\"linkpreviews-useragents-range\" class=\"flex flex-wrap gap-2\"><button class=\"btn-neutral\" data-days=\"1\" aria-pressed=\"false\">1 day</button> <button class=\"btn-neutral\" data-days=\"7\" aria-pressed=\"true\">7 days</button> <button class=\"btn-neutral\" data-days=\"28\" aria-pressed=\"false\">28 days</button> <button class=\"btn-neutral\" data-days=\"60\" aria-pressed=\"false\">60 days</button></div></div><div class=\"flex justify-center\"><canvas id=\"linkpreviews-useragents-chart\" class=\"max-w-200 max-h-64\"></canvas></div></section><section id=\"link-previews-section\" hx-get=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs("/dashboard/link-previews/list?page=" + fmt.Sprintf("%d", page))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/linkpreviews.templ`, Line: 34, Col: 75}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/linkpreviews.templ`, Line: 47, Col: 75}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" hx-trigger=\"load\" hx-swap=\"innerHTML\"><div class=\"flex items-center justify-center p-8\"><img class=\"htmx-indicator inline\" src=\"/static/3-dots-move.svg\" alt=\"Loading...\"></div></section><section><div class=\"flex justify-end\"><a href=\"/dashboard/link-previews/sitemap\" class=\"btn-neutral\">Import from Sitemap</a></div></section>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" hx-trigger=\"load\" hx-swap=\"innerHTML\"><div class=\"flex items-center justify-center p-8\"><img class=\"htmx-indicator inline\" src=\"/static/3-dots-move.svg\" alt=\"Loading...\"></div></section>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -113,7 +113,7 @@ func LinkPreviewsListTempl(linkPreviews []db.LinkPreview, page int, totalCount i
 				var templ_7745c5c3_Var5 string
 				templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(s.Url)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/linkpreviews.templ`, Line: 63, Col: 51}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/linkpreviews.templ`, Line: 71, Col: 51}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 				if templ_7745c5c3_Err != nil {
@@ -126,7 +126,7 @@ func LinkPreviewsListTempl(linkPreviews []db.LinkPreview, page int, totalCount i
 				var templ_7745c5c3_Var6 templ.SafeURL
 				templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinURLErrs(s.Url)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/linkpreviews.templ`, Line: 64, Col: 21}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/linkpreviews.templ`, Line: 72, Col: 21}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 				if templ_7745c5c3_Err != nil {
@@ -139,7 +139,7 @@ func LinkPreviewsListTempl(linkPreviews []db.LinkPreview, page int, totalCount i
 				var templ_7745c5c3_Var7 string
 				templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(s.Url)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/linkpreviews.templ`, Line: 64, Col: 53}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/linkpreviews.templ`, Line: 72, Col: 53}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 				if templ_7745c5c3_Err != nil {
@@ -152,7 +152,7 @@ func LinkPreviewsListTempl(linkPreviews []db.LinkPreview, page int, totalCount i
 				var templ_7745c5c3_Var8 string
 				templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs("/dashboard/link-previews/image?url=" + s.Url)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/linkpreviews.templ`, Line: 65, Col: 63}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/linkpreviews.templ`, Line: 73, Col: 63}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 				if templ_7745c5c3_Err != nil {
@@ -165,7 +165,7 @@ func LinkPreviewsListTempl(linkPreviews []db.LinkPreview, page int, totalCount i
 				var templ_7745c5c3_Var9 string
 				templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(s.Url)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/linkpreviews.templ`, Line: 65, Col: 77}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/linkpreviews.templ`, Line: 73, Col: 77}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 				if templ_7745c5c3_Err != nil {
@@ -178,7 +178,7 @@ func LinkPreviewsListTempl(linkPreviews []db.LinkPreview, page int, totalCount i
 				var templ_7745c5c3_Var10 string
 				templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(s.Url)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/linkpreviews.templ`, Line: 68, Col: 68}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/linkpreviews.templ`, Line: 76, Col: 68}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 				if templ_7745c5c3_Err != nil {
@@ -209,7 +209,7 @@ func LinkPreviewsListTempl(linkPreviews []db.LinkPreview, page int, totalCount i
 				var templ_7745c5c3_Var11 string
 				templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs("/dashboard/link-previews/list?page=" + fmt.Sprintf("%d", page-1))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/linkpreviews.templ`, Line: 85, Col: 80}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/linkpreviews.templ`, Line: 93, Col: 80}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 				if templ_7745c5c3_Err != nil {
@@ -222,7 +222,7 @@ func LinkPreviewsListTempl(linkPreviews []db.LinkPreview, page int, totalCount i
 				var templ_7745c5c3_Var12 string
 				templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs("/dashboard/link-previews?page=" + fmt.Sprintf("%d", page-1))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/linkpreviews.templ`, Line: 88, Col: 80}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/linkpreviews.templ`, Line: 96, Col: 80}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
 				if templ_7745c5c3_Err != nil {
@@ -245,7 +245,7 @@ func LinkPreviewsListTempl(linkPreviews []db.LinkPreview, page int, totalCount i
 			var templ_7745c5c3_Var13 string
 			templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%d", page))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/linkpreviews.templ`, Line: 97, Col: 35}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/linkpreviews.templ`, Line: 105, Col: 35}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
 			if templ_7745c5c3_Err != nil {
@@ -258,7 +258,7 @@ func LinkPreviewsListTempl(linkPreviews []db.LinkPreview, page int, totalCount i
 			var templ_7745c5c3_Var14 string
 			templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%d", calculateTotalPages(totalCount)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/linkpreviews.templ`, Line: 97, Col: 93}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/linkpreviews.templ`, Line: 105, Col: 93}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
 			if templ_7745c5c3_Err != nil {
@@ -276,7 +276,7 @@ func LinkPreviewsListTempl(linkPreviews []db.LinkPreview, page int, totalCount i
 				var templ_7745c5c3_Var15 string
 				templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinStringErrs("/dashboard/link-previews/list?page=" + fmt.Sprintf("%d", page+1))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/linkpreviews.templ`, Line: 101, Col: 80}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/linkpreviews.templ`, Line: 109, Col: 80}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var15))
 				if templ_7745c5c3_Err != nil {
@@ -289,7 +289,7 @@ func LinkPreviewsListTempl(linkPreviews []db.LinkPreview, page int, totalCount i
 				var templ_7745c5c3_Var16 string
 				templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.JoinStringErrs("/dashboard/link-previews?page=" + fmt.Sprintf("%d", page+1))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/linkpreviews.templ`, Line: 104, Col: 80}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/linkpreviews.templ`, Line: 112, Col: 80}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var16))
 				if templ_7745c5c3_Err != nil {
