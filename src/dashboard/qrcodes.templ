@@ -7,6 +7,7 @@ import (
 
 templ QrCodesPageTempl(qrCodes []db.QrCode) {
 	@ContentTempl("QR Codes", NilTemplate()) {
+		<p>Generate and cache QR codes for any authorized URL</p>
 		<section>
 			@QrCodesListTempl(qrCodes)
 		</section>
@@ -14,6 +15,7 @@ templ QrCodesPageTempl(qrCodes []db.QrCode) {
 }
 
 templ QrCodesListTempl(qrCodes []db.QrCode) {
+	<h2>Cached QR Codes</h2>
 	if len(qrCodes) == 0 {
 		No QR codes cached yet
 	} else {

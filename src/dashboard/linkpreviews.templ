@@ -8,12 +8,13 @@ import (
 
 templ LinkPreviewsPageTempl(page int) {
 	@ContentTempl("Link Previews", NilTemplate()) {
+		<p>Auto-generate OpenGraph social preview images for every page, using your own HTML/CSS templates</p>
 		<section>
 			<h2><label for="generate-link-url">Generate Link Preview URL</label></h2>
 			<form class="flex flex-col gap-4" onsubmit="return false;">
 				<div class="flex items-center gap-2">
 					<input class="flex-1" type="url" id="generate-link-url" required placeholder="https://example.com/article"/>
-					<button type="button" id="generate-link-preview-btn" class="btn-submit">Generate Link</button>
+					<button type="button" id="generate-link-preview-btn" class="btn-submit">Generate</button>
 					<a href="/dashboard/link-previews/sitemap" class="btn-neutral">Import from Sitemap</a>
 				</div>
 				<div id="generated-link-output" class="hidden">

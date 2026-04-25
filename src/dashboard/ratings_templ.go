@@ -47,7 +47,7 @@ func RatingsPageTempl(page int, days int) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<p>A ratings widget to capture user feedback for any URL. Thumbs (up/down), or Stars (1 to 5).</p><section><h2><label for=\"rating-embed-url\">Get Embeddable <code>&lt;iframe&gt;</code> Code\t\t\t\t</label></h2><form class=\"flex flex-col md:flex-row gap-4 md:items-end\" hx-get=\"/dashboard/ratings/embed\" hx-target=\"#ratings-embed-result\" hx-swap=\"innerHTML transition:true\"><div class=\"grow\"><input id=\"rating-embed-url\" name=\"url\" type=\"url\" required placeholder=\"https://example.com/article\" class=\"input-primary w-full\"></div><div><label for=\"rating-embed-ui\" class=\"text-sm\">UI</label> <select id=\"rating-embed-ui\" name=\"ui\" class=\"input-primary\"><option value=\"thumbs\">thumbs</option> <option value=\"stars\">stars</option></select></div><button type=\"submit\" class=\"btn-neutral\">Generate Code</button></form><div id=\"ratings-embed-result\"></div></section><section><h2>Ratings by URL</h2><div class=\"flex flex-wrap items-center gap-2 mb-4\"><span class=\"text-sm\">Range:</span><div id=\"ratings-range\" class=\"flex flex-wrap gap-2\"><button class=\"btn-neutral\" hx-get=\"/dashboard/ratings/list?days=1&page=1&sortBy=rating&sortOrder=desc\" hx-target=\"#ratings-section\" hx-swap=\"innerHTML transition:true\" hx-push-url=\"/dashboard/ratings?days=1&page=1\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<p>A ratings widget to capture user feedback for any URL: Thumbs (up/down), or Stars (1 to 5)</p><section><h2><label for=\"rating-embed-url\">Get Embeddable <code>&lt;iframe&gt;</code> Code</label></h2><form class=\"flex flex-col items-center md:flex-row gap-4 md:items-end\" hx-get=\"/dashboard/ratings/embed\" hx-target=\"#ratings-embed-result\" hx-swap=\"innerHTML transition:true\"><div class=\"grow\"><input id=\"rating-embed-url\" name=\"url\" type=\"url\" required placeholder=\"https://example.com/article\" class=\"input-primary w-full\"></div><div><label for=\"rating-embed-ui\" class=\"text-sm\">UI</label> <select id=\"rating-embed-ui\" name=\"ui\" class=\"input-primary\"><option value=\"thumbs\">thumbs</option> <option value=\"stars\">stars</option></select></div><button type=\"submit\" class=\"btn-submit\">Generate</button></form><div id=\"ratings-embed-result\"></div></section><section><h2>Ratings by URL</h2><div class=\"flex flex-wrap items-center gap-2 mb-4\"><span class=\"text-sm\">Range:</span><div id=\"ratings-range\" class=\"flex flex-wrap gap-2\"><button class=\"btn-neutral\" hx-get=\"/dashboard/ratings/list?days=1&page=1&sortBy=rating&sortOrder=desc\" hx-target=\"#ratings-section\" hx-swap=\"innerHTML transition:true\" hx-push-url=\"/dashboard/ratings?days=1&page=1\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -114,7 +114,7 @@ func RatingsPageTempl(page int, days int) templ.Component {
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("/dashboard/ratings/list?days=%d&page=1&sortBy=rating&sortOrder=desc", days))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 98, Col: 101}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 91, Col: 101}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
@@ -168,7 +168,7 @@ func RatingsListTempl(ratings []db.ListRatingsWithDistributionRow, page int, day
 			var templ_7745c5c3_Var5 string
 			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(buildSortUrl("/dashboard/ratings/list", days, 1, "url", sortBy, sortOrder))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 127, Col: 92}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 120, Col: 92}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 			if templ_7745c5c3_Err != nil {
@@ -198,7 +198,7 @@ func RatingsListTempl(ratings []db.ListRatingsWithDistributionRow, page int, day
 			var templ_7745c5c3_Var6 string
 			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(buildSortUrl("/dashboard/ratings/list", days, 1, "rating", sortBy, sortOrder))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 143, Col: 95}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 136, Col: 95}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 			if templ_7745c5c3_Err != nil {
@@ -228,7 +228,7 @@ func RatingsListTempl(ratings []db.ListRatingsWithDistributionRow, page int, day
 			var templ_7745c5c3_Var7 string
 			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(buildSortUrl("/dashboard/ratings/list", days, 1, "rating", sortBy, sortOrder))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 159, Col: 95}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 152, Col: 95}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 			if templ_7745c5c3_Err != nil {
@@ -258,7 +258,7 @@ func RatingsListTempl(ratings []db.ListRatingsWithDistributionRow, page int, day
 			var templ_7745c5c3_Var8 string
 			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(buildSortUrl("/dashboard/ratings/list", days, 1, "votes", sortBy, sortOrder))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 175, Col: 94}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 168, Col: 94}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 			if templ_7745c5c3_Err != nil {
@@ -293,7 +293,7 @@ func RatingsListTempl(ratings []db.ListRatingsWithDistributionRow, page int, day
 				var templ_7745c5c3_Var9 string
 				templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(r.Url)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 194, Col: 65}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 187, Col: 65}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 				if templ_7745c5c3_Err != nil {
@@ -329,7 +329,7 @@ func RatingsListTempl(ratings []db.ListRatingsWithDistributionRow, page int, day
 				var templ_7745c5c3_Var10 string
 				templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(formatAverageRating(r))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 205, Col: 33}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 198, Col: 33}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 				if templ_7745c5c3_Err != nil {
@@ -342,7 +342,7 @@ func RatingsListTempl(ratings []db.ListRatingsWithDistributionRow, page int, day
 				var templ_7745c5c3_Var11 string
 				templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%d", r.TotalRatings))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 208, Col: 44}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 201, Col: 44}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 				if templ_7745c5c3_Err != nil {
@@ -365,7 +365,7 @@ func RatingsListTempl(ratings []db.ListRatingsWithDistributionRow, page int, day
 				var templ_7745c5c3_Var12 string
 				templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("/dashboard/ratings/list?days=%d&page=%d&sortBy=%s&sortOrder=%s", days, page-1, sortBy, sortOrder))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 219, Col: 125}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 212, Col: 125}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
 				if templ_7745c5c3_Err != nil {
@@ -378,7 +378,7 @@ func RatingsListTempl(ratings []db.ListRatingsWithDistributionRow, page int, day
 				var templ_7745c5c3_Var13 string
 				templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("/dashboard/ratings?days=%d&page=%d", days, page-1))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 222, Col: 83}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 215, Col: 83}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
 				if templ_7745c5c3_Err != nil {
@@ -401,7 +401,7 @@ func RatingsListTempl(ratings []db.ListRatingsWithDistributionRow, page int, day
 			var templ_7745c5c3_Var14 string
 			templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%d", page))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 230, Col: 35}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 223, Col: 35}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
 			if templ_7745c5c3_Err != nil {
@@ -414,7 +414,7 @@ func RatingsListTempl(ratings []db.ListRatingsWithDistributionRow, page int, day
 			var templ_7745c5c3_Var15 string
 			templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%d", calculateTotalPages(totalCount)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 230, Col: 93}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 223, Col: 93}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var15))
 			if templ_7745c5c3_Err != nil {
@@ -432,7 +432,7 @@ func RatingsListTempl(ratings []db.ListRatingsWithDistributionRow, page int, day
 				var templ_7745c5c3_Var16 string
 				templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("/dashboard/ratings/list?days=%d&page=%d&sortBy=%s&sortOrder=%s", days, page+1, sortBy, sortOrder))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 235, Col: 125}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 228, Col: 125}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var16))
 				if templ_7745c5c3_Err != nil {
@@ -445,7 +445,7 @@ func RatingsListTempl(ratings []db.ListRatingsWithDistributionRow, page int, day
 				var templ_7745c5c3_Var17 string
 				templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("/dashboard/ratings?days=%d&page=%d", days, page+1))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 238, Col: 83}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 231, Col: 83}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var17))
 				if templ_7745c5c3_Err != nil {
@@ -507,7 +507,7 @@ func thumbsBar(r db.ListRatingsWithDistributionRow) templ.Component {
 		var templ_7745c5c3_Var19 string
 		templ_7745c5c3_Var19, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("👎 %.0f%% / 👍 %.0f%%", pctOf(r.ThumbsDown, r.TotalRatings), pctOf(r.ThumbsUp, r.TotalRatings)))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 262, Col: 122}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 255, Col: 122}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var19))
 		if templ_7745c5c3_Err != nil {
@@ -525,7 +525,7 @@ func thumbsBar(r db.ListRatingsWithDistributionRow) templ.Component {
 			var templ_7745c5c3_Var20 string
 			templ_7745c5c3_Var20, templ_7745c5c3_Err = templruntime.SanitizeStyleAttributeValues(fmt.Sprintf("width:%.1f%%", pctOf(r.ThumbsDown, r.TotalRatings)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 265, Col: 99}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 258, Col: 99}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var20))
 			if templ_7745c5c3_Err != nil {
@@ -544,7 +544,7 @@ func thumbsBar(r db.ListRatingsWithDistributionRow) templ.Component {
 			var templ_7745c5c3_Var21 string
 			templ_7745c5c3_Var21, templ_7745c5c3_Err = templruntime.SanitizeStyleAttributeValues(fmt.Sprintf("width:%.1f%%", pctOf(r.ThumbsUp, r.TotalRatings)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 268, Col: 99}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 261, Col: 99}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var21))
 			if templ_7745c5c3_Err != nil {
@@ -591,7 +591,7 @@ func starsBar(r db.ListRatingsWithDistributionRow) templ.Component {
 		var templ_7745c5c3_Var23 string
 		templ_7745c5c3_Var23, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("⭐ %.1f / 5 (%d votes)", r.AverageStars, r.TotalRatings))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 276, Col: 80}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 269, Col: 80}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var23))
 		if templ_7745c5c3_Err != nil {
@@ -609,7 +609,7 @@ func starsBar(r db.ListRatingsWithDistributionRow) templ.Component {
 			var templ_7745c5c3_Var24 string
 			templ_7745c5c3_Var24, templ_7745c5c3_Err = templruntime.SanitizeStyleAttributeValues(fmt.Sprintf("width:%.1f%%", pctOf(r.Stars1, r.TotalRatings)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 279, Col: 95}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 272, Col: 95}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var24))
 			if templ_7745c5c3_Err != nil {
@@ -622,7 +622,7 @@ func starsBar(r db.ListRatingsWithDistributionRow) templ.Component {
 			var templ_7745c5c3_Var25 string
 			templ_7745c5c3_Var25, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("1★: %d", r.Stars1))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 279, Col: 139}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 272, Col: 139}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var25))
 			if templ_7745c5c3_Err != nil {
@@ -641,7 +641,7 @@ func starsBar(r db.ListRatingsWithDistributionRow) templ.Component {
 			var templ_7745c5c3_Var26 string
 			templ_7745c5c3_Var26, templ_7745c5c3_Err = templruntime.SanitizeStyleAttributeValues(fmt.Sprintf("width:%.1f%%", pctOf(r.Stars2, r.TotalRatings)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 282, Col: 98}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 275, Col: 98}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var26))
 			if templ_7745c5c3_Err != nil {
@@ -654,7 +654,7 @@ func starsBar(r db.ListRatingsWithDistributionRow) templ.Component {
 			var templ_7745c5c3_Var27 string
 			templ_7745c5c3_Var27, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("2★: %d", r.Stars2))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 282, Col: 142}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 275, Col: 142}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var27))
 			if templ_7745c5c3_Err != nil {
@@ -673,7 +673,7 @@ func starsBar(r db.ListRatingsWithDistributionRow) templ.Component {
 			var templ_7745c5c3_Var28 string
 			templ_7745c5c3_Var28, templ_7745c5c3_Err = templruntime.SanitizeStyleAttributeValues(fmt.Sprintf("width:%.1f%%", pctOf(r.Stars3, r.TotalRatings)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 285, Col: 98}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 278, Col: 98}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var28))
 			if templ_7745c5c3_Err != nil {
@@ -686,7 +686,7 @@ func starsBar(r db.ListRatingsWithDistributionRow) templ.Component {
 			var templ_7745c5c3_Var29 string
 			templ_7745c5c3_Var29, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("3★: %d", r.Stars3))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 285, Col: 142}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 278, Col: 142}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var29))
 			if templ_7745c5c3_Err != nil {
@@ -705,7 +705,7 @@ func starsBar(r db.ListRatingsWithDistributionRow) templ.Component {
 			var templ_7745c5c3_Var30 string
 			templ_7745c5c3_Var30, templ_7745c5c3_Err = templruntime.SanitizeStyleAttributeValues(fmt.Sprintf("width:%.1f%%", pctOf(r.Stars4, r.TotalRatings)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 288, Col: 96}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 281, Col: 96}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var30))
 			if templ_7745c5c3_Err != nil {
@@ -718,7 +718,7 @@ func starsBar(r db.ListRatingsWithDistributionRow) templ.Component {
 			var templ_7745c5c3_Var31 string
 			templ_7745c5c3_Var31, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("4★: %d", r.Stars4))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 288, Col: 140}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 281, Col: 140}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var31))
 			if templ_7745c5c3_Err != nil {
@@ -737,7 +737,7 @@ func starsBar(r db.ListRatingsWithDistributionRow) templ.Component {
 			var templ_7745c5c3_Var32 string
 			templ_7745c5c3_Var32, templ_7745c5c3_Err = templruntime.SanitizeStyleAttributeValues(fmt.Sprintf("width:%.1f%%", pctOf(r.Stars5, r.TotalRatings)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 291, Col: 97}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 284, Col: 97}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var32))
 			if templ_7745c5c3_Err != nil {
@@ -750,7 +750,7 @@ func starsBar(r db.ListRatingsWithDistributionRow) templ.Component {
 			var templ_7745c5c3_Var33 string
 			templ_7745c5c3_Var33, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("5★: %d", r.Stars5))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 291, Col: 141}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 284, Col: 141}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var33))
 			if templ_7745c5c3_Err != nil {
@@ -797,7 +797,7 @@ func RatingsIFrameCodeTempl(iframeCode string) templ.Component {
 		var templ_7745c5c3_Var35 string
 		templ_7745c5c3_Var35, templ_7745c5c3_Err = templ.JoinStringErrs(iframeCode)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 298, Col: 118}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 291, Col: 118}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var35))
 		if templ_7745c5c3_Err != nil {
@@ -839,7 +839,7 @@ func RatingsIframeCodeErrorTempl(message string) templ.Component {
 		var templ_7745c5c3_Var37 string
 		templ_7745c5c3_Var37, templ_7745c5c3_Err = templ.JoinStringErrs(message)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 315, Col: 37}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/ratings.templ`, Line: 308, Col: 37}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var37))
 		if templ_7745c5c3_Err != nil {

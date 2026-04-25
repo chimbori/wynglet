@@ -10,13 +10,11 @@ import (
 
 templ DomainsPageTempl(domains []db.Domain) {
 	@ContentTempl("Domains", NilTemplate()) {
+		<p>To prevent abuse and to conserve resources, all domains are blocked until you explicitly authorize each one.</p>
 		<section class="max-w-6xl">
-			<form
-				class="flex"
-				hx-target="#authorized-domains"
-				hx-swap="innerHTML transition:true"
-			>
-				<input type="text" name="domain" placeholder="example.com" required class="grow"/>
+			<h2><label for="domain">Add Authorized Domain</label></h2>
+			<form class="flex items-center" hx-target="#authorized-domains" hx-swap="outerHTML transition:true">
+				<input type="text" id="domain" name="domain" placeholder="example.com" required class="grow"/>
 				<label class="mx-4">
 					<input type="checkbox" name="include_subdomains"/> Include Subdomains
 				</label>
@@ -26,93 +24,89 @@ templ DomainsPageTempl(domains []db.Domain) {
 					hx-put="/dashboard/domains/domain"
 					hx-include="closest form"
 					hx-vals='{"authorized":"allow"}'
-				>Add Authorized Domain</button>
+				>Add</button>
 			</form>
 		</section>
-		<section class="max-w-6xl">
-			@DomainsTempl(domains)
-		</section>
+		@DomainsTempl(domains)
 	}
 }
 
 templ DomainsTempl(domains []db.Domain) {
-	if len(domains) == 0 {
-		No domains authorized yet
-	} else {
-		<table
-			class="dashboard w-full"
-			id="authorized-domains"
-			hx-target="#authorized-domains"
-			hx-swap="outerHTML transition:true"
-		>
-			<tr>
-				<th>Domain</th>
-				<th class="text-center">Include Subdomains</th>
-				<th>Updated</th>
-				<th class="text-center">Debug Mode</th>
-				<th class="text-center">Allow</th>
-				<th class="text-center">Block</th>
-			</tr>
-			for _, d := range domains {
+	<section class="max-w-6xl" id="authorized-domains" hx-target="#authorized-domains" hx-swap="outerHTML transition:true">
+		<h2>Authorized Domains</h2>
+		if len(domains) == 0 {
+			<p>No domains authorized yet</p>
+		} else {
+			<table class="dashboard w-full">
 				<tr>
-					<td>
-						{ d.Domain }
-						<input type="hidden" name="domain" value={ d.Domain }/>
-					</td>
-					<td class="text-center">
-						<input
-							hx-put="/dashboard/domains/domain"
-							hx-include="closest tr"
-							hx-vals='{"authorized":"allow"}'
-							type="checkbox"
-							name="include_subdomains"
-							checked?={ *d.IncludeSubdomains }
-						/>
-					</td>
-					<td>{ d.UpdatedAt.Format("2006-01-02 15:04:05") }</td>
-					<td class="text-center">
-						<input
-							hx-post="/dashboard/domains/debug"
-							hx-include="closest tr"
-							type="checkbox"
-							name="debug_mode"
-							checked?={ core.IsDebugModeActive(d.Domain) }
-							title="Enable Debug Mode (1 hour)"
-						/>
-						if core.IsDebugModeActive(d.Domain) {
-							<span class="text-xs">
-								{ formatDuration(core.GetDebugModeRemainingTime(d.Domain)) }
-							</span>
-						}
-					</td>
-					<td class="text-center">
-						<input type="hidden" name="authorized" value={ getAuthorizedAttrValue(d) }/>
-						<button
-							if d.Authorized != nil && *d.Authorized {
-								disabled
-							}
-							hx-include="closest tr"
-							hx-put="/dashboard/domains/domain"
-							hx-vals='{"authorized":"allow"}'
-							class="btn-submit"
-						>Allow</button>
-					</td>
-					<td class="text-center">
-						<img
-							class="align-middle inline mx-2 cursor-pointer"
-							hx-confirm="Remove from list?"
-							hx-include="closest tr"
-							hx-delete="/dashboard/domains/domain"
-							title="Remove"
-							width="24"
-							height="24"
-							src="/static/close.svg"
-						/>
-					</td>
+					<th>Domain</th>
+					<th class="text-center">Include Subdomains</th>
+					<th>Updated</th>
+					<th class="text-center">Debug Mode</th>
+					<th class="text-center">Allow</th>
+					<th class="text-center">Block</th>
 				</tr>
-			}
-		</table>
-	}
+				for _, d := range domains {
+					<tr>
+						<td>
+							{ d.Domain }
+							<input type="hidden" name="domain" value={ d.Domain }/>
+						</td>
+						<td class="text-center">
+							<input
+								hx-put="/dashboard/domains/domain"
+								hx-include="closest tr"
+								hx-vals='{"authorized":"allow"}'
+								type="checkbox"
+								name="include_subdomains"
+								checked?={ *d.IncludeSubdomains }
+							/>
+						</td>
+						<td>{ d.UpdatedAt.Format("2006-01-02 15:04:05") }</td>
+						<td class="text-center">
+							<input
+								hx-post="/dashboard/domains/debug"
+								hx-include="closest tr"
+								type="checkbox"
+								name="debug_mode"
+								checked?={ core.IsDebugModeActive(d.Domain) }
+								title="Enable Debug Mode (1 hour)"
+							/>
+							if core.IsDebugModeActive(d.Domain) {
+								<span class="text-xs">
+									{ formatDuration(core.GetDebugModeRemainingTime(d.Domain)) }
+								</span>
+							}
+						</td>
+						<td class="text-center">
+							<input type="hidden" name="authorized" value={ getAuthorizedAttrValue(d) }/>
+							<button
+								if d.Authorized != nil && *d.Authorized {
+									disabled
+								}
+								hx-include="closest tr"
+								hx-put="/dashboard/domains/domain"
+								hx-vals='{"authorized":"allow"}'
+								class="btn-submit"
+							>Allow</button>
+						</td>
+						<td class="text-center">
+							<img
+								class="align-middle inline mx-2 cursor-pointer"
+								hx-confirm="Remove from list?"
+								hx-include="closest tr"
+								hx-delete="/dashboard/domains/domain"
+								title="Remove"
+								width="24"
+								height="24"
+								src="/static/close.svg"
+							/>
+						</td>
+					</tr>
+				}
+			</table>
+		}
+	</section>
 }
 
 func getAuthorizedAttrValue(d db.Domain) string {

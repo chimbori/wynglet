@@ -8,6 +8,7 @@ import (
 
 templ LogsTempl(appName string, page int) {
 	@ContentTempl("Logs", NilTemplate()) {
+		<p>Monitor your Butterfly instance</p>
 		<section
 			id="logs-section"
 			hx-get={ "/dashboard/logs/data?page=" + fmt.Sprintf("%d", page) }
