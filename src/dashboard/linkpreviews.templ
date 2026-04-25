@@ -10,14 +10,6 @@ templ LinkPreviewsPageTempl(page int) {
 	@ContentTempl("Link Previews", NilTemplate()) {
 		<section>
 			<div class="flex justify-between items-center gap-4">
-				<button
-					hx-confirm="Delete all cached link previews? This will delete all database entries and cached files."
-					hx-delete="/dashboard/link-previews/all"
-					hx-target="#link-previews-section"
-					hx-swap="innerHTML transition:true"
-					title="Delete All"
-					class="btn-submit"
-				>Delete All</button>
 				<a href="/dashboard/link-previews/sitemap" class="btn-neutral">Import from Sitemap</a>
 			</div>
 		</section>
@@ -56,6 +48,19 @@ templ LinkPreviewsPageTempl(page int) {
 }
 
 templ LinkPreviewsListTempl(linkPreviews []db.LinkPreview, page int, totalCount int64) {
+	<div class="flex justify-between items-center gap-4">
+		<h2>Cached Link Previews</h2>
+		if totalCount != 0 {
+			<button
+				hx-confirm="Delete all cached link previews?"
+				hx-delete="/dashboard/link-previews/all"
+				hx-target="#link-previews-section"
+				hx-swap="innerHTML transition:true"
+				title="Delete All"
+				class="btn-submit"
+			>Delete All</button>
+		}
+	</div>
 	if totalCount == 0 {
 		No link previews cached yet
 	} else {
