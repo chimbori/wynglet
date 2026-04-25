@@ -10,9 +10,9 @@ templ LinkPreviewsPageTempl(page int) {
 	@ContentTempl("Link Previews", NilTemplate()) {
 		<section>
 			<h2><label for="generate-link-url">Generate Link Preview URL</label></h2>
-			<div class="flex flex-col gap-4">
+			<form class="flex flex-col gap-4" onsubmit="return false;">
 				<div class="flex items-center gap-2">
-					<input class="flex-1" type="url" id="generate-link-url" placeholder="Enter URL to generate link preview for"/>
+					<input class="flex-1" type="url" id="generate-link-url" required placeholder="https://example.com/article"/>
 					<button type="button" id="generate-link-preview-btn" class="btn-submit">Generate Link</button>
 					<a href="/dashboard/link-previews/sitemap" class="btn-neutral">Import from Sitemap</a>
 				</div>
@@ -22,7 +22,7 @@ templ LinkPreviewsPageTempl(page int) {
 						<button type="button" id="copy-link-preview-btn" class="btn-neutral" title="Copy to clipboard">Copy</button>
 					</div>
 				</div>
-			</div>
+			</form>
 		</section>
 		<section>
 			<h2>Requests by Domain</h2>

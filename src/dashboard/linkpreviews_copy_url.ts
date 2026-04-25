@@ -16,22 +16,29 @@ export function initLinkPreviewsCopyUrl(): void {
 /**
  * Generates a link preview URL for the given input URL and displays it for copying.
  *
- * Validates the input URL format before generating the preview link.
+ * Uses HTML5 form validation to ensure the input field is filled and contains a valid URL format.
  * If valid, constructs the full `/link-previews/v1` URL with the input encoded as a query parameter
  * and displays it in the output field.
  */
 export function generateLinkPreviewUrl(): void {
-	const url = (document.getElementById('generate-link-url') as HTMLInputElement).value.trim();
-	if (!url) {
-		alert('Please enter a URL');
+	const inputElement = document.getElementById('generate-link-url') as HTMLInputElement;
+	const form = inputElement.closest('form') as HTMLFormElement;
+
+	// Use HTML5 validation
+	if (!form.checkValidity()) {
+		inputElement.reportValidity();
 		return;
 	}
+
+	const url = inputElement.value.trim();
+
 	try {
 		new URL(url);
 	} catch {
 		alert('Please enter a valid URL');
 		return;
 	}
+
 	const baseUrl = window.location.origin;
 	const linkPreviewUrl = `${baseUrl}/link-previews/v1?url=${encodeURIComponent(url)}`;
 	(document.getElementById('generated-link-url') as HTMLInputElement).value = linkPreviewUrl;
