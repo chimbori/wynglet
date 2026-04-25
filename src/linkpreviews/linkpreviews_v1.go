@@ -23,13 +23,11 @@ var Cache *core.DiskCache
 var selectorRegex = regexp.MustCompile(`^[#.][a-zA-Z0-9_-]+$`)
 
 func Init(mux *http.ServeMux) {
-	if *conf.Config.LinkPreviews.Cache.Enabled {
-		Cache = core.NewDiskCache(
-			filepath.Join(conf.Config.DataDir, "cache", "link-previews"),
-			core.WithTTL(conf.Config.LinkPreviews.Cache.TTL),
-			core.WithMaxSize(conf.Config.LinkPreviews.Cache.MaxSizeBytes),
-		)
-	} // else cache will be nil
+	Cache = core.NewDiskCache(
+		filepath.Join(conf.Config.DataDir, "cache", "link-previews"),
+		core.WithTTL(conf.Config.LinkPreviews.Cache.TTL),
+		core.WithMaxSize(conf.Config.LinkPreviews.Cache.MaxSizeBytes),
+	)
 
 	mux.HandleFunc("GET /link-previews/v1", handleLinkPreview)
 }
@@ -61,8 +59,8 @@ func handleLinkPreview(w http.ResponseWriter, req *http.Request) {
 	if selector == "" {
 		selector = "#link-preview"
 	} else if !selectorRegex.MatchString(selector) {
-		err := fmt.Errorf("invalid selector")
-		slog.Error("selector validation failed", tint.Err(err),
+		selectorErr := fmt.Errorf("invalid selector")
+		slog.Error("selector validation failed", tint.Err(selectorErr),
 			"method", req.Method,
 			"path", req.URL.Path,
 			"url", reqUrl,
@@ -75,22 +73,18 @@ func handleLinkPreview(w http.ResponseWriter, req *http.Request) {
 
 	var cached []byte
 
-	// Only check cache if enabled
-	if *conf.Config.LinkPreviews.Cache.Enabled {
-		var err error
-		cached, err = Cache.Find(core.ComputeKey(url, "png", false))
-		if err != nil {
-			err = fmt.Errorf("url: %s, %w", url, err)
-			slog.Error("error during cache lookup", tint.Err(err),
-				"method", req.Method,
-				"path", req.URL.Path,
-				"url", url,
-				"hostname", hostname,
-				"user-agent", userAgent,
-				"status", http.StatusInternalServerError)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
+	cached, err = Cache.Find(core.ComputeKey(url, "png", false))
+	if err != nil {
+		err = fmt.Errorf("url: %s, %w", url, err)
+		slog.Error("error during cache lookup", tint.Err(err),
+			"method", req.Method,
+			"path", req.URL.Path,
+			"url", url,
+			"hostname", hostname,
+			"user-agent", userAgent,
+			"status", http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
 	if cached != nil {
@@ -164,28 +158,26 @@ func handleLinkPreview(w http.ResponseWriter, req *http.Request) {
 		w.Write(screenshot)
 		recordLinkPreviewCreated(url, canonicalUserAgent)
 
-		// If cache is enabled, compress the generated screenshot and cache it, but without holding up the HTTP request
+		// Compress and cache the generated screenshot, but without holding up the HTTP request
 		go func() {
-			if *conf.Config.LinkPreviews.Cache.Enabled {
-				dataToWrite := screenshot
-				compressed, err := core.CompressPNG(screenshot)
-				if err == nil {
-					dataToWrite = compressed
-					slog.Info("PNG compressed", "from", len(screenshot), "to", len(compressed), "%", (len(compressed) * 100 / len(screenshot)))
-				} else {
-					slog.Error("PNG compression failed", tint.Err(err), "url", url)
-				}
+			dataToWrite := screenshot
+			compressed, err := core.CompressPNG(screenshot)
+			if err == nil {
+				dataToWrite = compressed
+				slog.Info("PNG compressed", "from", len(screenshot), "to", len(compressed), "%", (len(compressed) * 100 / len(screenshot)))
+			} else {
+				slog.Error("PNG compression failed", tint.Err(err), "url", url)
+			}
 
-				if err := Cache.Write(core.ComputeKey(url, "png", false), dataToWrite); err != nil {
-					err = fmt.Errorf("error writing to cache: %s, %w", url, err)
-					slog.Error("error writing to cache", tint.Err(err),
-						"method", req.Method,
-						"path", req.URL.Path,
-						"url", url,
-						"hostname", hostname,
-						"user-agent", userAgent,
-						"status", http.StatusInternalServerError)
-				}
+			if err := Cache.Write(core.ComputeKey(url, "png", false), dataToWrite); err != nil {
+				err = fmt.Errorf("error writing to cache: %s, %w", url, err)
+				slog.Error("error writing to cache", tint.Err(err),
+					"method", req.Method,
+					"path", req.URL.Path,
+					"url", url,
+					"hostname", hostname,
+					"user-agent", userAgent,
+					"status", http.StatusInternalServerError)
 			}
 		}()
 	}
@@ -222,9 +214,6 @@ func recordLinkPreviewAccessed(url string, canonicalUserAgent string) {
 
 // DeleteCached removes a cached screenshot file from disk.
 func DeleteCached(url string) error {
-	if Cache == nil {
-		return nil
-	}
 	err := Cache.Delete(url)
 	if errors.Is(err, os.ErrNotExist) {
 		return nil

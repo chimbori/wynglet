@@ -45,18 +45,10 @@ type AppConfig struct {
 			ConcurrentURLs int `yaml:"concurrent_urls"`
 			MaxURLs        int `yaml:"max_urls"`
 		} `yaml:"sitemap"`
-		Cache struct {
-			Enabled      *bool         `yaml:"enabled"`
-			TTL          time.Duration `yaml:"ttl"`
-			MaxSizeBytes int64         `yaml:"max_size_bytes"`
-		} `yaml:"cache"`
+		Cache CacheConfig `yaml:"cache"`
 	} `yaml:"link-previews"`
 	QrCodes struct {
-		Cache struct {
-			Enabled      *bool         `yaml:"enabled"`
-			TTL          time.Duration `yaml:"ttl"`
-			MaxSizeBytes int64         `yaml:"max_size_bytes"`
-		} `yaml:"cache"`
+		Cache CacheConfig `yaml:"cache"`
 	} `yaml:"qr-codes"`
 	Ratings struct {
 		Retention time.Duration `yaml:"retention"`
@@ -66,6 +58,11 @@ type AppConfig struct {
 
 type pagination struct {
 	Limit int `yaml:"limit"`
+}
+
+type CacheConfig struct {
+	TTL          time.Duration `yaml:"ttl"`
+	MaxSizeBytes int64         `yaml:"max_size_bytes"`
 }
 
 var configYmlPath string
@@ -108,11 +105,7 @@ func setDefaultsAndPrint(c *AppConfig) {
 		c.Dashboard.Pagination.Limit = 30
 	}
 
-	// Cache for Link Previews is enabled by default; only disable it when testing or debugging.
-	if c.LinkPreviews.Cache.Enabled == nil {
-		enabled := true
-		c.LinkPreviews.Cache.Enabled = &enabled
-	}
+	// Link Previews
 	if c.LinkPreviews.Cache.MaxSizeBytes == 0 {
 		c.LinkPreviews.Cache.MaxSizeBytes = 1 * 1024 * 1024 * 1024 // 1GB
 	}
@@ -126,24 +119,22 @@ func setDefaultsAndPrint(c *AppConfig) {
 		c.LinkPreviews.Sitemap.MaxURLs = 1000
 	}
 
-	// Cache for QR Codes is enabled by default; only disable it when testing or debugging.
-	if c.QrCodes.Cache.Enabled == nil {
-		enabled := true
-		c.QrCodes.Cache.Enabled = &enabled
-	}
+	// QR Codes
 	if c.QrCodes.Cache.MaxSizeBytes == 0 {
 		c.QrCodes.Cache.MaxSizeBytes = 1 * 1024 * 1024 * 1024 // 1GB
 	}
 
+	// Ratings
+	if c.Ratings.Retention == 0 {
+		c.Ratings.Retention = 365 * 24 * time.Hour
+	}
+
+	// Logs
 	if c.Logs.Retention == 0 {
 		c.Logs.Retention = 30 * 24 * time.Hour
 	}
 	if c.Logs.Pagination.Limit == 0 {
 		c.Logs.Pagination.Limit = 100
-	}
-
-	if c.Ratings.Retention == 0 {
-		c.Ratings.Retention = 365 * 24 * time.Hour
 	}
 
 	// Print the config at startup for observability, with sensitive fields redacted.
@@ -156,12 +147,5 @@ func setDefaultsAndPrint(c *AppConfig) {
 	// Print warnings for unsafe settings, just as FYI.
 	if c.Debug {
 		slog.Warn("Debug mode is enabled")
-	}
-
-	if !*c.LinkPreviews.Cache.Enabled {
-		slog.Warn("Screenshot cache disabled for Link Previews; performance will be affected")
-	}
-	if !*c.QrCodes.Cache.Enabled {
-		slog.Warn("Cache disabled for QR Codes; performance will be affected")
 	}
 }

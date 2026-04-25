@@ -20,13 +20,11 @@ import (
 var Cache *core.DiskCache
 
 func Init(mux *http.ServeMux) {
-	if *conf.Config.QrCodes.Cache.Enabled {
-		Cache = core.NewDiskCache(
-			filepath.Join(conf.Config.DataDir, "cache", "qr-codes"),
-			core.WithTTL(conf.Config.QrCodes.Cache.TTL),
-			core.WithMaxSize(conf.Config.QrCodes.Cache.MaxSizeBytes),
-		)
-	} // else cache will be nil
+	Cache = core.NewDiskCache(
+		filepath.Join(conf.Config.DataDir, "cache", "qr-codes"),
+		core.WithTTL(conf.Config.QrCodes.Cache.TTL),
+		core.WithMaxSize(conf.Config.QrCodes.Cache.MaxSizeBytes),
+	)
 
 	mux.HandleFunc("GET /qrcode/v1", handleQrCode)
 }
@@ -51,19 +49,16 @@ func handleQrCode(w http.ResponseWriter, req *http.Request) {
 
 	var cached []byte
 
-	// Only check cache if enabled
-	if *conf.Config.QrCodes.Cache.Enabled {
-		cached, err = Cache.Find(url)
-		if err != nil {
-			slog.Error("error during cache lookup", tint.Err(err),
-				"method", req.Method,
-				"path", req.URL.Path,
-				"url", url,
-				"hostname", hostname,
-				"status", http.StatusInternalServerError)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
+	cached, err = Cache.Find(url)
+	if err != nil {
+		slog.Error("error during cache lookup", tint.Err(err),
+			"method", req.Method,
+			"path", req.URL.Path,
+			"url", url,
+			"hostname", hostname,
+			"status", http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
 	if cached != nil {
@@ -105,27 +100,25 @@ func handleQrCode(w http.ResponseWriter, req *http.Request) {
 	w.Write(png)
 	recordQrCodeCreated(url)
 
-	// If cache is enabled, compress the generated QR Code and cache it, but without holding up the HTTP request
+	// Compress and cache the generated QR Code, but without holding up the HTTP request
 	go func() {
-		if *conf.Config.QrCodes.Cache.Enabled {
-			dataToWrite := png
-			compressed, err := core.CompressPNG(png)
-			if err == nil {
-				dataToWrite = compressed
-				slog.Info("PNG compressed", "from", len(png), "to", len(compressed), "%", (len(compressed) * 100 / len(png)))
-			} else {
-				slog.Error("PNG compression failed", tint.Err(err), "url", url)
-			}
+		dataToWrite := png
+		compressed, err := core.CompressPNG(png)
+		if err == nil {
+			dataToWrite = compressed
+			slog.Info("PNG compressed", "from", len(png), "to", len(compressed), "%", (len(compressed) * 100 / len(png)))
+		} else {
+			slog.Error("PNG compression failed", tint.Err(err), "url", url)
+		}
 
-			if err := Cache.Write(url, dataToWrite); err != nil {
-				err = fmt.Errorf("error writing to cache: %s, %w", url, err)
-				slog.Error("error writing to cache", tint.Err(err),
-					"method", req.Method,
-					"path", req.URL.Path,
-					"url", url,
-					"hostname", hostname,
-					"status", http.StatusInternalServerError)
-			}
+		if err := Cache.Write(url, dataToWrite); err != nil {
+			err = fmt.Errorf("error writing to cache: %s, %w", url, err)
+			slog.Error("error writing to cache", tint.Err(err),
+				"method", req.Method,
+				"path", req.URL.Path,
+				"url", url,
+				"hostname", hostname,
+				"status", http.StatusInternalServerError)
 		}
 	}()
 }

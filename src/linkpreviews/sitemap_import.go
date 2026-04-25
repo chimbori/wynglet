@@ -46,10 +46,6 @@ func GetSitemapImportStatus() *SitemapImportStatus {
 }
 
 func StartSitemapImport(parent context.Context, sitemapURL string) error {
-	if Cache == nil {
-		return fmt.Errorf("link preview cache is disabled")
-	}
-
 	sitemapImportState.mu.Lock()
 	if sitemapImportState.status != nil && sitemapImportState.status.InProgress {
 		sitemapImportState.mu.Unlock()

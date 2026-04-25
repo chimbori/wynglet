@@ -220,8 +220,7 @@ The output hash can be pasted directly into the <code>dashboard.password</code> 
 </span></span></code></pre></li>
 <li>
 <p>Link Previews config <em>(optional)</em></p>
-<p>Performance will be seriously affected by disabling the cache.
-Only turn off during development.</p>
+<p>Configure Cache TTL if needed for testing (e.g. set to a low value like <code>1m</code>).</p>
 <pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#ff79c6">link-previews</span>:
 </span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">screenshot</span>:
 </span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">timeout</span>: 20s
@@ -229,17 +228,14 @@ Only turn off during development.</p>
 </span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">concurrent_urls</span>: <span style="color:#bd93f9">4</span>  <span style="color:#6272a4"># Number of URLs processed in parallel during sitemap import</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">max_urls</span>: <span style="color:#bd93f9">1000</span>      <span style="color:#6272a4"># Maximum URLs fetched from a sitemap</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">cache</span>:
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">enabled</span>: <span style="color:#ff79c6">true</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">ttl</span>: 720h0m0s
 </span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">max_size_bytes</span>: <span style="color:#bd93f9">1073741824</span>
 </span></span></code></pre></li>
 <li>
 <p>QR Codes config <em>(optional)</em></p>
-<p>Performance will be seriously affected by disabling the cache.
-Only turn off during development.</p>
+<p>Configure Cache TTL if needed for testing (e.g. set to a low value like <code>1m</code>).</p>
 <pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#ff79c6">qr-codes</span>:
 </span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">cache</span>:
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">enabled</span>: <span style="color:#ff79c6">true</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">ttl</span>: 720h0m0s
 </span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">max_size_bytes</span>: <span style="color:#bd93f9">1073741824</span>
 </span></span></code></pre></li>

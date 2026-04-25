@@ -217,8 +217,7 @@ Butterfly requires basic configuration to be provided via a config file.
 
 - Link Previews config _(optional)_
 
-  Performance will be seriously affected by disabling the cache.
-  Only turn off during development.
+  Configure Cache TTL if needed for testing (e.g. set to a low value like `1m`).
 
   ```yml
   link-previews:
@@ -228,20 +227,17 @@ Butterfly requires basic configuration to be provided via a config file.
       concurrent_urls: 4  # Number of URLs processed in parallel during sitemap import
       max_urls: 1000      # Maximum URLs fetched from a sitemap
     cache:
-      enabled: true
       ttl: 720h0m0s
       max_size_bytes: 1073741824
   ```
 
 - QR Codes config _(optional)_
 
-  Performance will be seriously affected by disabling the cache.
-  Only turn off during development.
+  Configure Cache TTL if needed for testing (e.g. set to a low value like `1m`).
 
   ```yml
   qr-codes:
     cache:
-      enabled: true
       ttl: 720h0m0s
       max_size_bytes: 1073741824
   ```
