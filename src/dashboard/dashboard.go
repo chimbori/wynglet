@@ -46,7 +46,6 @@ func Init(mux *http.ServeMux) {
 	mux.Handle("GET /dashboard/logs/data", chain.ThenFunc(logsDataHandler))
 
 	mux.Handle("GET /dashboard/ratings", chain.ThenFunc(ratingsPageHandler))
-	mux.Handle("GET /dashboard/ratings/embed", chain.ThenFunc(ratingsEmbedBuilderHandler))
 	mux.Handle("GET /dashboard/ratings/list", chain.ThenFunc(ratingsListHandler))
 }
 

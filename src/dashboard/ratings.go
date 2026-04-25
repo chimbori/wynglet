@@ -5,14 +5,12 @@ import (
 	"log/slog"
 	"math"
 	"net/http"
-	"net/url"
 	"sort"
 	"strconv"
 	"strings"
 
 	"butterfly.chimbori.dev/conf"
 	"butterfly.chimbori.dev/db"
-	"butterfly.chimbori.dev/validation"
 	"github.com/lmittmann/tint"
 )
 
@@ -28,68 +26,6 @@ func ratingsPageHandler(w http.ResponseWriter, req *http.Request) {
 	}
 	days := parseRatingDays(req.URL.Query().Get("days"))
 	RatingsPageTempl(page, days).Render(req.Context(), w)
-}
-
-// GET /dashboard/ratings/embed?url=...&ui=thumbs|stars
-func ratingsEmbedBuilderHandler(w http.ResponseWriter, req *http.Request) {
-	rawURL := req.URL.Query().Get("url")
-	ui := req.URL.Query().Get("ui")
-	if ui == "" {
-		ui = "thumbs"
-	}
-	if ui != "thumbs" && ui != "stars" {
-		RatingsIframeCodeErrorTempl("UI must be either thumbs or stars.").Render(req.Context(), w)
-		return
-	}
-
-	if rawURL == "" {
-		RatingsIframeCodeErrorTempl("Paste a URL to generate an embed iframe.").Render(req.Context(), w)
-		return
-	}
-
-	queries := db.New(db.Pool)
-	validatedURL, hostname, err := validation.ValidateUrl(req.Context(), queries, rawURL)
-	if err != nil {
-		slog.Warn("ratings embed validation failed", tint.Err(err),
-			"method", req.Method,
-			"path", req.URL.Path,
-			"url", rawURL,
-			"hostname", hostname,
-			"status", http.StatusBadRequest)
-		RatingsIframeCodeErrorTempl(err.Error()).Render(req.Context(), w)
-		return
-	}
-
-	iframeCode := buildRatingsIframeEmbed(req, validatedURL, ui)
-	RatingsIFrameCodeTempl(iframeCode).Render(req.Context(), w)
-}
-
-func buildRatingsIframeEmbed(req *http.Request, validatedURL string, ui string) string {
-	params := url.Values{}
-	params.Set("url", validatedURL)
-	params.Set("ui", ui)
-
-	scheme := req.Header.Get("X-Forwarded-Proto")
-	if scheme == "" {
-		if req.TLS != nil {
-			scheme = "https"
-		} else {
-			scheme = "http"
-		}
-	}
-
-	width, height := 0, 0
-	switch ui {
-	case "stars":
-		width, height = 200, 50
-	case "thumbs":
-		width, height = 120, 50
-	}
-
-	iframeSrc := fmt.Sprintf("%s://%s/rating/v1?%s", scheme, req.Host, params.Encode())
-	return fmt.Sprintf(
-		`<iframe src="%s" width="%d" height="%d" style="border:0;overflow:hidden;" loading="lazy" referrerpolicy="no-referrer"></iframe>`,
-		iframeSrc, width, height)
 }
 
 // GET /dashboard/ratings/list?days=0&page=1&sortBy=rating&sortOrder=desc

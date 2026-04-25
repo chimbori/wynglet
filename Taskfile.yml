@@ -103,6 +103,8 @@ tasks:
     cmds:
       - esbuild dashboard/dashboard.ts --bundle --target=es2020 --outfile=embedfs/static/dashboard.js
       - esbuild dashboard/dashboard.ts --bundle --target=es2020 --outfile=embedfs/static/dashboard.min.js --minify
+      - esbuild dashboard/ratings.ts --bundle --target=es2020 --outfile=embedfs/static/ratings.js
+      - esbuild dashboard/ratings.ts --bundle --target=es2020 --outfile=embedfs/static/ratings.min.js --minify
 
   update:
     desc: Update all dependencies

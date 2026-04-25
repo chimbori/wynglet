@@ -7,7 +7,7 @@
   font-style: normal;
   font-weight: 400 600 700;
   font-display: swap;
-  src: url('InterVariable.woff2?v=4.1') format('woff2');
+  src: url('InterVariable.woff2') format('woff2');
 }
 
 @font-face {

@@ -18,8 +18,9 @@ templ LinkPreviewsPageTempl(page int) {
 					<a href="/dashboard/link-previews/sitemap" class="btn-neutral">Import from Sitemap</a>
 				</div>
 				<div id="generated-link-output" class="hidden">
+					<label for="generated-link-url">OpenGraph URL</label>
 					<div class="flex items-center gap-2">
-						<input type="text" id="generated-link-url" readonly class="flex-1"/>
+						<input type="text" id="generated-link-url" readonly class="flex-1 font-mono"/>
 						<button type="button" id="copy-link-preview-btn" class="btn-neutral" title="Copy to clipboard">Copy</button>
 					</div>
 				</div>

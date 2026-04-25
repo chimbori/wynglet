@@ -1,13 +1,11 @@
 /** Initializes the link preview URL generator UI by attaching event listeners to buttons. */
-export function initLinkPreviewsCopyUrl(): void {
+export function initLinkPreviewsUrlBuilder(): void {
 	// Attach event listeners to buttons
 	const generateBtn = document.getElementById('generate-link-preview-btn');
 	const copyBtn = document.getElementById('copy-link-preview-btn');
-
 	if (generateBtn) {
 		generateBtn.addEventListener('click', generateLinkPreviewUrl);
 	}
-
 	if (copyBtn) {
 		copyBtn.addEventListener('click', copyToClipboard);
 	}
@@ -16,31 +14,24 @@ export function initLinkPreviewsCopyUrl(): void {
 /**
  * Generates a link preview URL for the given input URL and displays it for copying.
  *
- * Uses HTML5 form validation to ensure the input field is filled and contains a valid URL format.
  * If valid, constructs the full `/link-previews/v1` URL with the input encoded as a query parameter
  * and displays it in the output field.
  */
 export function generateLinkPreviewUrl(): void {
-	const inputElement = document.getElementById('generate-link-url') as HTMLInputElement;
-	const form = inputElement.closest('form') as HTMLFormElement;
-
-	// Use HTML5 validation
+	const urlInput = document.getElementById('generate-link-url') as HTMLInputElement;
+	const form = urlInput.closest('form') as HTMLFormElement;
 	if (!form.checkValidity()) {
-		inputElement.reportValidity();
+		urlInput.reportValidity();
 		return;
 	}
 
-	const url = inputElement.value.trim();
-
-	try {
-		new URL(url);
-	} catch {
-		alert('Please enter a valid URL');
-		return;
-	}
+	const url = urlInput.value.trim();
 
 	const baseUrl = window.location.origin;
-	const linkPreviewUrl = `${baseUrl}/link-previews/v1?url=${encodeURIComponent(url)}`;
+  const params = new URLSearchParams();
+	params.set('url', url);
+
+  const linkPreviewUrl = `${baseUrl}/link-previews/v1?${params.toString()}`;
 	(document.getElementById('generated-link-url') as HTMLInputElement).value = linkPreviewUrl;
 	document.getElementById('generated-link-output')!.classList.remove('hidden');
 }
@@ -54,6 +45,7 @@ export function copyToClipboard(event: Event): void {
 	const linkUrl = document.getElementById('generated-link-url') as HTMLInputElement;
 	linkUrl.select();
 	document.execCommand('copy');
+
 	const btn = event.target as HTMLButtonElement;
 	const originalText = btn.textContent;
 	btn.textContent = 'Copied!';

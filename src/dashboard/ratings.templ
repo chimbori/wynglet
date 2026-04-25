@@ -1,6 +1,7 @@
 package dashboard
 
 import (
+	"butterfly.chimbori.dev/conf"
 	"butterfly.chimbori.dev/core"
 	"butterfly.chimbori.dev/db"
 	"fmt"
@@ -11,12 +12,7 @@ templ RatingsPageTempl(page int, days int) {
 		<p>A ratings widget to capture user feedback for any URL: Thumbs (up/down), or Stars (1 to 5)</p>
 		<section>
 			<h2><label for="rating-embed-url">Get Embeddable <code>&lt;iframe&gt;</code> Code</label></h2>
-			<form
-				class="flex flex-col items-center md:flex-row gap-4 md:items-end"
-				hx-get="/dashboard/ratings/embed"
-				hx-target="#ratings-embed-result"
-				hx-swap="innerHTML transition:true"
-			>
+			<form id="ratings-embed-form" class="flex flex-col items-center md:flex-row gap-4 md:items-end" onsubmit="return false;">
 				<div class="grow">
 					<input id="rating-embed-url" name="url" type="url" required placeholder="https://example.com/article" class="input-primary w-full"/>
 				</div>
@@ -27,9 +23,17 @@ templ RatingsPageTempl(page int, days int) {
 						<option value="stars">stars</option>
 					</select>
 				</div>
-				<button type="submit" class="btn-submit">Generate</button>
+				<button id="generate-rating-iframe-btn" type="button" class="btn-submit">Generate</button>
 			</form>
-			<div id="ratings-embed-result"></div>
+			<div id="ratings-embed-result" class="hidden">
+				<div class="flex flex-col gap-2 mt-4">
+					<label for="ratings-iframe-code">Embed Code</label>
+					<div class="flex items-start gap-2">
+						<textarea id="ratings-iframe-code" readonly class="flex-1 font-mono" rows="4"></textarea>
+						<button type="button" id="copy-ratings-iframe-btn" class="btn-neutral" title="Copy to clipboard">Copy</button>
+					</div>
+				</div>
+			</div>
 		</section>
 		<section>
 			<h2>Ratings by URL</h2>
@@ -97,6 +101,11 @@ templ RatingsPageTempl(page int, days int) {
 				</div>
 			</div>
 		</section>
+	}
+	if conf.Config.Debug {
+		<script src="/static/ratings.js"></script>
+	} else {
+		<script src="/static/ratings.min.js"></script>
 	}
 }
 
@@ -284,26 +293,4 @@ templ starsBar(r db.ListRatingsWithDistributionRow) {
 			<div class="bg-green-500" style={ fmt.Sprintf("width:%.1f%%", pctOf(r.Stars5, r.TotalRatings)) } title={ fmt.Sprintf("5★: %d", r.Stars5) }></div>
 		}
 	</div>
-}
-
-templ RatingsIFrameCodeTempl(iframeCode string) {
-	<div class="flex gap-2 mt-4">
-		<textarea id="ratings-embed-code" readonly class="grow rounded-xl shadow-lg h-24 p-4 text-xs font-mono">{ iframeCode }</textarea>
-		<button id="ratings-copy-btn" class="btn-neutral px-4 h-24 flex items-center" onclick="copyEmbedCode()">Copy</button>
-	</div>
-	<script>
-		function copyEmbedCode() {
-			const textarea = document.getElementById('ratings-embed-code');
-			textarea.select();
-			document.execCommand('copy');
-			const btn = document.getElementById('ratings-copy-btn');
-			const origText = btn.textContent;
-			btn.textContent = 'Copied!';
-			setTimeout(() => { btn.textContent = origText; }, 2000);
-		}
-	</script>
-}
-
-templ RatingsIframeCodeErrorTempl(message string) {
-	<div class="error-message">{ message }</div>
 }
