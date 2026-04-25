@@ -379,6 +379,9 @@
   .min-w-80 {
     min-width: calc(var(--spacing) * 80);
   }
+  .flex-1 {
+    flex: 1;
+  }
   .flex-shrink-0 {
     flex-shrink: 0;
   }

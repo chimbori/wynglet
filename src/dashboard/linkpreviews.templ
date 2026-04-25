@@ -9,8 +9,19 @@ import (
 templ LinkPreviewsPageTempl(page int) {
 	@ContentTempl("Link Previews", NilTemplate()) {
 		<section>
-			<div class="flex justify-between items-center gap-4">
-				<a href="/dashboard/link-previews/sitemap" class="btn-neutral">Import from Sitemap</a>
+			<h2><label for="generate-link-url">Generate Link Preview URL</label></h2>
+			<div class="flex flex-col gap-4">
+				<div class="flex items-center gap-2">
+					<input class="flex-1" type="url" id="generate-link-url" placeholder="Enter URL to generate link preview for"/>
+					<button type="button" id="generate-link-preview-btn" class="btn-submit">Generate Link</button>
+					<a href="/dashboard/link-previews/sitemap" class="btn-neutral">Import from Sitemap</a>
+				</div>
+				<div id="generated-link-output" class="hidden">
+					<div class="flex items-center gap-2">
+						<input type="text" id="generated-link-url" readonly class="flex-1"/>
+						<button type="button" id="copy-link-preview-btn" class="btn-neutral" title="Copy to clipboard">Copy</button>
+					</div>
+				</div>
 			</div>
 		</section>
 		<section>
