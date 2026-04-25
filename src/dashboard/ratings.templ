@@ -10,7 +10,7 @@ templ RatingsPageTempl(page int, days int) {
 	@ContentTempl("Ratings", NilTemplate()) {
 		<p>A ratings widget to capture user feedback for any URL. Thumbs (up/down), or Stars (1 to 5).</p>
 		<section>
-			<h2>Get Embeddable <code>&lt;iframe&gt;</code> Code</h2>
+			<h2><label for="rating-embed-url">Get Embeddable <code>&lt;iframe&gt;</code> Code				</label> </h2>
 			<form
 				class="flex flex-col md:flex-row gap-4 md:items-end"
 				hx-get="/dashboard/ratings/embed"
@@ -18,7 +18,6 @@ templ RatingsPageTempl(page int, days int) {
 				hx-swap="innerHTML transition:true"
 			>
 				<div class="grow">
-					<label for="rating-embed-url" class="text-sm">URL</label>
 					<input
 						id="rating-embed-url"
 						name="url"
