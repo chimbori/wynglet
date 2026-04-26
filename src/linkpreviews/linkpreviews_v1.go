@@ -22,14 +22,19 @@ var Cache *core.DiskCache
 
 var selectorRegex = regexp.MustCompile(`^[#.][a-zA-Z0-9_-]+$`)
 
-func Init(mux *http.ServeMux) {
-	Cache = core.NewDiskCache(
+func Init(mux *http.ServeMux) error {
+	var err error
+	Cache, err = core.NewDiskCache(
 		filepath.Join(conf.Config.DataDir, "cache", "link-previews"),
 		core.WithTTL(conf.Config.LinkPreviews.Cache.TTL),
 		core.WithMaxSize(conf.Config.LinkPreviews.Cache.MaxSizeBytes),
 	)
+	if err != nil {
+		return err
+	}
 
 	mux.HandleFunc("GET /link-previews/v1", handleLinkPreview)
+	return nil
 }
 
 // GET /link-previews/v1?url={url}&sel={selector}

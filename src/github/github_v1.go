@@ -35,13 +35,18 @@ func setCORSHeaders(w http.ResponseWriter) {
 	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
 }
 
-func Init(mux *http.ServeMux) {
-	Cache = core.NewDiskCache(
+func Init(mux *http.ServeMux) error {
+	var err error
+	Cache, err = core.NewDiskCache(
 		filepath.Join(conf.Config.DataDir, "cache", "github"),
 		core.WithTTL(time.Hour), // 1 hour
 	)
+	if err != nil {
+		return err
+	}
 	mux.HandleFunc("GET /github/v1/{user}/{repo}/{type}", handleGithubV1)
 	mux.HandleFunc("OPTIONS /github/v1/{user}/{repo}/{type}", handleGithubV1)
+	return nil
 }
 
 func handleGithubV1(w http.ResponseWriter, req *http.Request) {

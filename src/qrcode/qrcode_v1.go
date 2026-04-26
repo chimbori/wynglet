@@ -19,14 +19,19 @@ import (
 
 var Cache *core.DiskCache
 
-func Init(mux *http.ServeMux) {
-	Cache = core.NewDiskCache(
+func Init(mux *http.ServeMux) error {
+	var err error
+	Cache, err = core.NewDiskCache(
 		filepath.Join(conf.Config.DataDir, "cache", "qr-codes"),
 		core.WithTTL(conf.Config.QrCodes.Cache.TTL),
 		core.WithMaxSize(conf.Config.QrCodes.Cache.MaxSizeBytes),
 	)
+	if err != nil {
+		return err
+	}
 
 	mux.HandleFunc("GET /qrcode/v1", handleQrCode)
+	return nil
 }
 
 // GET /qrcode/v1?url={url}

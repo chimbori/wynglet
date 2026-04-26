@@ -107,9 +107,15 @@ func main() {
 	mux.HandleFunc("GET /{$}", func(w http.ResponseWriter, req *http.Request) {
 		IndexTempl().Render(req.Context(), w)
 	})
-	linkpreviews.Init(mux)
-	qrcode.Init(mux)
-	github.Init(mux)
+	if err := linkpreviews.Init(mux); err != nil {
+		log.Fatalf("failed to initialize link previews: %v", err)
+	}
+	if err := qrcode.Init(mux); err != nil {
+		log.Fatalf("failed to initialize QR codes: %v", err)
+	}
+	if err := github.Init(mux); err != nil {
+		log.Fatalf("failed to initialize GitHub cache: %v", err)
+	}
 	rating.Init(mux)
 	dashboard.Init(mux)
 

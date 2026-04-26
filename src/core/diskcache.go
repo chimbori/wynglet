@@ -37,7 +37,12 @@ func WithMaxSize(size int64) Option {
 }
 
 // NewDiskCache creates a new DiskCache instance with the specified root directory.
-func NewDiskCache(root string, opts ...Option) *DiskCache {
+// It creates the root directory if it does not exist.
+func NewDiskCache(root string, opts ...Option) (*DiskCache, error) {
+	if err := os.MkdirAll(root, 0o755); err != nil {
+		return nil, fmt.Errorf("failed to create cache directory: %w", err)
+	}
+
 	c := &DiskCache{
 		Root:    root,
 		MaxSize: 1 * 1024 * 1024 * 1024, // Default 1GB
@@ -45,7 +50,7 @@ func NewDiskCache(root string, opts ...Option) *DiskCache {
 	for _, opt := range opts {
 		opt(c)
 	}
-	return c
+	return c, nil
 }
 
 // Find attempts to retrieve a cached file for the given cache key.
