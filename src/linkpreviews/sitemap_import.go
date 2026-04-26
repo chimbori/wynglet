@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"log/slog"
+	"net/url"
 	"sync"
 	"sync/atomic"
 
@@ -53,9 +54,17 @@ func StartSitemapImport(parent context.Context, sitemapURL string) error {
 	}
 	sitemapImportState.mu.Unlock()
 
+	// Extract hostname from sitemap URL for logging
+	parsedSitemapURL, _ := url.Parse(sitemapURL)
+	hostname := ""
+	if parsedSitemapURL != nil {
+		hostname = parsedSitemapURL.Hostname()
+	}
+
 	queries := db.New(db.Pool)
 	urls, err := core.FetchSitemap(parent, sitemapURL, conf.Config.LinkPreviews.Sitemap.MaxURLs)
 	if err != nil {
+		slog.Error("failed to fetch sitemap", tint.Err(err), "url", sitemapURL, "hostname", hostname)
 		return err
 	}
 
@@ -79,6 +88,7 @@ func StartSitemapImport(parent context.Context, sitemapURL string) error {
 
 	existingURLs, err := queries.GetExistingLinkPreviewURLs(parent, urls)
 	if err != nil {
+		slog.Error("failed to get existing link preview URLs", tint.Err(err), "url", sitemapURL, "hostname", hostname)
 		appendSitemapImportError(status, err.Error())
 		finishSitemapImport(status)
 		cancel()
@@ -109,6 +119,13 @@ func CancelSitemapImport() bool {
 func runSitemapImport(ctx context.Context, status *SitemapImportStatus, urls []string, existing map[string]struct{}, concurrency int) {
 	defer finishSitemapImport(status)
 
+	// Parse hostname once from the sitemap URL
+	parsedSitemapURL, err := url.Parse(status.SitemapURL)
+	hostname := ""
+	if err == nil && parsedSitemapURL != nil {
+		hostname = parsedSitemapURL.Hostname()
+	}
+
 	jobs := make(chan string)
 	var waitGroup sync.WaitGroup
 	var skipped int64
@@ -118,29 +135,31 @@ func runSitemapImport(ctx context.Context, status *SitemapImportStatus, urls []s
 	for range concurrency {
 		waitGroup.Go(func() {
 			queries := db.New(db.Pool)
-			for url := range jobs {
+			for jobURL := range jobs {
 				select {
 				case <-ctx.Done():
 					return
 				default:
 				}
 
-				if _, ok := existing[url]; ok {
+				if _, ok := existing[jobURL]; ok {
 					atomic.AddInt64(&skipped, 1)
 					updateSitemapImportCounts(status, int(atomic.LoadInt64(&completed)), int(atomic.LoadInt64(&skipped)), int(atomic.LoadInt64(&failed)))
 					continue
 				}
 
-				validatedURL, _, err := validation.ValidateUrl(ctx, queries, url)
+				validatedURL, _, err := validation.ValidateUrl(ctx, queries, jobURL)
 				if err != nil {
+					slog.Error("URL validation failed during sitemap import", tint.Err(err), "url", jobURL, "hostname", hostname)
 					atomic.AddInt64(&failed, 1)
-					appendSitemapImportError(status, fmt.Sprintf("%s: %v", url, err))
+					appendSitemapImportError(status, fmt.Sprintf("%s: %v", jobURL, err))
 					updateSitemapImportCounts(status, int(atomic.LoadInt64(&completed)), int(atomic.LoadInt64(&skipped)), int(atomic.LoadInt64(&failed)))
 					continue
 				}
 
 				cached, err := Cache.Find(core.ComputeKey(validatedURL, "png", false))
 				if err != nil {
+					slog.Error("failed to find cached link preview during sitemap import", tint.Err(err), "url", validatedURL, "hostname", hostname)
 					atomic.AddInt64(&failed, 1)
 					appendSitemapImportError(status, fmt.Sprintf("%s: %v", validatedURL, err))
 					updateSitemapImportCounts(status, int(atomic.LoadInt64(&completed)), int(atomic.LoadInt64(&skipped)), int(atomic.LoadInt64(&failed)))
@@ -155,6 +174,7 @@ func runSitemapImport(ctx context.Context, status *SitemapImportStatus, urls []s
 				}
 
 				if err := generateAndCacheSitemapPreview(ctx, validatedURL); err != nil {
+					slog.Error("failed to generate and cache sitemap preview", tint.Err(err), "url", validatedURL, "hostname", hostname)
 					atomic.AddInt64(&failed, 1)
 					appendSitemapImportError(status, fmt.Sprintf("%s: %v", validatedURL, err))
 					updateSitemapImportCounts(status, int(atomic.LoadInt64(&completed)), int(atomic.LoadInt64(&skipped)), int(atomic.LoadInt64(&failed)))
@@ -168,16 +188,17 @@ func runSitemapImport(ctx context.Context, status *SitemapImportStatus, urls []s
 		})
 	}
 
-	for _, url := range urls {
+	for _, pageURL := range urls {
 		select {
 		case <-ctx.Done():
 			close(jobs)
 			waitGroup.Wait()
 			if !errors.Is(ctx.Err(), context.Canceled) {
+				slog.Error("sitemap import context error", tint.Err(ctx.Err()), "url", status.SitemapURL, "hostname", hostname)
 				appendSitemapImportError(status, ctx.Err().Error())
 			}
 			return
-		case jobs <- url:
+		case jobs <- pageURL:
 		}
 	}
 
@@ -185,6 +206,7 @@ func runSitemapImport(ctx context.Context, status *SitemapImportStatus, urls []s
 	waitGroup.Wait()
 
 	if err := ctx.Err(); err != nil && !errors.Is(err, context.Canceled) {
+		slog.Error("sitemap import context error", tint.Err(err), "url", status.SitemapURL, "hostname", hostname)
 		appendSitemapImportError(status, err.Error())
 	}
 }
