@@ -168,7 +168,7 @@ func RatingsListTempl(ratings []db.ListRatingsWithDistributionRow, page int, day
 		}
 		ctx = templ.ClearChildren(ctx)
 		if totalCount == 0 {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "No ratings recorded yet.")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "No ratings recorded yet")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

@@ -212,7 +212,8 @@ func runSitemapImport(ctx context.Context, status *SitemapImportStatus, urls []s
 }
 
 func generateAndCacheSitemapPreview(parent context.Context, url string) error {
-	ctx, cancel := context.WithTimeout(parent, conf.Config.LinkPreviews.Screenshot.Timeout)
+	// Use double the default timeout for sitemap import, since this is a background task.
+	ctx, cancel := context.WithTimeout(parent, 2*conf.Config.LinkPreviews.Screenshot.Timeout)
 	defer cancel()
 
 	screenshot, err := core.TakeScreenshot(ctx, url, "#link-preview")
