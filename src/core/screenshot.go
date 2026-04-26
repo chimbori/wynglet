@@ -15,9 +15,9 @@ import (
 	"strings"
 	"time"
 
-	"butterfly.chimbori.dev/conf"
 	"github.com/chromedp/chromedp"
 	"golang.org/x/net/html"
+	"wynglet.chimbori.dev/conf"
 )
 
 var ErrMissingSelector = errors.New("selector not found")
@@ -161,7 +161,7 @@ func FetchTitleAndDescription(ctx context.Context, url string) (title, descripti
 		if err != nil {
 			return "", "", err
 		}
-		req.Header.Set("User-Agent", "Mozilla/5.0 (compatible; Butterfly/1.0; +https://butterfly.chimbori.dev)")
+		req.Header.Set("User-Agent", "Mozilla/5.0 (compatible; Wynglet/1.0; +https://wynglet.chimbori.dev)")
 
 		resp, err := httpClient.Do(req)
 		if err != nil {

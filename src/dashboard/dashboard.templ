@@ -1,10 +1,10 @@
 package dashboard
 
 import (
-	"butterfly.chimbori.dev/conf"
-	"butterfly.chimbori.dev/embedfs"
 	"fmt"
 	"net/url"
+	"wynglet.chimbori.dev/conf"
+	"wynglet.chimbori.dev/embedfs"
 )
 
 var S = fmt.Sprint
@@ -100,7 +100,7 @@ templ ErrorTempl(msg string) {
 templ FooterTempl() {
 	<footer class="mt-16 mb-8">
 		<p class="print:hidden mb-4">
-			{{ currentURL := "https://butterfly.chimbori.dev/" }}
+			{{ currentURL := "https://wynglet.chimbori.dev/" }}
 			<a class="btn-sharing" target="_blank" href={ "https://bsky.app/intent/compose?text=" + url.QueryEscape(currentURL) } title="Share on BlueSky">
 				@embedfs.BlueSkyIcon
 			</a>
@@ -116,11 +116,11 @@ templ FooterTempl() {
 		</p>
 		<a
 			target="_blank"
-			href="https://butterfly.chimbori.dev"
+			href="https://wynglet.chimbori.dev"
 			class="no-underline rounded-lg shadow mr-2 px-3 py-2 text-sm text-black bg-linear-to-b from-zinc-50 to-zinc-100 hover:from-zinc-100 hover:to-zinc-200"
 		>
 			<img src="/static/github.svg" class="size-4 inline mr-1" alt="GitHub"/>
-			<span hx-get="/github/v1/chimbori/butterfly/stars" hx-trigger="load"></span> stars
+			<span hx-get="/github/v1/chimbori/wynglet/stars" hx-trigger="load"></span> stars
 		</a>
 		<span class="text-xs">{ conf.AppName + " " + conf.BuildTimestamp }</span>
 	</footer>

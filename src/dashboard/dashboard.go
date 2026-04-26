@@ -6,16 +6,16 @@ import (
 	"net/http"
 	"time"
 
-	"butterfly.chimbori.dev/conf"
-	"butterfly.chimbori.dev/core"
 	"github.com/justinas/alice"
 	"github.com/lmittmann/tint"
 	"golang.org/x/crypto/bcrypt"
+	"wynglet.chimbori.dev/conf"
+	"wynglet.chimbori.dev/core"
 )
 
 var sessionStore = core.NewInMemorySessionStore(24 * time.Hour)
 
-const sessionCookieName = "butterfly_session"
+const sessionCookieName = "wynglet_session"
 
 func Init(mux *http.ServeMux) {
 	chain := alice.New(authHandler)

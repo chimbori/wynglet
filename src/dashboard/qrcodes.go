@@ -4,9 +4,9 @@ import (
 	"log/slog"
 	"net/http"
 
-	"butterfly.chimbori.dev/db"
-	"butterfly.chimbori.dev/qrcode"
 	"github.com/lmittmann/tint"
+	"wynglet.chimbori.dev/db"
+	"wynglet.chimbori.dev/qrcode"
 )
 
 // GET /dashboard/qr-codes - List all QR Codes

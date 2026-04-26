@@ -8,11 +8,11 @@ package dashboard
 import (
 	"fmt"
 
-	"butterfly.chimbori.dev/conf"
-	"butterfly.chimbori.dev/core"
-	"butterfly.chimbori.dev/db"
 	"github.com/a-h/templ"
 	templruntime "github.com/a-h/templ/runtime"
+	"wynglet.chimbori.dev/conf"
+	"wynglet.chimbori.dev/core"
+	"wynglet.chimbori.dev/db"
 )
 
 func RatingsPageTempl(page int, days int) templ.Component {

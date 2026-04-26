@@ -13,14 +13,14 @@ import (
 	"runtime"
 	"strconv"
 
-	"butterfly.chimbori.dev/conf"
-	"butterfly.chimbori.dev/core"
-	"butterfly.chimbori.dev/db"
-	"butterfly.chimbori.dev/linkpreviews"
-	"butterfly.chimbori.dev/validation"
 	nativewebp "github.com/HugoSmits86/nativewebp"
 	"github.com/disintegration/imaging"
 	"github.com/lmittmann/tint"
+	"wynglet.chimbori.dev/conf"
+	"wynglet.chimbori.dev/core"
+	"wynglet.chimbori.dev/db"
+	"wynglet.chimbori.dev/linkpreviews"
+	"wynglet.chimbori.dev/validation"
 )
 
 // compressionSem limits the number of concurrent image compression tasks.

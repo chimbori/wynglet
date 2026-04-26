@@ -8,10 +8,10 @@ package dashboard
 import (
 	"fmt"
 
-	"butterfly.chimbori.dev/conf"
-	"butterfly.chimbori.dev/db"
 	"github.com/a-h/templ"
 	templruntime "github.com/a-h/templ/runtime"
+	"wynglet.chimbori.dev/conf"
+	"wynglet.chimbori.dev/db"
 )
 
 func LogsTempl(appName string, page int) templ.Component {
@@ -47,7 +47,7 @@ func LogsTempl(appName string, page int) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<p>Monitor your Butterfly instance</p><section id=\"logs-section\" hx-get=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<p>Monitor your Wynglet instance</p><section id=\"logs-section\" hx-get=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

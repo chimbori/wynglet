@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"strings"
 
-	"butterfly.chimbori.dev/db"
+	"wynglet.chimbori.dev/db"
 )
 
 // Canonicalize parses a user-provided URL string and returns a *url.URL.

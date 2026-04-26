@@ -55,7 +55,7 @@ func fetchSitemapRecursive(ctx context.Context, client *http.Client, sitemapURL 
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("User-Agent", "Mozilla/5.0 (compatible; Butterfly/1.0; +https://butterfly.chimbori.dev)")
+	req.Header.Set("User-Agent", "Mozilla/5.0 (compatible; Wynglet/1.0; +https://wynglet.chimbori.dev)")
 
 	resp, err := client.Do(req)
 	if err != nil {

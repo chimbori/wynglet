@@ -16,19 +16,19 @@ import (
 
 	_ "time/tzdata"
 
-	"butterfly.chimbori.dev/conf"
-	"butterfly.chimbori.dev/core"
-	"butterfly.chimbori.dev/dashboard"
-	"butterfly.chimbori.dev/db"
-	"butterfly.chimbori.dev/embedfs"
-	"butterfly.chimbori.dev/github"
-	"butterfly.chimbori.dev/linkpreviews"
-	"butterfly.chimbori.dev/qrcode"
-	"butterfly.chimbori.dev/rating"
-	"butterfly.chimbori.dev/slogdb"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/lmittmann/tint"
 	"golang.org/x/crypto/bcrypt"
+	"wynglet.chimbori.dev/conf"
+	"wynglet.chimbori.dev/core"
+	"wynglet.chimbori.dev/dashboard"
+	"wynglet.chimbori.dev/db"
+	"wynglet.chimbori.dev/embedfs"
+	"wynglet.chimbori.dev/github"
+	"wynglet.chimbori.dev/linkpreviews"
+	"wynglet.chimbori.dev/qrcode"
+	"wynglet.chimbori.dev/rating"
+	"wynglet.chimbori.dev/slogdb"
 )
 
 func main() {
@@ -38,7 +38,7 @@ func main() {
 
 	bcryptFlag := flag.Bool("bcrypt", false, "print bcrypt hash for given password & exit")
 	healthCheckFlag := flag.Bool("healthcheck", false, "verify health of running service & exit")
-	configYmlFlag := flag.String("config", "butterfly.yml", "path to butterfly.yml")
+	configYmlFlag := flag.String("config", "wynglet.yml", "path to wynglet.yml")
 	flag.Parse()
 
 	// If run with “--bcrypt”, read a password via the terminal, output a bcrypt hash, and exit.

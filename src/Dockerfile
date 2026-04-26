@@ -13,22 +13,22 @@ RUN set -Eeux && \
 COPY . .
 
 RUN go build \
-  -o butterfly \
+  -o wynglet \
   -trimpath \
-  -ldflags="-w -s -X 'butterfly.chimbori.dev/conf.BuildTimestamp=$(TZ=":America/Los_Angeles" date +"%Y-%m-%d %H:%M:%S")'"
+  -ldflags="-w -s -X 'wynglet.chimbori.dev/conf.BuildTimestamp=$(TZ=":America/Los_Angeles" date +"%Y-%m-%d %H:%M:%S")'"
 
 # Copy to deployable image, with Chrome Headless
 
 FROM chromedp/headless-shell:latest
 COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo
 COPY --from=builder /etc/ssl/certs /etc/ssl/certs
-COPY --from=builder /app/butterfly /butterfly
-RUN useradd -r -s /usr/sbin/nologin butterfly && \
+COPY --from=builder /app/wynglet /wynglet
+RUN useradd -r -s /usr/sbin/nologin wynglet && \
   mkdir -p /data && \
-  chown -R butterfly:butterfly /data /butterfly
+  chown -R wynglet:wynglet /data /wynglet
 EXPOSE 9999
 
 ENV TZ="America/Los_Angeles"
-USER butterfly
-ENTRYPOINT ["/butterfly"]
-CMD ["--config=/data/butterfly.yml"]
+USER wynglet
+ENTRYPOINT ["/wynglet"]
+CMD ["--config=/data/wynglet.yml"]

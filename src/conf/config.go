@@ -14,14 +14,14 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-var AppName = "Butterfly"
+var AppName = "Wynglet"
 
 var BuildTimestamp string
 
 var Config AppConfig
 
 type AppConfig struct {
-	DataDir  string `yaml:"-"` // The directory containing `butterfly.yml` is where all data will be stored.
+	DataDir  string `yaml:"-"` // The directory containing `wynglet.yml` is where all data will be stored.
 	Database struct {
 		Url string `yaml:"url"`
 	} `yaml:"database"`

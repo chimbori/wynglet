@@ -8,10 +8,10 @@ package dashboard
 import (
 	"fmt"
 
-	"butterfly.chimbori.dev/core"
-	"butterfly.chimbori.dev/db"
 	"github.com/a-h/templ"
 	templruntime "github.com/a-h/templ/runtime"
+	"wynglet.chimbori.dev/core"
+	"wynglet.chimbori.dev/db"
 )
 
 func LinkPreviewsPageTempl(page int) templ.Component {

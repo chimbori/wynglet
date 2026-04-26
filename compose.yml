@@ -1,21 +1,21 @@
 services:
-  butterfly-db:
-    container_name: butterfly-db
+  wynglet-db:
+    container_name: wynglet-db
     image: postgres:18-alpine
     environment:
-      POSTGRES_DB: butterfly
+      POSTGRES_DB: wynglet
       POSTGRES_USER: chimbori
       POSTGRES_PASSWORD: chimbori
     ports:
       - 5432:5432
     volumes:
-      - /Users/Shared/Unsynced/butterfly-db-data:/var/lib/postgresql
+      - /Users/Shared/Unsynced/wynglet-db-data:/var/lib/postgresql
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "/butterfly", "--config=/data/butterfly.yml", "--healthcheck"]
+      test: [ "CMD", "/wynglet", "--config=/data/wynglet.yml", "--healthcheck" ]
       interval: 5s
       timeout: 5s
       retries: 5
 
 volumes:
-  butterfly-db-data:
+  wynglet-db-data:

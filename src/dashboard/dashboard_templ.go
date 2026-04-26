@@ -9,10 +9,10 @@ import (
 	"fmt"
 	"net/url"
 
-	"butterfly.chimbori.dev/conf"
-	"butterfly.chimbori.dev/embedfs"
 	"github.com/a-h/templ"
 	templruntime "github.com/a-h/templ/runtime"
+	"wynglet.chimbori.dev/conf"
+	"wynglet.chimbori.dev/embedfs"
 )
 
 var S = fmt.Sprint
@@ -482,7 +482,7 @@ func FooterTempl() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		currentURL := "https://butterfly.chimbori.dev/"
+		currentURL := "https://wynglet.chimbori.dev/"
 		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 29, "<a class=\"btn-sharing\" target=\"_blank\" href=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -567,7 +567,7 @@ func FooterTempl() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 37, "</a></p><a target=\"_blank\" href=\"https://butterfly.chimbori.dev\" class=\"no-underline rounded-lg shadow mr-2 px-3 py-2 text-sm text-black bg-linear-to-b from-zinc-50 to-zinc-100 hover:from-zinc-100 hover:to-zinc-200\"><img src=\"/static/github.svg\" class=\"size-4 inline mr-1\" alt=\"GitHub\"> <span hx-get=\"/github/v1/chimbori/butterfly/stars\" hx-trigger=\"load\"></span> stars</a> <span class=\"text-xs\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 37, "</a></p><a target=\"_blank\" href=\"https://wynglet.chimbori.dev\" class=\"no-underline rounded-lg shadow mr-2 px-3 py-2 text-sm text-black bg-linear-to-b from-zinc-50 to-zinc-100 hover:from-zinc-100 hover:to-zinc-200\"><img src=\"/static/github.svg\" class=\"size-4 inline mr-1\" alt=\"GitHub\"> <span hx-get=\"/github/v1/chimbori/wynglet/stars\" hx-trigger=\"load\"></span> stars</a> <span class=\"text-xs\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

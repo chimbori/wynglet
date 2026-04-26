@@ -8,13 +8,13 @@ import (
 	"net/http"
 	"path/filepath"
 
-	"butterfly.chimbori.dev/conf"
-	"butterfly.chimbori.dev/core"
-	"butterfly.chimbori.dev/db"
-	"butterfly.chimbori.dev/validation"
 	"github.com/lmittmann/tint"
 	"github.com/yeqown/go-qrcode/v2"
 	"github.com/yeqown/go-qrcode/writer/standard"
+	"wynglet.chimbori.dev/conf"
+	"wynglet.chimbori.dev/core"
+	"wynglet.chimbori.dev/db"
+	"wynglet.chimbori.dev/validation"
 )
 
 var Cache *core.DiskCache

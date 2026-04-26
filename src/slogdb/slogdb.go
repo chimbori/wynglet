@@ -5,8 +5,8 @@ import (
 	"log/slog"
 	"sync"
 
-	"butterfly.chimbori.dev/db"
 	"github.com/jackc/pgx/v5/pgxpool"
+	"wynglet.chimbori.dev/db"
 )
 
 // DBHandler is a slog.Handler that writes logs to the PostgreSQL `logs` table.

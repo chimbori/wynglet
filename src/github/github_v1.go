@@ -10,9 +10,9 @@ import (
 	"regexp"
 	"time"
 
-	"butterfly.chimbori.dev/conf"
-	"butterfly.chimbori.dev/core"
 	"github.com/lmittmann/tint"
+	"wynglet.chimbori.dev/conf"
+	"wynglet.chimbori.dev/core"
 )
 
 var Cache *core.DiskCache

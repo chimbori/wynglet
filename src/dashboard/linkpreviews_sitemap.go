@@ -6,10 +6,10 @@ import (
 	"net/http"
 	"strings"
 
-	"butterfly.chimbori.dev/db"
-	"butterfly.chimbori.dev/linkpreviews"
-	"butterfly.chimbori.dev/validation"
 	"github.com/lmittmann/tint"
+	"wynglet.chimbori.dev/db"
+	"wynglet.chimbori.dev/linkpreviews"
+	"wynglet.chimbori.dev/validation"
 )
 
 func sitemapPageHandler(w http.ResponseWriter, req *http.Request) {

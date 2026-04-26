@@ -6,9 +6,9 @@ import (
 	"os"
 	"testing"
 
-	"butterfly.chimbori.dev/db"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/lmittmann/tint"
+	"wynglet.chimbori.dev/db"
 )
 
 // TestDBHandler tests that logs are written to the database as expected.
@@ -22,7 +22,7 @@ func TestDBHandler(t *testing.T) {
 	// Connect to the database
 	dbURL := os.Getenv("DATABASE_URL")
 	if dbURL == "" {
-		dbURL = "postgresql://chimbori:chimbori@localhost:5432/butterfly"
+		dbURL = "postgresql://chimbori:chimbori@localhost:5432/wynglet"
 	}
 
 	pool, err := pgxpool.New(context.Background(), dbURL)

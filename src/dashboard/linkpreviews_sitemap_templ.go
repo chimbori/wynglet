@@ -6,9 +6,9 @@ package dashboard
 //lint:file-ignore SA4006 This context is only used if a nested component is present.
 
 import (
-	"butterfly.chimbori.dev/linkpreviews"
 	"github.com/a-h/templ"
 	templruntime "github.com/a-h/templ/runtime"
+	"wynglet.chimbori.dev/linkpreviews"
 )
 
 func SitemapImportPageTempl(status *linkpreviews.SitemapImportStatus, errorMessage string) templ.Component {

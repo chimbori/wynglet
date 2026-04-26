@@ -28,5 +28,5 @@ jobs:
 
       - name: Build Image
         run: |
-          docker build . --tag ghcr.io/chimbori/butterfly:latest
-          docker push ghcr.io/chimbori/butterfly:latest
+          docker build . --tag ghcr.io/chimbori/wynglet:latest
+          docker push ghcr.io/chimbori/wynglet:latest

@@ -1,12 +1,12 @@
-# butterfly.yml
+# wynglet.yml
 
-# debug: false
+debug: true
 
 web:
   port: 9999
 
 database:
-  url: postgresql://chimbori:chimbori@localhost:5432/butterfly
+  url: postgresql://chimbori:chimbori@localhost:5432/wynglet
 
 dashboard:
   username: chimbori

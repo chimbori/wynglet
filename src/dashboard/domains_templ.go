@@ -9,10 +9,10 @@ import (
 	"fmt"
 	"time"
 
-	"butterfly.chimbori.dev/core"
-	"butterfly.chimbori.dev/db"
 	"github.com/a-h/templ"
 	templruntime "github.com/a-h/templ/runtime"
+	"wynglet.chimbori.dev/core"
+	"wynglet.chimbori.dev/db"
 )
 
 func DomainsPageTempl(domains []db.Domain) templ.Component {

@@ -1,4 +1,4 @@
-# Butterfly Social
+# Wynglet
 
 The dynamic companion for your static site: a self-hosted toolkit that brings dynamic capabilities to static websites without depending on paid third-party services.
 
@@ -6,7 +6,7 @@ Static site generators are great at producing fast, secure, cheap-to-host websit
 But they have one inherent limitation: they’re static.
 Features like social preview images, QR codes, and rating widgets traditionally each require a separate paid SaaS subscription: each with its own account, pricing model, and data silo.
 
-Butterfly bundles all of these into a single containerized open-source binary:
+Wynglet bundles all of these into a single containerized open-source binary:
 
 - **[OpenGraph Link Previews](#open-graph-link-previews)**:
   Auto-generate OpenGraph social preview images for every page, using your own HTML/CSS templates.
@@ -17,28 +17,28 @@ Butterfly bundles all of these into a single containerized open-source binary:
 - **[Rating Widget](#rating-widget)**:
   Embed a 👍/👎 or ⭐ rating widget on any page via a lightweight `<iframe>`.
 
-**One instance serves many sites.** A single Butterfly deployment can power all your static sites simultaneously.
+**One instance serves many sites.** A single Wynglet deployment can power all your static sites simultaneously.
 Every tool is gated by a domain allowlist: only explicitly authorized domains can embed or use your instance, preventing unauthorized use.
 
 **Self-hosted.** Your data stays on your own infrastructure.
-You can host Butterfly on a cheap VPS from any provider (here’s $200 in credits with a [DigitalOcean referral code](https://www.digitalocean.com/?refcode=e76ea0927117)).
+You can host Wynglet on a cheap VPS from any provider (here’s $200 in credits with a [DigitalOcean referral code](https://www.digitalocean.com/?refcode=e76ea0927117)).
 No vendor lock-in, no per-request billing, no privacy trade-offs.
 
 **Open source.** Apache 2.0 licensed, free forever.
 
 ## Open Graph Link Previews
 
-Butterfly Social is a quick way to auto-generate OpenGraph link preview images in bulk for all your sites, without the use of a separate template editor or API integration at no cost.
+Wynglet is a quick way to auto-generate OpenGraph link preview images in bulk for all your sites, without the use of a separate template editor or API integration at no cost.
 The source of truth for the image data & design remains within your primary website, so you can use tools you are already familiar with & assets that
 
-To prevent abuse and to conserve resources, Butterfly blocks all domains by default, until you explicitly authorize each domain you care about.
+To prevent abuse and to conserve resources, Wynglet blocks all domains by default, until you explicitly authorize each domain you care about.
 
 ### Use the Default Template
 
-Just one step: Paste the Butterfly `<meta>` tag into the original page, and you’re done!
+Just one step: Paste the Wynglet `<meta>` tag into the original page, and you’re done!
 
 ```html
-<meta property="og:image" content="https://butterfly.your-server.com/link-previews/v1?url=your-site.com/some/page">
+<meta property="og:image" content="https://wynglet.your-server.com/link-previews/v1?url=your-site.com/some/page">
 ```
 
 ### Use your Own Templates
@@ -48,15 +48,15 @@ Just one step: Paste the Butterfly `<meta>` tag into the original page, and you�
 
     ```html
     <div id="link-preview" style="display: none; width: 1200px;">
-      <h1>Butterfly Social</h1>
+      <h1>Wynglet</h1>
       <p>Self-hosted OpenGraph / social link preview image generation tool. Fully customizable, yet works out of the box with zero configuration.</p>
     </div>
     ```
 
-2. Use Butterfly to craft a URL, and paste the `<meta>` tag into the original page.
+2. Use Wynglet to craft a URL, and paste the `<meta>` tag into the original page.
 
     ```html
-    <meta property="og:image" content="https://butterfly.your-server.com/link-previews/v1?url=your-site.com/some/page">
+    <meta property="og:image" content="https://wynglet.your-server.com/link-previews/v1?url=your-site.com/some/page">
     ```
 
     If you can’t use the default selector (`#link-preview`) for any reason, you can provide an alternate one using the `&sel=` parameter.
@@ -65,15 +65,15 @@ Just one step: Paste the Butterfly `<meta>` tag into the original page, and you�
 
 ### How it’s rendered
 
-![Example](https://butterfly.chimbori.dev/example.png)
+![Example](https://wynglet.chimbori.dev/example.png)
 
-Test your Butterfly installation by posting your original page URL to any social platform.
+Test your Wynglet installation by posting your original page URL to any social platform.
 
 ### How it works
 
-Butterfly fetches the URL you provide to it, using a Chrome Headless instance, runs JavaScript to un-hide the hidden element, takes a screenshot of it, and serves it (while also caching & compressing it).
+Wynglet fetches the URL you provide to it, using a Chrome Headless instance, runs JavaScript to un-hide the hidden element, takes a screenshot of it, and serves it (while also caching & compressing it).
 
-Butterfly works well with static sites (using any static site generator) as well as dynamically-generated sites (using any CMS or platform).
+Wynglet works well with static sites (using any static site generator) as well as dynamically-generated sites (using any CMS or platform).
 
 ### Can I use…
 
@@ -90,18 +90,18 @@ The unattainable is unknown at Zombocom.
 
 ## QR Codes
 
-Butterfly generates QR Codes for your authorized URLs that you can embed on your site wherever appropriate.
+Wynglet generates QR Codes for your authorized URLs that you can embed on your site wherever appropriate.
 
 Use this URL format:
 
 ```html
-<img src="https://butterfly.your-server.com/qrcode/v1?url=your-site.com/some/page">
+<img src="https://wynglet.your-server.com/qrcode/v1?url=your-site.com/some/page">
 ```
 
 ## Rating Widget
 
-Butterfly includes an embeddable rating widget that your visitors can use to rate any page on your site.
-Ratings are not public, but are visible on your Butterfly Dashboard.
+Wynglet includes an embeddable rating widget that your visitors can use to rate any page on your site.
+Ratings are not public, but are visible on your Wynglet Dashboard.
 It provides a lightweight mechanism to monitor the quality of content, e.g. for Help Articles.
 It supports two UI styles:
 
@@ -112,7 +112,7 @@ Embed the widget on your page using an `<iframe>`:
 
 ```html
 <iframe
-  src="https://butterfly.your-server.com/rating/v1?ui=thumbs&url=https://your-site.com/some/page"
+  src="https://wynglet.your-server.com/rating/v1?ui=thumbs&url=https://your-site.com/some/page"
   style="border:none; width:200px; height:50px;">
 </iframe>
 ```
@@ -124,15 +124,15 @@ Use the Dashboard’s **Ratings** section to view collected ratings and generate
 
 ## CLI Utilities
 
-Butterfly ships with a couple of built-in command-line helpers:
+Wynglet ships with a couple of built-in command-line helpers:
 
-- **Generate a bcrypt password hash** (for use in `butterfly.yml`):
+- **Generate a bcrypt password hash** (for use in `wynglet.yml`):
 
   Enter your desired password when prompted.
   The output hash can be pasted directly into the `dashboard.password` field.
 
   ```shell
-  butterfly --bcrypt
+  wynglet --bcrypt
   ```
 
 - **Health check** (useful for container health checks):
@@ -140,7 +140,7 @@ Butterfly ships with a couple of built-in command-line helpers:
   Pings the running service and exits `0` on success or `1` on failure.
 
   ```shell
-  butterfly --healthcheck
+  wynglet --healthcheck
   ```
 
 ## Install & Deploy
@@ -148,7 +148,7 @@ Butterfly ships with a couple of built-in command-line helpers:
 - We strongly recommend deploying using the official container image, which includes Chrome Headless for convenience.
   - Thanks to the [chromedp](https://github.com/chromedp/chromedp) project for making this possible!
 
-- Butterfly is designed to be used behind a TLS reverse proxy for SSL termination (among other things).
+- Wynglet is designed to be used behind a TLS reverse proxy for SSL termination (among other things).
   - We recommend [Caddy](https://caddyserver.com/); see sample Caddyfile below.
   - If you expect a lot of traffic, consider putting a CDN in front.
 
@@ -156,46 +156,46 @@ Butterfly ships with a couple of built-in command-line helpers:
 
 ```yml
 services:
-  butterfly:
-    container_name: butterfly
-    image: ghcr.io/chimbori/butterfly:latest
+  wynglet:
+    container_name: wynglet
+    image: ghcr.io/chimbori/wynglet:latest
     volumes:
-      - $PWD/butterfly-data:/data
+      - $PWD/wynglet-data:/data
     restart: unless-stopped
     depends_on:
-      - butterfly-db
+      - wynglet-db
 
-  butterfly-db:
-    container_name: butterfly-db
+  wynglet-db:
+    container_name: wynglet-db
     image: postgres:18-alpine
     environment:
-      POSTGRES_DB: butterfly
+      POSTGRES_DB: wynglet
       POSTGRES_USER: chimbori
       POSTGRES_PASSWORD: chimbori
     volumes:
-      - $PWD/butterfly-db-data:/var/lib/postgresql
+      - $PWD/wynglet-db-data:/var/lib/postgresql
     restart: unless-stopped
 
 volumes:
-  butterfly-data:
-  butterfly-db-data:
+  wynglet-data:
+  wynglet-db-data:
 ```
 
 #### If you prefer to install using the Go binary on raw metal, use `go install`
 
 ```shell
-go install butterfly.chimbori.dev@latest
+go install wynglet.chimbori.dev@latest
 ```
 
-### Sample `butterfly.yml`
+### Sample `wynglet.yml`
 
-Butterfly requires basic configuration to be provided via a config file.
+Wynglet requires basic configuration to be provided via a config file.
 
 - **PostgreSQL Database URL** _(required)_
 
   ```yml
   database:
-    url: postgresql://chimbori:chimbori@butterfly-db:5432/butterfly
+    url: postgresql://chimbori:chimbori@wynglet-db:5432/wynglet
   ```
 
 - **Dashboard credentials** (encrypted via `bcrypt`) _(required)_
@@ -208,7 +208,7 @@ Butterfly requires basic configuration to be provided via a config file.
 
 - Web config _(optional)_
 
-  Assuming there’s a reverse proxy in front of Butterfly Social, there should be no need to change the port here; just configure the reverse proxy to forward requests to port 9999.
+  Assuming there’s a reverse proxy in front of Wynglet, there should be no need to change the port here; just configure the reverse proxy to forward requests to port 9999.
 
   ```yml
   web:
@@ -278,15 +278,15 @@ Butterfly requires basic configuration to be provided via a config file.
 ### Sample `Caddyfile`
 
 ```caddy
-butterfly.your-server.com {
-  reverse_proxy butterfly:9999
+wynglet.your-server.com {
+  reverse_proxy wynglet:9999
   encode zstd gzip
 }
 ```
 
 # Dashboard UI
 
-You can manage Butterfly from the Dashboard UI at `https://butterfly.your-server.com/dashboard`.
+You can manage Wynglet from the Dashboard UI at `https://wynglet.your-server.com/dashboard`.
 The Dashboard is available as an installable PWA (Progressive Web Application) that can be "installed" locally using any modern browser.
 
 The Dashboard includes the following sections:
@@ -313,7 +313,7 @@ The Dashboard includes the following sections:
 - **Logs**:
   View recent error-level log entries.
 
-<img src="https://butterfly.chimbori.dev/screenshot-pwa.webp">
+<img src="https://wynglet.chimbori.dev/screenshot-pwa.webp">
 
 # License
 
@@ -357,4 +357,4 @@ But now,
 - You have to rely on these companies being around long enough, and not disappearing completely after running out of money or being bought over by a VC.
 - And you have to pay, based on volume.
 
-Butterfly is none of those things. All you need is the ability to write some HTML/CSS (no JavaScript necessary!) to design your preview image. And it’s free in perpetuity.
+Wynglet is none of those things. All you need is the ability to write some HTML/CSS (no JavaScript necessary!) to design your preview image. And it’s free in perpetuity.

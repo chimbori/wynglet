@@ -1,14 +1,14 @@
 package dashboard
 
 import (
-	"butterfly.chimbori.dev/conf"
-	"butterfly.chimbori.dev/db"
 	"fmt"
+	"wynglet.chimbori.dev/conf"
+	"wynglet.chimbori.dev/db"
 )
 
 templ LogsTempl(appName string, page int) {
 	@ContentTempl("Logs", NilTemplate()) {
-		<p>Monitor your Butterfly instance</p>
+		<p>Monitor your Wynglet instance</p>
 		<section
 			id="logs-section"
 			hx-get={ "/dashboard/logs/data?page=" + fmt.Sprintf("%d", page) }

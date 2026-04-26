@@ -10,12 +10,12 @@ import (
 	"path/filepath"
 	"regexp"
 
-	"butterfly.chimbori.dev/conf"
-	"butterfly.chimbori.dev/core"
-	"butterfly.chimbori.dev/db"
-	"butterfly.chimbori.dev/embedfs"
-	"butterfly.chimbori.dev/validation"
 	"github.com/lmittmann/tint"
+	"wynglet.chimbori.dev/conf"
+	"wynglet.chimbori.dev/core"
+	"wynglet.chimbori.dev/db"
+	"wynglet.chimbori.dev/embedfs"
+	"wynglet.chimbori.dev/validation"
 )
 
 var Cache *core.DiskCache

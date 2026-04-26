@@ -1,8 +1,8 @@
 debug: true
-title: Butterfly Social
+title: Wynglet
 description: 'The Dynamic Companion for your Static Sites: a self-hosted single-binary toolkit of embeddable services: OpenGraph preview images, QR codes, and Rating widgets'
 urls:
-  root: https://butterfly.chimbori.dev
+  root: https://wynglet.chimbori.dev
   css: //chimbori.com/css/gen.css
   feed: //chimbori.com/feed.xml
   touch-icon: //chimbori.com/media/favicon.png
@@ -12,6 +12,6 @@ imports:
   - link-preview
   - go-import
 go-import:
-  repo: butterfly.chimbori.dev
-  git-url: https://github.com/chimbori/butterfly
+  repo: wynglet.chimbori.dev
+  git-url: https://github.com/chimbori/wynglet
   sub-dir: src

@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"strings"
 
-	"butterfly.chimbori.dev/core"
-	"butterfly.chimbori.dev/db"
 	"github.com/lmittmann/tint"
+	"wynglet.chimbori.dev/core"
+	"wynglet.chimbori.dev/db"
 )
 
 // GET /dashboard/domains - List all domains

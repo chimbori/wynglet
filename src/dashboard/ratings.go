@@ -9,9 +9,9 @@ import (
 	"strconv"
 	"strings"
 
-	"butterfly.chimbori.dev/conf"
-	"butterfly.chimbori.dev/db"
 	"github.com/lmittmann/tint"
+	"wynglet.chimbori.dev/conf"
+	"wynglet.chimbori.dev/db"
 )
 
 // GET /dashboard/ratings

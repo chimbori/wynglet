@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"butterfly.chimbori.dev/conf"
 	"github.com/chromedp/chromedp"
+	"wynglet.chimbori.dev/conf"
 )
 
 func init() {

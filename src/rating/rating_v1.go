@@ -13,10 +13,10 @@ import (
 	"net/http"
 	"strings"
 
-	"butterfly.chimbori.dev/core"
-	"butterfly.chimbori.dev/db"
-	"butterfly.chimbori.dev/validation"
 	"github.com/lmittmann/tint"
+	"wynglet.chimbori.dev/core"
+	"wynglet.chimbori.dev/db"
+	"wynglet.chimbori.dev/validation"
 )
 
 //go:embed widget.min.css

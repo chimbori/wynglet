@@ -5,8 +5,8 @@ import (
 	"os"
 	"testing"
 
-	"butterfly.chimbori.dev/db"
 	"github.com/jackc/pgx/v5/pgxpool"
+	"wynglet.chimbori.dev/db"
 )
 
 func setupTestDB(t *testing.T) (*pgxpool.Pool, *db.Queries) {
@@ -18,7 +18,7 @@ func setupTestDB(t *testing.T) (*pgxpool.Pool, *db.Queries) {
 	// Connect to the database
 	dbURL := os.Getenv("DATABASE_URL")
 	if dbURL == "" {
-		dbURL = "postgresql://chimbori:chimbori@localhost:5432/butterfly"
+		dbURL = "postgresql://chimbori:chimbori@localhost:5432/wynglet"
 	}
 
 	pool, err := pgxpool.New(context.Background(), dbURL)

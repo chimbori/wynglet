@@ -6,10 +6,10 @@ package dashboard
 //lint:file-ignore SA4006 This context is only used if a nested component is present.
 
 import (
-	"butterfly.chimbori.dev/core"
-	"butterfly.chimbori.dev/db"
 	"github.com/a-h/templ"
 	templruntime "github.com/a-h/templ/runtime"
+	"wynglet.chimbori.dev/core"
+	"wynglet.chimbori.dev/db"
 )
 
 func QrCodesPageTempl(qrCodes []db.QrCode) templ.Component {

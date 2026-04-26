@@ -6,15 +6,15 @@ import (
 	"log/slog"
 	"time"
 
-	"butterfly.chimbori.dev/conf"
-	"butterfly.chimbori.dev/core"
-	"butterfly.chimbori.dev/dashboard"
-	"butterfly.chimbori.dev/db"
-	"butterfly.chimbori.dev/github"
-	"butterfly.chimbori.dev/linkpreviews"
-	"butterfly.chimbori.dev/qrcode"
 	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/lmittmann/tint"
+	"wynglet.chimbori.dev/conf"
+	"wynglet.chimbori.dev/core"
+	"wynglet.chimbori.dev/dashboard"
+	"wynglet.chimbori.dev/db"
+	"wynglet.chimbori.dev/github"
+	"wynglet.chimbori.dev/linkpreviews"
+	"wynglet.chimbori.dev/qrcode"
 )
 
 func performMaintenance() {
