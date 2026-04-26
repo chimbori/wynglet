@@ -108,13 +108,16 @@ func main() {
 		IndexTempl().Render(req.Context(), w)
 	})
 	if err := linkpreviews.Init(mux); err != nil {
-		log.Fatalf("failed to initialize link previews: %v", err)
+		slog.Error("failed to initialize link previews", tint.Err(err))
+		os.Exit(1)
 	}
 	if err := qrcode.Init(mux); err != nil {
-		log.Fatalf("failed to initialize QR codes: %v", err)
+		slog.Error("failed to initialize QR codes", tint.Err(err))
+		os.Exit(1)
 	}
 	if err := github.Init(mux); err != nil {
-		log.Fatalf("failed to initialize GitHub cache: %v", err)
+		slog.Error("failed to initialize GitHub cache", tint.Err(err))
+		os.Exit(1)
 	}
 	rating.Init(mux)
 	dashboard.Init(mux)
