@@ -111,7 +111,7 @@ templ RatingsPageTempl(page int, days int) {
 
 templ RatingsListTempl(ratings []db.ListRatingsWithDistributionRow, page int, days int, totalCount int64, sortBy string, sortOrder string) {
 	if totalCount == 0 {
-		@ErrorTempl("No ratings recorded yet")
+		No ratings recorded yet
 	} else {
 		<div class="flex flex-col gap-4">
 			<div class="overflow-x-auto">
