@@ -72,7 +72,7 @@
   h3 {
     @apply text-lg mb-1 not-first:mt-6;
   }
-  a:link:has(:not(img)) {
+  a:any-link:not(:has(img)) {
     @apply border-b;
   }
   p,
