@@ -59,7 +59,7 @@ func ContentTempl(title string, contents templ.Component) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</title><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><link rel=\"preload\" href=\"/static/InterVariable.woff2\" as=\"font\" crossorigin=\"\" type=\"font/woff2\"><link rel=\"preload\" href=\"/static/GoogleSansFlex.woff2\" as=\"font\" crossorigin=\"\" type=\"font/woff2\"><link rel=\"manifest\" href=\"/app.webmanifest\"><script src=\"/static/htmx.min.js\"></script><script src=\"/static/chart.min.js\"></script><meta name=\"htmx-config\" content='{\"selfRequestsOnly\":false}'><link rel=\"stylesheet\" href=\"/static/gen.min.css\"><link rel=\"icon\" href=\"/static/favicon.svg\"></head><body>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</title><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><link rel=\"preload\" href=\"/static/InterVariable.woff2\" as=\"font\" crossorigin=\"\" type=\"font/woff2\"><link rel=\"preload\" href=\"/static/GoogleSansFlex.woff2\" as=\"font\" crossorigin=\"\" type=\"font/woff2\"><link rel=\"manifest\" href=\"/app.webmanifest\"><script defer src=\"/static/htmx.min.js\"></script><script defer src=\"/static/chart.min.js\"></script><meta name=\"htmx-config\" content='{\"selfRequestsOnly\":false}'><link rel=\"stylesheet\" href=\"/static/gen.min.css\"><link rel=\"icon\" href=\"/static/favicon.svg\"></head><body>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -101,12 +101,12 @@ func ContentTempl(title string, contents templ.Component) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		if conf.Config.Debug {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<script src=\"/static/dashboard.js\"></script>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<script defer src=\"/static/dashboard.js\"></script>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		} else {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<script src=\"/static/dashboard.min.js\"></script>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<script defer src=\"/static/dashboard.min.js\"></script>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

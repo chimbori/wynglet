@@ -103,9 +103,9 @@ templ RatingsPageTempl(page int, days int) {
 		</section>
 	}
 	if conf.Config.Debug {
-		<script src="/static/ratings.js"></script>
+		<script defer src="/static/ratings.js"></script>
 	} else {
-		<script src="/static/ratings.min.js"></script>
+		<script defer src="/static/ratings.min.js"></script>
 	}
 }
 
