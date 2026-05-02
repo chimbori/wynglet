@@ -1,4 +1,4 @@
-name: Create & Deploy Docker Image to GHCR
+name: Create Container Image
 
 on:
   push:
@@ -7,14 +7,14 @@ on:
   workflow_dispatch: # Run manually from the Actions tab.
 
 jobs:
-  create-push-image:
+  create-container-image:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
     defaults:
       run:
-        working-directory: "./src"
+        working-directory: ./src
     steps:
       - name: Checkout
         uses: actions/checkout@v6
