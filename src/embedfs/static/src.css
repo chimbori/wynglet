@@ -90,15 +90,10 @@
     @apply pl-2;
   }
   section {
-    @apply rounded-xl border border-solid shadow overflow-x-auto
-        p-4 my-4 md:my-8
-        bg-white dark:bg-slate-800
-        border-slate-200 dark:border-slate-900;
-  }
-  blockquote {
-    @apply my-6 px-6 py-4 rounded-xl max-w-full overflow-x-auto
-      text-gray-800 dark:text-blue-200
-      bg-blue-50 dark:bg-blue-950;
+    @apply rounded-xl border border-solid shadow-lg overflow-x-auto
+      p-4 my-4 md:my-8
+      bg-white dark:bg-slate-800
+      border-slate-200 dark:border-slate-900;
   }
   blockquote,
   pre {
@@ -235,8 +230,7 @@
     }
   }
   .error-message {
-    @apply my-4 p-4 rounded-lg
-      bg-red-100 dark:bg-red-900/30
+    @apply bg-red-100 dark:bg-red-900/30
       text-red-800 dark:text-red-200
       border border-red-300 dark:border-red-700;
   }

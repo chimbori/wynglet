@@ -92,8 +92,10 @@ templ NilTemplate() {
 }
 
 templ ErrorTempl(msg string) {
-	<div class="error-message">
-		<span class="font-semibold">Error:</span> { msg }
+	<div class="error-message my-4 p-4 rounded-lg">
+		<span class="font-semibold">Error:</span>
+		{ msg }
+		{ children... }
 	</div>
 }
 
