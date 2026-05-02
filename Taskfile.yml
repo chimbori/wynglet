@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 
 vars:
   CONFIGYML: ../data/wynglet.yml
@@ -7,14 +7,14 @@ tasks:
   run:
     desc: Run the binary
     deps: [sqlc, templ, css, fmt, esbuild]
-    dir: "src"
+    dir: 'src'
     cmds:
       - go run . -config="{{.CONFIGYML}}"
 
   build:
     desc: Build a binary targeting the current OS
     deps: [fmt, esbuild]
-    dir: "src"
+    dir: 'src'
     cmds:
       - |-
         CGO_ENABLED=0 \
@@ -24,19 +24,19 @@ tasks:
 
   test:
     desc: Run all tests
-    dir: "src"
+    dir: 'src'
     cmds:
       - go test -count=1 ./...
 
   testv:
     desc: Run all tests, with verbose output
-    dir: "src"
+    dir: 'src'
     cmds:
       - go test -v -count=1 ./...
 
   fmt:
     desc: Reformat all source files, including templates
-    dir: "src"
+    dir: 'src'
     cmds:
       - go mod tidy
       - gofumpt -l -w .
@@ -45,16 +45,16 @@ tasks:
 
   lint:
     desc: Lint sources
-    dir: "src"
+    dir: 'src'
     cmds:
       - golangci-lint run
 
   sqlc:
     desc: Regenerate SQLC-generated sources
-    dir: "src"
+    dir: 'src'
     env:
-      CGO_CFLAGS: "-DHAVE_STRCHRNUL -mmacosx-version-min=15.4"
-      MACOSX_DEPLOYMENT_TARGET: "15.4"
+      CGO_CFLAGS: '-DHAVE_STRCHRNUL -mmacosx-version-min=15.4'
+      MACOSX_DEPLOYMENT_TARGET: '15.4'
     cmds:
       - sqlc generate
 
@@ -83,32 +83,32 @@ tasks:
 
   templ:
     desc: Regenerate Templ templates
-    dir: "src"
+    dir: 'src'
     cmds:
       - templ generate
       - templ fmt .
 
   css:
     desc: Regenerate CSS (minified & pretty-printed)
-    dir: "src"
+    dir: 'src'
     cmds:
       - tailwindcss --content "**/*.templ" --input embedfs/static/src.css --output embedfs/static/gen.css
       - tailwindcss --content "**/*.templ" --input embedfs/static/src.css --output embedfs/static/gen.min.css --minify
-      - tailwindcss --input rating/widget.css --output rating/widget.min.css --minify
+      - tailwindcss --input rating/widget.css  --output rating/widget.min.css  --minify
       - tailwindcss --input rating/success.css --output rating/success.min.css --minify
 
   esbuild:
     desc: Bundle and minify TypeScript with esbuild
-    dir: "src"
+    dir: 'src'
     cmds:
-      - esbuild dashboard/dashboard.ts --bundle --target=es2020 --outfile=embedfs/static/dashboard.js
-      - esbuild dashboard/dashboard.ts --bundle --target=es2020 --outfile=embedfs/static/dashboard.min.js --minify
-      - esbuild dashboard/ratings.ts --bundle --target=es2020 --outfile=embedfs/static/ratings.js
-      - esbuild dashboard/ratings.ts --bundle --target=es2020 --outfile=embedfs/static/ratings.min.js --minify
+      - esbuild --bundle --target=es2020 dashboard/dashboard.ts --outfile=embedfs/static/dashboard.js
+      - esbuild --bundle --target=es2020 dashboard/dashboard.ts --outfile=embedfs/static/dashboard.min.js --minify
+      - esbuild --bundle --target=es2020 dashboard/ratings.ts   --outfile=embedfs/static/ratings.js
+      - esbuild --bundle --target=es2020 dashboard/ratings.ts   --outfile=embedfs/static/ratings.min.js   --minify
 
   update:
     desc: Update all dependencies
-    dir: "src"
+    dir: 'src'
     deps: [fmt]
     cmds:
       - go get -u -t ./...
@@ -119,16 +119,16 @@ tasks:
   install:
     desc: Build and install the binary
     deps: [fmt]
-    dir: "src"
+    dir: 'src'
     cmds:
       - go install .
 
   setup:
     desc: Setup pre-requisites on a new machine
-    dir: "src"
+    dir: 'src'
     env:
-      CGO_CFLAGS: "-DHAVE_STRCHRNUL -mmacosx-version-min=15.4"
-      MACOSX_DEPLOYMENT_TARGET: "15.4"
+      CGO_CFLAGS: '-DHAVE_STRCHRNUL -mmacosx-version-min=15.4'
+      MACOSX_DEPLOYMENT_TARGET: '15.4'
     cmds:
       - brew install tailwindcss libpq esbuild
       - brew link libpq --force
