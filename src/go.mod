@@ -1,6 +1,6 @@
 module wynglet.chimbori.dev
 
-go 1.26.1
+go 1.26.2
 
 require (
 	github.com/HugoSmits86/nativewebp v1.2.1

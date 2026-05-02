@@ -1,6 +1,6 @@
 # Build Go binary
 
-FROM golang:1.26.1 AS builder
+FROM golang:1.26.2 AS builder
 RUN go version
 
 ARG CGO_ENABLED=0
@@ -23,6 +23,7 @@ FROM chromedp/headless-shell:latest
 COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo
 COPY --from=builder /etc/ssl/certs /etc/ssl/certs
 COPY --from=builder /app/wynglet /wynglet
+
 RUN useradd -r -s /usr/sbin/nologin wynglet && \
   mkdir -p /data && \
   chown -R wynglet:wynglet /data /wynglet
