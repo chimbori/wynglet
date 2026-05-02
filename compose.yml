@@ -12,7 +12,7 @@ services:
       - /Users/Shared/Unsynced/wynglet-db-data:/var/lib/postgresql
     restart: unless-stopped
     healthcheck:
-      test: [ "CMD", "/wynglet", "--config=/data/wynglet.yml", "--healthcheck" ]
+      test: [ "CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}" ]
       interval: 5s
       timeout: 5s
       retries: 5
