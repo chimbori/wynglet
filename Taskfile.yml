@@ -132,6 +132,7 @@ tasks:
     cmds:
       - brew install tailwindcss libpq esbuild
       - brew link libpq --force
+      - go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
       - go install github.com/a-h/templ/cmd/templ@latest
       - go install golang.org/x/tools/cmd/goimports@latest
       - go install mvdan.cc/gofumpt@latest
