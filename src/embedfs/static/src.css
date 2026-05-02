@@ -49,27 +49,18 @@
 }
 
 @layer base {
-  * {
-    @apply font-sans;
-  }
   body {
-    @apply box-border text-sm/8
-      bg-slate-100 dark:bg-slate-900
-      text-slate-500 dark:text-slate-400
+    @apply box-border font-sans text-base/8 md:text-sm/6
+      bg-white dark:bg-slate-900
+      text-slate-800 dark:text-slate-300
       flex flex-col md:flex-row;
   }
   h1,
-  h1 *,
   h2,
-  h2 *,
   h3,
-  h3 *,
   h4,
-  h4 *,
   h5,
-  h5 *,
-  h6,
-  h6 * {
+  h6 {
     @apply font-display font-medium text-slate-950 dark:text-slate-200;
   }
   h1 {
