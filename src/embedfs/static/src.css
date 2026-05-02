@@ -67,22 +67,24 @@
     @apply text-3xl my-4;
   }
   h2 {
-    @apply text-xl mb-4;
-    &:where(:not(:first-child)) {
-      @apply mt-6;
-    }
+    @apply text-xl mb-2 not-first:mt-6;
+  }
+  h3 {
+    @apply text-lg mb-1 not-first:mt-6;
   }
   a:link:has(:not(img)) {
     @apply border-b;
   }
-  p {
-    @apply mb-4;
+  p,
+  ul,
+  ol {
+    @apply mb-4 last:mb-0;
   }
   ul {
-    @apply list-disc my-4 ml-2 pl-4;
+    @apply list-disc mt-4 ml-2 pl-4;
   }
   ol {
-    @apply list-decimal my-4 ml-2 pl-4;
+    @apply list-decimal mt-4 ml-2 pl-4;
   }
   li {
     @apply pl-2;
@@ -249,7 +251,7 @@
   aside {
     @apply flex flex-col w-full md:w-64 xl:w-80 md:shrink-0;
     a {
-      @apply px-4 py-2 rounded-lg border-0 transition-all
+      @apply px-4 py-1 rounded-lg border-0 transition-all
         text-slate-800 dark:text-slate-200
         hover:bg-slate-200 dark:hover:bg-slate-800;
     }
