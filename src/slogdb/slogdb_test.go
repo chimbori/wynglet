@@ -43,7 +43,8 @@ func TestDBHandler(t *testing.T) {
 	logger.Warn("This is a warning - should only go to console")
 
 	// Log an error - this should go to both console AND database
-	logger.Error("This is an error message",
+	logger.Error(
+		"This is an error message",
 		"path", "/test/path",
 		"method", "GET",
 		"status", 500,

@@ -199,7 +199,8 @@ func TestTakeScreenshotWithTemplate(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
-	opts := append(chromedp.DefaultExecAllocatorOptions[:],
+	opts := append(
+		chromedp.DefaultExecAllocatorOptions[:],
 		chromedp.Flag("headless", true),
 		chromedp.Flag("disable-gpu", true),
 		chromedp.Flag("no-sandbox", true),

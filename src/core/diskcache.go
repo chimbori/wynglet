@@ -183,7 +183,8 @@ func (c *DiskCache) Prune() error {
 	}
 
 	if totalSize <= c.MaxSize {
-		slog.Info("no need to prune",
+		slog.Info(
+			"no need to prune",
 			"root", filepath.Base(c.Root),
 			"size", humanize.Bytes(uint64(totalSize)),
 			"limit", humanize.Bytes(uint64(c.MaxSize)),
