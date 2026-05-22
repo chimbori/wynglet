@@ -3,7 +3,7 @@ const submitBtn = document.getElementById('submitBtn');
 const statusDiv = document.getElementById('status');
 
 // Configuration
-const FORMS_API_URL = 'http://localhost:9999';
+const FORMS_API_URL = window.location.origin;
 const FORM_ID = 'contact-us';
 
 function showError(message) {
