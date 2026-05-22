@@ -113,8 +113,8 @@ SELECT _id, form_id, submitted_at, domain, ip_address, form_data, is_spam, email
   WHERE _id = $1
 `
 
-func (q *Queries) GetFormSubmission(ctx context.Context, formID int64) (FormSubmission, error) {
-	row := q.db.QueryRow(ctx, getFormSubmission, formID)
+func (q *Queries) GetFormSubmission(ctx context.Context, ID int64) (FormSubmission, error) {
+	row := q.db.QueryRow(ctx, getFormSubmission, ID)
 	var i FormSubmission
 	err := row.Scan(
 		&i.ID,

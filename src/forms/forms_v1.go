@@ -38,10 +38,11 @@ func formSubmitHandler(w http.ResponseWriter, r *http.Request) {
 	origin := r.Header.Get("Origin")
 	clientIP := getClientIP(r)
 
-	// Validate CORS origin early - Origin header is required.
-	// Note: origin is the literal string "null" when the form is loaded from a file:// URL
-	if origin == "" || origin == "null" {
-		slog.Warn(fmt.Sprintf("Form submission rejected: missing or invalid origin: origin=`%s`", origin),
+	// Validate CORS origin early, but only if present.
+	// Missing Origin header indicates a same-origin request (browsers only send Origin for CORS requests),
+	// so we allow it through. However, origin="null" (file:// URLs) is rejected for security.
+	if origin == "null" {
+		slog.Warn(fmt.Sprintf("Form submission rejected: origin from file:// URL: origin=`%s`", origin),
 			"method", r.Method,
 			"path", r.URL.Path,
 			"url", r.URL.String(),
@@ -53,54 +54,57 @@ func formSubmitHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	parsedURL, err := url.Parse(origin)
-	if err != nil || parsedURL.Host == "" {
-		slog.Warn(fmt.Sprintf("Failed to parse origin: origin=`%s`", origin),
-			"method", r.Method,
-			"path", r.URL.Path,
-			"url", r.URL.String(),
-			"hostname", r.Host,
-			"user-agent", r.UserAgent(),
-			"ip", clientIP,
-			"status", http.StatusForbidden,
-			tint.Err(err))
-		http.Error(w, "Unauthorized", http.StatusForbidden)
-		return
+	// If Origin header is present (not empty and not "null"), validate it.
+	if origin != "" {
+		parsedURL, err := url.Parse(origin)
+		if err != nil || parsedURL.Host == "" {
+			slog.Warn(fmt.Sprintf("Failed to parse origin: origin=`%s`", origin),
+				"method", r.Method,
+				"path", r.URL.Path,
+				"url", r.URL.String(),
+				"hostname", r.Host,
+				"user-agent", r.UserAgent(),
+				"ip", clientIP,
+				"status", http.StatusForbidden,
+				tint.Err(err))
+			http.Error(w, "Unauthorized", http.StatusForbidden)
+			return
+		}
+
+		ctx, cancel := context.WithTimeout(r.Context(), 5*time.Second)
+		defer cancel()
+
+		queries := db.New(db.Pool)
+		authorized, authErr := validation.IsAuthorized(ctx, queries, parsedURL)
+		if authErr != nil {
+			slog.Warn(fmt.Sprintf("Failed to check domain authorization: origin=`%s`", origin),
+				"method", r.Method,
+				"path", r.URL.Path,
+				"url", r.URL.String(),
+				"hostname", r.Host,
+				"user-agent", r.UserAgent(),
+				"ip", clientIP,
+				"status", http.StatusForbidden,
+				tint.Err(authErr))
+			http.Error(w, "Unauthorized", http.StatusForbidden)
+			return
+		}
+
+		if !authorized {
+			slog.Warn(fmt.Sprintf("Origin not authorized: origin=%s", origin),
+				"method", r.Method,
+				"path", r.URL.Path,
+				"url", r.URL.String(),
+				"hostname", r.Host,
+				"user-agent", r.UserAgent(),
+				"ip", clientIP,
+				"status", http.StatusForbidden)
+			http.Error(w, "Unauthorized", http.StatusForbidden)
+			return
+		}
+
+		core.SetCORSHeaders(w, origin)
 	}
-
-	ctx, cancel := context.WithTimeout(r.Context(), 5*time.Second)
-	defer cancel()
-
-	queries := db.New(db.Pool)
-	authorized, authErr := validation.IsAuthorized(ctx, queries, parsedURL)
-	if authErr != nil {
-		slog.Warn(fmt.Sprintf("Failed to check domain authorization: origin=`%s`", origin),
-			"method", r.Method,
-			"path", r.URL.Path,
-			"url", r.URL.String(),
-			"hostname", r.Host,
-			"user-agent", r.UserAgent(),
-			"ip", clientIP,
-			"status", http.StatusForbidden,
-			tint.Err(authErr))
-		http.Error(w, "Unauthorized", http.StatusForbidden)
-		return
-	}
-
-	if !authorized {
-		slog.Warn(fmt.Sprintf("Origin not authorized: origin=%s", origin),
-			"method", r.Method,
-			"path", r.URL.Path,
-			"url", r.URL.String(),
-			"hostname", r.Host,
-			"user-agent", r.UserAgent(),
-			"ip", clientIP,
-			"status", http.StatusForbidden)
-		http.Error(w, "Unauthorized", http.StatusForbidden)
-		return
-	}
-
-	core.SetCORSHeaders(w, origin)
 
 	if err := r.ParseMultipartForm(10 << 20); err != nil {
 		slog.Error("Failed to parse form data", tint.Err(err),
@@ -273,10 +277,11 @@ func getTokenHandler(w http.ResponseWriter, r *http.Request) {
 	origin := r.Header.Get("Origin")
 	clientIP := getClientIP(r)
 
-	// Validate CORS origin early - Origin header is required
-	// Note: origin is the literal string "null" when the form is loaded from a file:// URL
-	if origin == "" || origin == "null" {
-		slog.Warn(fmt.Sprintf("Token request rejected: missing or invalid origin: origin=`%s`", origin),
+	// Validate CORS origin early, but only if present.
+	// Missing Origin header indicates a same-origin request (browsers only send Origin for CORS requests),
+	// so we allow it through. However, origin="null" (file:// URLs) is rejected for security.
+	if origin == "null" {
+		slog.Warn(fmt.Sprintf("Token request rejected: origin from file:// URL: origin=`%s`", origin),
 			"method", r.Method,
 			"path", r.URL.Path,
 			"url", r.URL.String(),
@@ -288,54 +293,57 @@ func getTokenHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	parsedURL, err := url.Parse(origin)
-	if err != nil || parsedURL.Host == "" {
-		slog.Warn(fmt.Sprintf("Failed to parse origin: origin=`%s`", origin),
-			"method", r.Method,
-			"path", r.URL.Path,
-			"url", r.URL.String(),
-			"hostname", r.Host,
-			"user-agent", r.UserAgent(),
-			"ip", clientIP,
-			"status", http.StatusForbidden,
-			tint.Err(err))
-		http.Error(w, "Unauthorized", http.StatusForbidden)
-		return
+	// If Origin header is present (not empty and not "null"), validate it
+	if origin != "" {
+		parsedURL, err := url.Parse(origin)
+		if err != nil || parsedURL.Host == "" {
+			slog.Warn(fmt.Sprintf("Failed to parse origin: origin=`%s`", origin),
+				"method", r.Method,
+				"path", r.URL.Path,
+				"url", r.URL.String(),
+				"hostname", r.Host,
+				"user-agent", r.UserAgent(),
+				"ip", clientIP,
+				"status", http.StatusForbidden,
+				tint.Err(err))
+			http.Error(w, "Unauthorized", http.StatusForbidden)
+			return
+		}
+
+		ctx, cancel := context.WithTimeout(r.Context(), 5*time.Second)
+		defer cancel()
+
+		queries := db.New(db.Pool)
+		authorized, authErr := validation.IsAuthorized(ctx, queries, parsedURL)
+		if authErr != nil {
+			slog.Warn(fmt.Sprintf("Failed to check domain authorization: origin=`%s`", origin),
+				"method", r.Method,
+				"path", r.URL.Path,
+				"url", r.URL.String(),
+				"hostname", r.Host,
+				"user-agent", r.UserAgent(),
+				"ip", clientIP,
+				"status", http.StatusForbidden,
+				tint.Err(authErr))
+			http.Error(w, "Unauthorized", http.StatusForbidden)
+			return
+		}
+
+		if !authorized {
+			slog.Warn(fmt.Sprintf("Origin not authorized: origin=`%s`", origin),
+				"method", r.Method,
+				"path", r.URL.Path,
+				"url", r.URL.String(),
+				"hostname", r.Host,
+				"user-agent", r.UserAgent(),
+				"ip", clientIP,
+				"status", http.StatusForbidden)
+			http.Error(w, "Unauthorized", http.StatusForbidden)
+			return
+		}
+
+		core.SetCORSHeaders(w, origin)
 	}
-
-	ctx, cancel := context.WithTimeout(r.Context(), 5*time.Second)
-	defer cancel()
-
-	queries := db.New(db.Pool)
-	authorized, authErr := validation.IsAuthorized(ctx, queries, parsedURL)
-	if authErr != nil {
-		slog.Warn(fmt.Sprintf("Failed to check domain authorization: origin=`%s`", origin),
-			"method", r.Method,
-			"path", r.URL.Path,
-			"url", r.URL.String(),
-			"hostname", r.Host,
-			"user-agent", r.UserAgent(),
-			"ip", clientIP,
-			"status", http.StatusForbidden,
-			tint.Err(authErr))
-		http.Error(w, "Unauthorized", http.StatusForbidden)
-		return
-	}
-
-	if !authorized {
-		slog.Warn(fmt.Sprintf("Origin not authorized: origin=`%s`", origin),
-			"method", r.Method,
-			"path", r.URL.Path,
-			"url", r.URL.String(),
-			"hostname", r.Host,
-			"user-agent", r.UserAgent(),
-			"ip", clientIP,
-			"status", http.StatusForbidden)
-		http.Error(w, "Unauthorized", http.StatusForbidden)
-		return
-	}
-
-	core.SetCORSHeaders(w, origin)
 
 	formID := r.URL.Query().Get("form_id")
 
