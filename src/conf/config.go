@@ -53,6 +53,11 @@ type AppConfig struct {
 	Ratings struct {
 		Retention time.Duration `yaml:"retention"`
 	} `yaml:"ratings"`
+	Forms struct {
+		RateLimit struct {
+			PerIPHour int `yaml:"per-ip-hour"`
+		} `yaml:"rate-limit"`
+	} `yaml:"forms"`
 	Debug bool `yaml:"debug"`
 }
 
@@ -127,6 +132,11 @@ func setDefaultsAndPrint(c *AppConfig) {
 	// Ratings
 	if c.Ratings.Retention == 0 {
 		c.Ratings.Retention = 365 * 24 * time.Hour
+	}
+
+	// Forms
+	if c.Forms.RateLimit.PerIPHour == 0 {
+		c.Forms.RateLimit.PerIPHour = 20
 	}
 
 	// Logs

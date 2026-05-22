@@ -36,3 +36,7 @@ qr-codes:
 
 ratings:
   retention: "8760h" # 365 days
+
+forms:
+  rate-limit:
+    per-ip-hour: 20
