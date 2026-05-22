@@ -47,6 +47,12 @@ func Init(mux *http.ServeMux) {
 
 	mux.Handle("GET /dashboard/ratings", chain.ThenFunc(ratingsPageHandler))
 	mux.Handle("GET /dashboard/ratings/list", chain.ThenFunc(ratingsListHandler))
+
+	mux.Handle("GET /dashboard/forms", chain.ThenFunc(formsPageHandler))
+	mux.Handle("GET /dashboard/forms/list", chain.ThenFunc(formsListHandler))
+	mux.Handle("GET /dashboard/forms/{form_id}", chain.ThenFunc(formDetailHandler))
+	mux.Handle("GET /dashboard/forms/{form_id}/export.csv", chain.ThenFunc(formExportCSVHandler))
+	mux.Handle("DELETE /dashboard/forms/{form_id}/{id}", chain.ThenFunc(formDeleteHandler))
 }
 
 // GET /dashboard
