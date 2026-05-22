@@ -10,12 +10,12 @@ database:
 
 dashboard:
   username: chimbori
-  password: "$2a$10$a8LnUkK1UiB.9yQrUp3wyuGsH1AAHhlHVy1cjIaaIUVAwCtGvaX7q" # "test"
+  password: '$2a$10$a8LnUkK1UiB.9yQrUp3wyuGsH1AAHhlHVy1cjIaaIUVAwCtGvaX7q' # "test"
   pagination:
     limit: 10
 
 logs:
-  retention: "720h" # 30 days
+  retention: '720h' # 30 days
   pagination:
     limit: 10
 
@@ -35,7 +35,7 @@ qr-codes:
     # max_size_bytes: 1073741824
 
 ratings:
-  retention: "8760h" # 365 days
+  retention: '8760h' # 365 days
 
 forms:
   rate-limit:

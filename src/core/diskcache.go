@@ -160,7 +160,7 @@ func (c *DiskCache) Prune() error {
 
 	err := filepath.WalkDir(c.Root, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
-			// If we can't read a directory/file, just skip it but don't fail the whole prune
+			// If we can’t read a directory/file, just skip it but don't fail the whole prune
 			return nil
 		}
 		if !d.IsDir() {
