@@ -24,6 +24,7 @@ import (
 	"wynglet.chimbori.dev/dashboard"
 	"wynglet.chimbori.dev/db"
 	"wynglet.chimbori.dev/embedfs"
+	"wynglet.chimbori.dev/forms"
 	"wynglet.chimbori.dev/github"
 	"wynglet.chimbori.dev/linkpreviews"
 	"wynglet.chimbori.dev/qrcode"
@@ -119,6 +120,7 @@ func main() {
 		slog.Error("failed to initialize GitHub cache", tint.Err(err))
 		os.Exit(1)
 	}
+	forms.Init(mux)
 	rating.Init(mux)
 	dashboard.Init(mux)
 
