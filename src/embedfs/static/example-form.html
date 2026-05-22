@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self'">
+  <title>Example Form</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui;
+      max-width: 800px;
+      margin: 32px auto;
+    }
+
+    fieldset {
+      margin: 16px 0;
+      border: none;
+      padding: 0;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    legend {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+
+    .required {
+      color: red;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="number"],
+    input[type="date"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    button {
+      padding: 16px 32px;
+      border: 0;
+      cursor: pointer;
+      border-radius: 32px;
+      font-size: 16px;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .honeypot {
+      display: none;
+    }
+
+    .status {
+      background-color: mintcream;
+      padding: 32px;
+      border-radius: 32px;
+      display: none;
+
+      &.success {
+        border-color: palegreen;
+        /* background-color: #ffe6e6; */
+        display: block;
+      }
+
+      &.error {
+        border-color: orangered;
+        /* background-color: #ffe6e6; */
+        display: block;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Example Form</h1>
+
+  <form id="contactForm" novalidate>
+    <!-- Hidden config fields -->
+    <input type="hidden" name="_form_id" value="contact-us">
+    <input type="hidden" name="_subject" value="New Contact Form Submission">
+    <input type="hidden" name="_redirect" value="https://example.com/thank-you">
+    <input type="hidden" name="_honeypot" value="_trap">
+    <input type="hidden" name="_token" value="">
+
+    <!-- Honeypot field (should be left empty) -->
+    <div class="honeypot">
+      <input type="text" name="_trap" placeholder="Leave this blank">
+    </div>
+
+    <!-- User fields -->
+    <fieldset>
+      <label for="name">Full Name <span class="required">*</span></label>
+      <input type="text" id="name" name="full_name" required>
+    </fieldset>
+
+    <fieldset>
+      <label for="email">Email Address <span class="required">*</span></label>
+      <input type="email" id="email" name="email" required>
+    </fieldset>
+
+    <fieldset>
+      <label for="message">Message <span class="required">*</span></label>
+      <textarea id="message" name="message" required></textarea>
+    </fieldset>
+
+    <div class="form-row">
+      <fieldset>
+        <label for="priority">Priority <span class="required">*</span></label>
+        <select id="priority" name="priority" required>
+          <option value="">-- Select Priority --</option>
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </select>
+      </fieldset>
+      <fieldset>
+        <label for="phone">Phone Number</label>
+        <input type="text" id="phone" name="phone">
+      </fieldset>
+      <fieldset>
+        <label for="date">Preferred Date</label>
+        <input type="date" id="date" name="preferred_date">
+      </fieldset>
+    </div>
+
+    <div class="form-row">
+      <fieldset>
+        <legend>Type of Inquiry <span class="required">*</span></legend>
+        <label><input type="radio" id="support" name="inquiry_type" value="support" required> Support</label>
+        <label><input type="radio" id="sales" name="inquiry_type" value="sales"> Sales</label>
+        <label><input type="radio" id="feedback" name="inquiry_type" value="feedback">Feedback</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Services of Interest</legend>
+        <div>
+          <label><input type="checkbox" id="service1" name="services" value="consulting"> Consulting</label>
+          <label><input type="checkbox" id="service2" name="services" value="development"> Development</label>
+          <label><input type="checkbox" id="service3" name="services" value="support"> Support</label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <label for="budget">Budget ($)</label>
+        <input type="number" id="budget" name="budget" min="0" step="100">
+      </fieldset>
+    </div>
+
+    <div class="form-row">
+      <fieldset>
+        <label><input type="checkbox" id="terms" name="terms" value="yes"> Terms Accepted</label>
+      </fieldset>
+
+      <fieldset style="text-align: right;">
+        <button type="submit" id="submitBtn" disabled>Send Message</button>
+      </fieldset>
+    </div>
+    <noscript>
+      <p style="color: red; margin-top: 16px;">This form requires JavaScript to be enabled.</p>
+    </noscript>
+    <div class="status" id="status"></div>
+  </form>
+  <script src="example-form.js"></script>
+</body>
+
+</html>
