@@ -16,6 +16,17 @@ type Domain struct {
 	Authorized        *bool
 }
 
+type FormSubmission struct {
+	ID          int64
+	FormID      string
+	SubmittedAt time.Time
+	Domain      string
+	IpAddress   string
+	FormData    string
+	IsSpam      bool
+	EmailSentAt *time.Time
+}
+
 type LinkPreview struct {
 	ID                 int64
 	Url                string
