@@ -1,0 +1,152 @@
+package dashboard
+
+import (
+	"fmt"
+	"wynglet.chimbori.dev/db"
+)
+
+templ FormsPageTempl() {
+	@ContentTempl("Forms", NilTemplate()) {
+		<p>View and manage form submissions</p>
+		<div class="mb-8">
+			<a href="/static/example-form.html" target="_blank" class="btn-neutral">View Sample Form →</a>
+		</div>
+		<section
+			id="forms-list"
+			hx-get="/dashboard/forms/list"
+			hx-trigger="load"
+			hx-swap="innerHTML"
+		>
+			<div class="flex items-center justify-center p-8">
+				<img class="htmx-indicator inline" src="/static/3-dots-move.svg" alt="Loading..."/>
+			</div>
+		</section>
+	}
+}
+
+templ FormsListTempl(forms []db.ListFormsRow) {
+	<h2>Forms</h2>
+	if len(forms) == 0 {
+		<p>No forms found</p>
+	} else {
+		<table class="dashboard w-full">
+			<tr>
+				<th>Form</th>
+				<th>Submissions</th>
+				<th></th>
+			</tr>
+			for _, form := range forms {
+				<tr>
+					<td class="align-middle">
+						<a href={ templ.SafeURL("/dashboard/forms/" + form.FormID) }>{ form.FormID }</a>
+					</td>
+					<td class="align-middle">{ fmt.Sprintf("%d", form.Count) }</td>
+					<td class="text-right align-middle">
+						<a href={ templ.SafeURL("/dashboard/forms/" + form.FormID + "/export.csv") } class="btn-neutral">Export CSV</a>
+					</td>
+				</tr>
+			}
+		</table>
+	}
+}
+
+templ FormSubmissionsTempl(formID string, submissions []db.FormSubmission, page int, total int64, pageSize int) {
+	@ContentTempl(formID+" — Submissions", NilTemplate()) {
+		<div class="mb-4">
+			<a href="/dashboard/forms" class="btn-neutral inline-block mb-4">← Back to Forms</a>
+		</div>
+		if len(submissions) == 0 {
+			<p>No submissions for this form</p>
+		} else {
+			@FormSubmissionsTableTempl(formID, submissions)
+			<div class="flex justify-between items-center gap-4 p-4">
+				<button
+					if page > 1 {
+						hx-get={ "/dashboard/forms/" + formID + "?page=" + fmt.Sprintf("%d", page-1) }
+						hx-target="main"
+						hx-swap="innerHTML transition:true"
+						hx-push-url={ "/dashboard/forms/" + formID + "?page=" + fmt.Sprintf("%d", page-1) }
+					} else {
+						disabled
+					}
+					class="btn-neutral"
+				>
+					← Previous
+				</button>
+				<span class="text-sm">
+					Page { fmt.Sprintf("%d", page) } of { fmt.Sprintf("%d", calculateTotalPages(total)) }
+				</span>
+				<button
+					if int64(page*pageSize) < total {
+						hx-get={ "/dashboard/forms/" + formID + "?page=" + fmt.Sprintf("%d", page+1) }
+						hx-target="main"
+						hx-swap="innerHTML transition:true"
+						hx-push-url={ "/dashboard/forms/" + formID + "?page=" + fmt.Sprintf("%d", page+1) }
+					} else {
+						disabled
+					}
+					class="btn-neutral"
+				>
+					Next →
+				</button>
+			</div>
+		}
+	}
+}
+
+// FormSubmissionsTableTempl renders only the submissions table section for HTMX updates
+templ FormSubmissionsTableTempl(formID string, submissions []db.FormSubmission) {
+	<div class="overflow-x-auto" id="submissions-table">
+		<table class="dashboard w-full text-sm">
+			<thead>
+				<tr>
+					<th>Submitted</th>
+					<th>Origin</th>
+					<th>IP</th>
+					<th>Fields</th>
+					<th class="text-center">Spam?</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				for _, submission := range submissions {
+					<tr class={ getSpamRowClass(submission.IsSpam) }>
+						<td class="align-middle">{ submission.SubmittedAt.Format("2006-01-02 15:04:05") }</td>
+						<td class="align-middle">{ submission.Domain }</td>
+						<td class="align-middle">{ submission.IpAddress }</td>
+						<td class="align-middle">
+							<details open>
+								<summary class="cursor-pointer hover:underline">Show</summary>
+								<pre class="text-xs overflow-x-auto font-mono">{ string(submission.FormData) }</pre>
+							</details>
+						</td>
+						<td class="text-center align-middle">
+							if submission.IsSpam {
+								<span class="inline-block bg-red-500 text-white px-2 py-1 rounded text-xs font-semibold">SPAM</span>
+							}
+						</td>
+						<td class="text-right align-middle">
+							<button
+								class="btn-submit"
+								hx-confirm="Delete this submission?"
+								hx-delete={ "/dashboard/forms/" + formID + "/" + fmt.Sprintf("%d", submission.ID) }
+								hx-target="#submissions-table"
+								hx-swap="outerHTML"
+							>
+								Delete
+							</button>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+}
+
+// Helper function to return CSS class for spam rows
+func getSpamRowClass(isSpam bool) string {
+	if isSpam {
+		return "spam"
+	}
+	return ""
+}
