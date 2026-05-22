@@ -65,3 +65,11 @@ func NormalizeClientIP(raw string) string {
 	}
 	return first
 }
+
+// SetCORSHeaders sets CORS headers for an authorized origin.
+func SetCORSHeaders(w http.ResponseWriter, origin string) {
+	w.Header().Set("Access-Control-Allow-Origin", origin)
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("Access-Control-Max-Age", "3600")
+}
