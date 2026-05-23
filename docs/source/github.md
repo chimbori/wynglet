@@ -26,7 +26,7 @@ Features:
 
 Make a GET request to fetch repository statistics:
 
-```
+```text
 GET https://wynglet.your-server.com/github/v1/{user}/{repo}/{field}
 ```
 
@@ -86,7 +86,7 @@ No preflight requests are needed.
 
 All requests receive permissive CORS headers:
 
-```
+```text
 Access-Control-Allow-Origin: *
 Access-Control-Allow-Headers: *
 Access-Control-Allow-Methods: GET, OPTIONS

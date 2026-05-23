@@ -55,7 +55,6 @@ No vendor lock-in, no per-request billing, no privacy compromises.
 - Embed a lightweight rating interface (👍/👎 or ⭐ 1–5) to collect visitor feedback directly on your site.
 - Privacy-focused, rate-limited to prevent abuse, and fully logged in your dashboard for analysis.
 
-
 ## GitHub Repository Stats
 
 [Learn more →](/github)
@@ -110,32 +109,6 @@ This means:
 - You maintain complete control over who has access
 
 Learn more: [Security & Abuse Protection](/security)
-
-## Why Wynglet?
-
-### No New Tools to Learn
-
-Write HTML/CSS that you already know. No proprietary template editors or learning curves.
-
-### Full Design Control
-
-Use the entire Web platform. Flexbox, Grid, SVG, custom fonts, images—anything you can design for the web.
-
-### No Context Switching
-
-Update templates in your website where they live, not in a separate service.
-
-### Reuse Your Theme
-
-Share colors, gradients, and logos between your site and previews without copy/pasting.
-
-### Always Available
-
-Open source, runs on your infrastructure. No risk of the service disappearing.
-
-### No Per-Request Billing
-
-One-time deployment cost, no ongoing usage fees.
 
 ## Support
 

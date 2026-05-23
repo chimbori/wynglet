@@ -62,9 +62,8 @@
 <h2 id="getting-started">Getting Started</h2>
 <h3 id="fetch-repository-stats">Fetch Repository Stats</h3>
 <p>Make a GET request to fetch repository statistics:</p>
-<pre><code>GET https://wynglet.your-server.com/github/v1/{user}/{repo}/{field}
-</code></pre>
-<p><strong>URL Parameters:</strong></p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>GET https://wynglet.your-server.com/github/v1/{user}/{repo}/{field}
+</span></span></code></pre><p><strong>URL Parameters:</strong></p>
 <ul>
 <li><code>{user}</code> — GitHub username (e.g., <code>chimbori</code>)</li>
 <li><code>{repo}</code> — Repository name (e.g., <code>wynglet</code>)</li>
@@ -104,11 +103,10 @@
 <p>The GitHub Stats endpoint is fully CORS-enabled and can be called directly from any website.
 No preflight requests are needed.</p>
 <p>All requests receive permissive CORS headers:</p>
-<pre><code>Access-Control-Allow-Origin: *
-Access-Control-Allow-Headers: *
-Access-Control-Allow-Methods: GET, OPTIONS
-</code></pre>
-<h2 id="caching">Caching</h2>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>Access-Control-Allow-Origin: *
+</span></span><span style="display:flex;"><span>Access-Control-Allow-Headers: *
+</span></span><span style="display:flex;"><span>Access-Control-Allow-Methods: GET, OPTIONS
+</span></span></code></pre><h2 id="caching">Caching</h2>
 <p>Results are cached for 1 hour to minimize requests to GitHub’s API.
 If you need fresh data before the cache expires, you can:</p>
 <ol>
