@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5">
+  <meta name="robots" content="noodp,noydir">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title itemprop="name">GitHub Repository Stats</title>
+  <meta name="description" itemprop="description" content="Embed live GitHub repository statistics on your website">
+  <meta name="theme-color" content="#fe7a4d">
+
+  <meta property="og:url" content="https://wynglet.chimbori.dev/github">
+  <meta property="og:title" content="GitHub Repository Stats">
+  <meta property="og:description" content="Embed live GitHub repository statistics on your website">
+  <meta property="og:image" content="https://wynglet.chimbori.net/link-previews/v1?url=https://wynglet.chimbori.dev/github">
+
+  <link rel="canonical" href="https://wynglet.chimbori.dev/github">
+  <link rel="apple-touch-icon-precomposed" sizes="192x192" href="//chimbori.com/media/favicon.png">
+  <link rel="shortcut icon" type="image/x-icon" href="//chimbori.com/media/favicon.png">
+  <link rel="stylesheet" href="//chimbori.com/css/gen.css">
+  <link rel="alternate" type="application/atom+xml" title="Wynglet" href="//chimbori.com/feed.xml">
+  <meta name="go-import" content="wynglet.chimbori.dev git https://github.com/chimbori/wynglet src">
+
+  <script src="/htmx.min.js"></script>
+  <meta name="htmx-config" content='{"selfRequestsOnly":false}' />
+</head>
+
+<body hx-boost="true">
+  <header class="py-8 background-blue">
+    <div class="width-limit">
+      <a class="inline-block mb-4 font-display font-medium text-2xl" href="/">Wynglet</a><nav class="print:hidden">
+  <ul><li>
+      <form class="print:hidden inline white-placeholder" target="_blank" action="https://www.google.com/search" hx-boost="false" enterkeyhint="search">
+        <input type="search" name="q" size="14" placeholder="🔍 &nbsp; Search" class="px-3 btn-white">
+        <input type="hidden" name="sitesearch" value="chimbori.com">
+      </form>
+    </li>
+    <li>
+      <a target="_blank" href="https://github.com/chimbori/wynglet"
+        class="bg-linear-to-b from-zinc-50 hover:from-zinc-100 to-zinc-100 hover:to-zinc-200 shadow mr-2 px-3 py-2 rounded-lg text-black text-sm no-underline">
+        <img src="/github.svg" class="inline mr-1 size-4" alt="GitHub" />
+        <span hx-get="https://wynglet.chimbori.net/github/v1/chimbori/wynglet/stars" hx-trigger="load"></span> stars
+      </a>
+    </li>
+  </ul>
+</nav></div>
+  </header>
+  <article class="my-8 md:my-16 width-limit prose-lite"><h1 id="github-repository-stats">GitHub Repository Stats</h1>
+<p>Embed live GitHub repository statistics (stars, forks, watchers, etc.) on your website without authentication.</p>
+<h2 id="overview">Overview</h2>
+<p>The GitHub Stats API allows you to fetch and display current information about any public GitHub repository.</p>
+<p>Features:</p>
+<ul>
+<li><strong>No Authentication Required</strong>: Works with public repositories</li>
+<li><strong>Cached Responses</strong>: Results are cached for 1 hour to minimize API calls</li>
+<li><strong>CORS Enabled</strong>: Can be called from any website</li>
+<li><strong>Multiple Fields</strong>: Access stars, forks, watchers, open issues, and more</li>
+<li><strong>Lightweight</strong>: Small, fast responses ideal for embedding</li>
+</ul>
+<h2 id="getting-started">Getting Started</h2>
+<h3 id="fetch-repository-stats">Fetch Repository Stats</h3>
+<p>Make a GET request to fetch repository statistics:</p>
+<pre><code>GET https://wynglet.your-server.com/github/v1/{user}/{repo}/{field}
+</code></pre>
+<p><strong>URL Parameters:</strong></p>
+<ul>
+<li><code>{user}</code> — GitHub username (e.g., <code>chimbori</code>)</li>
+<li><code>{repo}</code> — Repository name (e.g., <code>wynglet</code>)</li>
+<li><code>{field}</code> — What to fetch (see Available Fields below)</li>
+</ul>
+<h3 id="available-fields">Available Fields</h3>
+<ul>
+<li><code>name</code> — Repository name</li>
+<li><code>description</code> — Repository description</li>
+<li><code>stars</code> — Number of stars (stargazers_count)</li>
+<li><code>forks</code> — Number of forks</li>
+<li><code>issues</code> — Number of open issues</li>
+<li><code>watchers</code> — Number of watchers (subscribers_count)</li>
+</ul>
+<h3 id="examples">Examples</h3>
+<p><strong>Get Star Count:</strong></p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>https://wynglet.your-server.com/github/v1/chimbori/wynglet/stars
+</span></span></code></pre><p>Response:</p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">&#34;stars&#34;</span>: <span style="color:#bd93f9">42</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre><p><strong>Display in HTML:</strong></p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">p</span>&gt;
+</span></span><span style="display:flex;"><span>  Wynglet has
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#ff79c6">span</span> <span style="color:#50fa7b">id</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;stars&#34;</span>&gt;--&lt;/<span style="color:#ff79c6">span</span>&gt;
+</span></span><span style="display:flex;"><span>  stars on GitHub
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#ff79c6">p</span>&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">script</span>&gt;
+</span></span><span style="display:flex;"><span>fetch(<span style="color:#f1fa8c">&#39;https://wynglet.your-server.com/github/v1/chimbori/wynglet/stars&#39;</span>)
+</span></span><span style="display:flex;"><span>  .then(r =&gt; r.json())
+</span></span><span style="display:flex;"><span>  .then(data =&gt; {
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">document</span>.getElementById(<span style="color:#f1fa8c">&#39;stars&#39;</span>).textContent <span style="color:#ff79c6">=</span> data.stars.toLocaleString();
+</span></span><span style="display:flex;"><span>  });
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#ff79c6">script</span>&gt;
+</span></span></code></pre><h2 id="cors">CORS</h2>
+<p>The GitHub Stats endpoint is fully CORS-enabled and can be called directly from any website.
+No preflight requests are needed.</p>
+<p>All requests receive permissive CORS headers:</p>
+<pre><code>Access-Control-Allow-Origin: *
+Access-Control-Allow-Headers: *
+Access-Control-Allow-Methods: GET, OPTIONS
+</code></pre>
+<h2 id="caching">Caching</h2>
+<p>Results are cached for 1 hour to minimize requests to GitHub’s API.
+If you need fresh data before the cache expires, you can:</p>
+<ol>
+<li>Wait for the cache to expire (1 hour)</li>
+<li>Deploy a new instance with cleared caches</li>
+<li>Query multiple times to get the most recent data</li>
+</ol>
+<h2 id="error-handling">Error Handling</h2>
+<p>If a request fails (invalid repository, network error, etc.), the API returns an error status with details.</p>
+<p><strong>Example Error Response:</strong></p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">&#34;error&#34;</span>: <span style="color:#f1fa8c">&#34;Repository not found&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre><h2 id="use-cases">Use Cases</h2>
+<ul>
+<li><strong>Portfolio Sites</strong>: Show your most popular projects</li>
+<li><strong>Documentation</strong>: Display project health and community stats</li>
+<li><strong>Team Pages</strong>: Showcase your open-source projects</li>
+<li><strong>Dashboards</strong>: Monitor GitHub activity across repositories</li>
+</ul>
+<h2 id="limitations">Limitations</h2>
+<ul>
+<li>Only works with <strong>public repositories</strong> (GitHub API limitation)</li>
+<li>Results are <strong>cached for 1 hour</strong>, not real-time</li>
+<li><strong>Rate-limited</strong> by GitHub’s public API limits (60 requests/hour per IP)</li>
+</ul>
+<h2 id="configuration">Configuration</h2>
+<p>The GitHub stats endpoint requires no special configuration.
+It uses a local disk cache to minimize GitHub API requests.</p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#ff79c6">github</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4"># Cache TTL is fixed at 1 hour for GitHub stats</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">cache</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">ttl</span>: 1h
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">location</span>: cache/github
+</span></span></code></pre><h2 id="best-practices">Best Practices</h2>
+<ul>
+<li><strong>Cache on Your Side Too</strong>: Don’t fetch on every page load; cache results in your site’s cache or in JavaScript sessionStorage</li>
+<li><strong>Handle Errors Gracefully</strong>: Provide fallback values if GitHub stats are unavailable</li>
+<li><strong>Don’t Over-Request</strong>: The endpoint is cached; requesting multiple times quickly won’t get you fresher data</li>
+<li><strong>Use Appropriate Fields</strong>: Only request the fields you need</li>
+</ul>
+<h2 id="next-steps">Next Steps</h2>
+<ul>
+<li><a href="/installation">Installation</a></li>
+<li><a href="/">Home</a> — Start here</li>
+<li><a href="/security">Security &amp; Abuse Protection</a></li>
+<li><a href="/dashboard">Dashboard</a></li>
+</ul>
+</article>
+
+  <footer>
+    <div class="md:flex font-display width-limit">
+      <div class="md:flex-auto"><nav class="print:hidden">
+  <ul>
+    
+  </ul>
+</nav></div>
+    </div>
+  </footer>
+<div class="hidden relative mx-auto px-24 py-16 w-[1200px] h-[630px] text-white background-orange" id="link-preview">
+  <h1 class="text-shadow-lg mb-12 text-7xl/21 line-clamp-3">GitHub Repository Stats</h1>
+  <h2 class="text-shadow-md pr-24 text-5xl/18 line-clamp-3">Embed live GitHub repository statistics on your website</h2>
+  <img class="right-24 bottom-16 absolute size-24" style="filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.2));" src="//chimbori.com/media/favicon.png">
+</div>
+</body>
+
+</html>

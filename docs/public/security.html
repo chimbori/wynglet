@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5">
+  <meta name="robots" content="noodp,noydir">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title itemprop="name">Security &amp; Abuse Protection</title>
+  <meta name="description" itemprop="description" content="How Wynglet protects against abuse and unauthorized use">
+  <meta name="theme-color" content="#fe7a4d">
+
+  <meta property="og:url" content="https://wynglet.chimbori.dev/security">
+  <meta property="og:title" content="Security &amp; Abuse Protection">
+  <meta property="og:description" content="How Wynglet protects against abuse and unauthorized use">
+  <meta property="og:image" content="https://wynglet.chimbori.net/link-previews/v1?url=https://wynglet.chimbori.dev/security">
+
+  <link rel="canonical" href="https://wynglet.chimbori.dev/security">
+  <link rel="apple-touch-icon-precomposed" sizes="192x192" href="//chimbori.com/media/favicon.png">
+  <link rel="shortcut icon" type="image/x-icon" href="//chimbori.com/media/favicon.png">
+  <link rel="stylesheet" href="//chimbori.com/css/gen.css">
+  <link rel="alternate" type="application/atom+xml" title="Wynglet" href="//chimbori.com/feed.xml">
+  <meta name="go-import" content="wynglet.chimbori.dev git https://github.com/chimbori/wynglet src">
+
+  <script src="/htmx.min.js"></script>
+  <meta name="htmx-config" content='{"selfRequestsOnly":false}' />
+</head>
+
+<body hx-boost="true">
+  <header class="py-8 background-blue">
+    <div class="width-limit">
+      <a class="inline-block mb-4 font-display font-medium text-2xl" href="/">Wynglet</a><nav class="print:hidden">
+  <ul><li>
+      <form class="print:hidden inline white-placeholder" target="_blank" action="https://www.google.com/search" hx-boost="false" enterkeyhint="search">
+        <input type="search" name="q" size="14" placeholder="🔍 &nbsp; Search" class="px-3 btn-white">
+        <input type="hidden" name="sitesearch" value="chimbori.com">
+      </form>
+    </li>
+    <li>
+      <a target="_blank" href="https://github.com/chimbori/wynglet"
+        class="bg-linear-to-b from-zinc-50 hover:from-zinc-100 to-zinc-100 hover:to-zinc-200 shadow mr-2 px-3 py-2 rounded-lg text-black text-sm no-underline">
+        <img src="/github.svg" class="inline mr-1 size-4" alt="GitHub" />
+        <span hx-get="https://wynglet.chimbori.net/github/v1/chimbori/wynglet/stars" hx-trigger="load"></span> stars
+      </a>
+    </li>
+  </ul>
+</nav></div>
+  </header>
+  <article class="my-8 md:my-16 width-limit prose-lite"><h1 id="security--abuse-protection">Security &amp; Abuse Protection</h1>
+<p>Wynglet is designed with security and abuse prevention as core features.
+Every API and service is protected by multiple layers of validation and rate limiting.</p>
+<h2 id="domain-based-authorization">Domain-Based Authorization</h2>
+<h3 id="how-it-works">How It Works</h3>
+<p>Wynglet operates on a <strong>deny-by-default</strong> security model:</p>
+<ul>
+<li><strong>All domains are blocked by default</strong>: No one can use your Wynglet instance until you explicitly authorize them.</li>
+<li><strong>Allow-list-based access</strong>: You maintain an allow-list of authorized domains in the Dashboard.</li>
+<li><strong>Domain validation on every request</strong>: Each request checks that its origin is on the allow-list.</li>
+</ul>
+<h3 id="setting-up-domain-authorization">Setting Up Domain Authorization</h3>
+<ol>
+<li>Go to the Dashboard at <code>https://wynglet.your-server.com/dashboard</code></li>
+<li>Navigate to the <strong>Domains</strong> section</li>
+<li>Click <strong>Add Domain</strong></li>
+<li>Enter your domain (e.g., <code>example.com</code> or <code>subdomain.example.com</code>)</li>
+<li>Save</li>
+</ol>
+<p>If your instance has recently received requests from particular domains, you will see these listed there (with the denied-by-default status).
+This allows you to quickly allow-list domains while bringing up new sites.
+If you do not explicitly authorize a domain, it will stop showing up in the list after a few days.</p>
+<h3 id="domain-matching-rules">Domain Matching Rules</h3>
+<ul>
+<li>By default, only the <strong>exact domain</strong> is allow-listed: <code>example.com</code> and <code>www.example.com</code> are treated as different domains,
+and authorizing one will not authorize the other one.</li>
+<li><strong>Sub-domains can be optionally allow-listed</strong>:
+You can authorize all subdomains (without having to list each one individually) if you prefer.
+E.g. allow-listing all subdomains for <code>example.com</code> will match <code>www.example.com</code>, <code>api.example.com</code>, <code>blog.example.com</code>, etc.</li>
+<li><strong>Case-insensitive</strong> (like all domains in general): <code>Example.com</code> matches <code>example.com</code>.</li>
+<li><strong>Protocols don’t matter</strong>: both <code>http://example.com</code> and <code>https://example.com</code> are authorized if <code>example.com</code> is on the allow-list.</li>
+<li><strong>Ports are ignored</strong>: <code>example.com:8080</code> is treated as <code>example.com</code>.</li>
+</ul>
+<h3 id="why-this-matters">Why This Matters</h3>
+<p>Without domain authorization, anyone could use your Wynglet instance:</p>
+<ul>
+<li>Use your QR code generator to link to their site.</li>
+<li>Embed your rating widget and collect fake ratings.</li>
+<li>Generate preview images at your expense.</li>
+<li>Overwhelm your instance with requests.</li>
+</ul>
+<h2 id="rate-limiting">Rate Limiting</h2>
+<p>In addition to Domain Authorization, Wynglet uses IP-based rate limiting to prevent abuse and protect server resources.</p>
+<h3 id="global-rate-limits">Global Rate Limits</h3>
+<p>Each IP address is limited across all features:</p>
+<ul>
+<li>
+<p><strong>Form Submissions</strong>:</p>
+<ul>
+<li>1 submission per form per 60 seconds</li>
+<li>10 total submissions per hour</li>
+</ul>
+</li>
+<li>
+<p><strong>Ratings</strong>:</p>
+<ul>
+<li>1 rating per URL per 24 hours</li>
+<li>10 ratings across all URLs per hour</li>
+</ul>
+</li>
+</ul>
+<h3 id="what-happens-when-rate-limits-are-exceeded">What Happens When Rate Limits Are Exceeded</h3>
+<p>When a rate limit is exceeded, the request is rejected with a <code>429 Too Many Requests</code> status code.</p>
+<h3 id="bypassing-rate-limits">Bypassing Rate Limits</h3>
+<p>Rate limits apply per-IP. Multiple clients from different IP addresses can submit simultaneously. However:</p>
+<ul>
+<li><strong>Shared Networks</strong>: All users on the same corporate network, school, or ISP may share a rate limit bucket</li>
+<li><strong>Residential ISPs</strong>: Most residential ISPs assign static IPs per household</li>
+<li><strong>Mobile Networks</strong>: Mobile ISPs often assign IPs per cell tower</li>
+</ul>
+<h2 id="csrf-protection">CSRF Protection</h2>
+<h3 id="what-is-csrf">What Is CSRF?</h3>
+<p>Cross-Site Request Forgery (CSRF) is an attack where a malicious site tricks your browser into making unwanted requests to another site on your behalf.</p>
+<h3 id="how-wynglet-protects-against-it">How Wynglet Protects Against It</h3>
+<p>Wynglet uses <strong>CSRF tokens</strong> for form submissions:</p>
+<ol>
+<li>Before rendering a form, you request a token from Wynglet</li>
+<li>You include this token in any form submission</li>
+<li>Wynglet validates that the token is present and valid</li>
+<li>Malicious sites don’t have access to your valid tokens</li>
+</ol>
+<h3 id="token-validation">Token Validation</h3>
+<ul>
+<li>Tokens are <strong>unique per form</strong>: each new form render gets a new token</li>
+<li>Tokens <strong>expire</strong>: old tokens become invalid</li>
+<li>Tokens are <strong>single-use</strong>: after submission, they cannot be reused</li>
+</ul>
+<h2 id="honeypot-fields">Honeypot Fields</h2>
+<h3 id="how-it-works-1">How It Works</h3>
+<p>A honeypot field is a hidden form field that humans won’t see, but automated bots will fill in.</p>
+<p>Example:</p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><!-- Hidden from real users, visible to bots -->
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">input</span> <span style="color:#50fa7b">type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;hidden&#34;</span> <span style="color:#50fa7b">name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;_honeypot&#34;</span> <span style="color:#50fa7b">value</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;&#34;</span>&gt;
+</span></span></code></pre><p>When a form is submitted:</p>
+<ul>
+<li><strong>Humans</strong> leave the field empty (they can’t see it)</li>
+<li><strong>Bots</strong> fill it in with something (they fill every field)</li>
+</ul>
+<p>Wynglet automatically rejects submissions where honeypot fields are filled in.</p>
+<h2 id="cors-validation">CORS Validation</h2>
+<h3 id="what-is-cors">What Is CORS?</h3>
+<p>Cross-Origin Resource Sharing (CORS) is a browser security feature that controls which sites can make requests to an API.</p>
+<h3 id="how-wynglet-uses-cors">How Wynglet Uses CORS</h3>
+<ul>
+<li><strong>Strict CORS headers</strong>: Wynglet sets CORS headers that only allow requests from authorized domains.
+This prevents unauthorized sites from making requests to your Wynglet instance.</li>
+<li><strong>Reject file:// URLs</strong>: Requests from <code>file://</code> are always rejected</li>
+<li><strong>GitHub stats endpoint</strong>: Allows any origin (intentionally permissive for public stats)</li>
+</ul>
+<p>In practice, this means:</p>
+<ul>
+<li>Only domains you’ve explicitly authorized in the Dashboard can make cross-origin requests to Wynglet</li>
+<li>Unauthorized domains will be blocked by the browser’s CORS policy</li>
+<li>This provides an additional layer of security beyond domain allow-listing</li>
+</ul>
+<h2 id="debug-mode">Debug Mode</h2>
+<h3 id="toggling-debug-mode">Toggling Debug Mode</h3>
+<p>You can enable per-domain debug mode in the Dashboard:</p>
+<ol>
+<li>Go to <strong>Domains</strong> section</li>
+<li>Find your domain</li>
+<li>Toggle <strong>Debug Mode</strong></li>
+</ol>
+<p>When enabled, Wynglet logs detailed information about requests from that domain, helping you troubleshoot issues.</p>
+<h2 id="best-practices">Best Practices</h2>
+<ul>
+<li><strong>Authorize only your domains</strong>: Add all your sites’ domains, but no others</li>
+<li><strong>Monitor the Logs</strong>: Check the Dashboard Logs section for suspicious activity</li>
+<li><strong>Review Ratings &amp; Submissions</strong>: Look for spam patterns in your collected data</li>
+<li><strong>Use Honeypots</strong>: Always include honeypot fields in your contact forms</li>
+<li><strong>Validate Client-Side</strong>: Validate form data on your website too</li>
+</ul>
+<h2 id="monitoring-abuse">Monitoring Abuse</h2>
+<h3 id="signs-of-abuse">Signs of Abuse</h3>
+<ul>
+<li>Unusually high number of ratings from a single IP</li>
+<li>Many form submissions from a single IP</li>
+<li>Requests from unexpected domains</li>
+<li>Requests from suspicious origins</li>
+</ul>
+<h3 id="what-to-do">What To Do</h3>
+<ol>
+<li>Check the <strong>Logs</strong> section in the Dashboard for errors</li>
+<li>Review <strong>Ratings</strong> and <strong>Submissions</strong> for spam</li>
+<li>Check if the attacking IP is on your domain allow-list</li>
+<li>Consider removing offending domains if they’re being abused</li>
+<li>Enable <strong>Debug Mode</strong> for detailed information</li>
+</ol>
+<h2 id="reporting-security-issues">Reporting Security Issues</h2>
+<p>If you discover a security vulnerability in Wynglet:</p>
+<ol>
+<li><strong>Do not</strong> post it publicly</li>
+<li><strong>Do not</strong> include it in a GitHub issue</li>
+<li>Visit the <a href="https://github.com/chimbori/wynglet/security/policy">Security Policy</a> for reporting procedures</li>
+</ol>
+<h2 id="next-steps">Next Steps</h2>
+<ul>
+<li><a href="/installation">Installation</a></li>
+<li><a href="/forms">Form Submissions</a></li>
+<li><a href="/dashboard">Dashboard</a></li>
+<li><a href="/installation">Installation</a></li>
+</ul>
+</article>
+
+  <footer>
+    <div class="md:flex font-display width-limit">
+      <div class="md:flex-auto"><nav class="print:hidden">
+  <ul>
+    
+  </ul>
+</nav></div>
+    </div>
+  </footer>
+<div class="hidden relative mx-auto px-24 py-16 w-[1200px] h-[630px] text-white background-orange" id="link-preview">
+  <h1 class="text-shadow-lg mb-12 text-7xl/21 line-clamp-3">Security &amp; Abuse Protection</h1>
+  <h2 class="text-shadow-md pr-24 text-5xl/18 line-clamp-3">How Wynglet protects against abuse and unauthorized use</h2>
+  <img class="right-24 bottom-16 absolute size-24" style="filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.2));" src="//chimbori.com/media/favicon.png">
+</div>
+</body>
+
+</html>

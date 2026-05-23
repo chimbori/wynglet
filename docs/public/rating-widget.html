@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5">
+  <meta name="robots" content="noodp,noydir">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title itemprop="name">Rating Widget</title>
+  <meta name="description" itemprop="description" content="Embed a rating widget on any page to collect user feedback">
+  <meta name="theme-color" content="#fe7a4d">
+
+  <meta property="og:url" content="https://wynglet.chimbori.dev/rating-widget">
+  <meta property="og:title" content="Rating Widget">
+  <meta property="og:description" content="Embed a rating widget on any page to collect user feedback">
+  <meta property="og:image" content="https://wynglet.chimbori.net/link-previews/v1?url=https://wynglet.chimbori.dev/rating-widget">
+
+  <link rel="canonical" href="https://wynglet.chimbori.dev/rating-widget">
+  <link rel="apple-touch-icon-precomposed" sizes="192x192" href="//chimbori.com/media/favicon.png">
+  <link rel="shortcut icon" type="image/x-icon" href="//chimbori.com/media/favicon.png">
+  <link rel="stylesheet" href="//chimbori.com/css/gen.css">
+  <link rel="alternate" type="application/atom+xml" title="Wynglet" href="//chimbori.com/feed.xml">
+  <meta name="go-import" content="wynglet.chimbori.dev git https://github.com/chimbori/wynglet src">
+
+  <script src="/htmx.min.js"></script>
+  <meta name="htmx-config" content='{"selfRequestsOnly":false}' />
+</head>
+
+<body hx-boost="true">
+  <header class="py-8 background-blue">
+    <div class="width-limit">
+      <a class="inline-block mb-4 font-display font-medium text-2xl" href="/">Wynglet</a><nav class="print:hidden">
+  <ul><li>
+      <form class="print:hidden inline white-placeholder" target="_blank" action="https://www.google.com/search" hx-boost="false" enterkeyhint="search">
+        <input type="search" name="q" size="14" placeholder="🔍 &nbsp; Search" class="px-3 btn-white">
+        <input type="hidden" name="sitesearch" value="chimbori.com">
+      </form>
+    </li>
+    <li>
+      <a target="_blank" href="https://github.com/chimbori/wynglet"
+        class="bg-linear-to-b from-zinc-50 hover:from-zinc-100 to-zinc-100 hover:to-zinc-200 shadow mr-2 px-3 py-2 rounded-lg text-black text-sm no-underline">
+        <img src="/github.svg" class="inline mr-1 size-4" alt="GitHub" />
+        <span hx-get="https://wynglet.chimbori.net/github/v1/chimbori/wynglet/stars" hx-trigger="load"></span> stars
+      </a>
+    </li>
+  </ul>
+</nav></div>
+  </header>
+  <article class="my-8 md:my-16 width-limit prose-lite"><h1 id="rating-widget">Rating Widget</h1>
+<p>Embed an interactive rating widget on any page to collect user feedback.
+The widget supports both thumbs (👍/👎) and star rating (⭐) interfaces.</p>
+<h2 id="overview">Overview</h2>
+<p>The Rating Widget is a lightweight mechanism to monitor the quality of content and collect feedback from your visitors.</p>
+<p>Features:</p>
+<ul>
+<li><strong>Private ratings</strong>: Ratings are not public, but are visible on your Wynglet Dashboard.</li>
+<li><strong>Two UI styles</strong>: Thumbs (👍/👎) or Stars (⭐ 1–5)</li>
+<li><strong>Lightweight</strong>: Embedded via a simple <code>&lt;iframe&gt;</code>, no heavy JavaScript required.</li>
+<li><strong>Rate-limited</strong>: Prevents abuse by limiting submissions per user.</li>
+</ul>
+<h2 id="getting-started">Getting Started</h2>
+<p>Embed the widget on your page using an <code>&lt;iframe&gt;</code>:</p>
+<h3 id="thumbs-ui-default">Thumbs UI (Default)</h3>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">iframe</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#50fa7b">src</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;https://wynglet.your-server.com/rating/v1?ui=thumbs&amp;url=https://your-site.com/some/page&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#50fa7b">style</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;border:none; width:200px; height:50px;&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#ff79c6">iframe</span>&gt;
+</span></span></code></pre><h3 id="stars-ui">Stars UI</h3>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">iframe</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#50fa7b">src</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;https://wynglet.your-server.com/rating/v1?ui=stars&amp;url=https://your-site.com/some/page&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#50fa7b">style</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;border:none; width:200px; height:50px;&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#ff79c6">iframe</span>&gt;
+</span></span></code></pre><h2 id="ui-styles">UI Styles</h2>
+<h3 id="thumbs-default">Thumbs (Default)</h3>
+<p>Displays a simple 👍 (like) and 👎 (dislike) button pair.
+Best for binary feedback.</p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">iframe</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#50fa7b">src</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;https://wynglet.your-server.com/rating/v1?ui=thumbs&amp;url=https://your-site.com/some/page&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#50fa7b">style</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;border:none; width:200px; height:50px;&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#ff79c6">iframe</span>&gt;
+</span></span></code></pre><h3 id="stars">Stars</h3>
+<p>Displays a 1–5 star rating interface.
+Best for detailed feedback.</p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">iframe</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#50fa7b">src</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;https://wynglet.your-server.com/rating/v1?ui=stars&amp;url=https://your-site.com/some/page&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#50fa7b">style</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;border:none; width:200px; height:50px;&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#ff79c6">iframe</span>&gt;
+</span></span></code></pre><h2 id="rate-limiting">Rate Limiting</h2>
+<p>To prevent abuse, a single IP is limited to:</p>
+<ul>
+<li><strong>1 rating per URL per 24 hours</strong>: Users can’t spam the same page repeatedly.</li>
+<li><strong>10 ratings across all URLs per hour</strong>: Abusive users can’t overload the system.</li>
+</ul>
+<p>These limits help ensure quality feedback while preventing abuse.</p>
+<h2 id="security">Security</h2>
+<p>Ratings are validated against the authorized domains allowlist.
+Only ratings from authorized domains are accepted.</p>
+<p><a href="/dashboard">Manage your authorized domains in the Dashboard</a>.</p>
+<h2 id="dashboard-integration">Dashboard Integration</h2>
+<p>Use the Dashboard’s <strong>Ratings</strong> section to:</p>
+<ul>
+<li>View collected ratings for any authorized URL</li>
+<li>Monitor feedback trends</li>
+<li>Generate ready-to-paste <code>&lt;iframe&gt;</code> embed code for any authorized URL</li>
+</ul>
+<p>The embed builder in the Dashboard makes it easy to copy the correct code for your pages without having to remember the URL format.</p>
+<h2 id="use-cases">Use Cases</h2>
+<ul>
+<li><strong>Help Articles</strong>: Monitor the usefulness of documentation</li>
+<li><strong>Blog Posts</strong>: Collect reader feedback on content quality</li>
+<li><strong>Product Pages</strong>: Gauge customer satisfaction with product information</li>
+<li><strong>FAQs</strong>: Identify which answers are most helpful</li>
+<li><strong>Tutorials</strong>: Get feedback on tutorial clarity and usefulness</li>
+</ul>
+<h2 id="configuration">Configuration</h2>
+<p>You can configure rating data retention in your <code>wynglet.yml</code>:</p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#ff79c6">ratings</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">retention: 8760h  # How long to keep rating data (default</span>: <span style="color:#bd93f9">365</span> days)
+</span></span></code></pre><h2 id="best-practices">Best Practices</h2>
+<ul>
+<li><strong>Place strategically</strong>: Put the widget at the end of your content where readers have finished consuming it</li>
+<li><strong>Collect feedback early</strong>: Use thumbs for quick &ldquo;Was this helpful?&rdquo; feedback</li>
+<li><strong>Follow up</strong>: For detailed feedback (5-star ratings), consider adding a comment form or link to your feedback system</li>
+<li><strong>Act on feedback</strong>: Regularly review ratings and update your content based on feedback</li>
+</ul>
+<h2 id="next-steps">Next Steps</h2>
+<ul>
+<li><a href="/installation">Installation</a></li>
+<li><a href="/">Home</a> — Start here</li>
+<li><a href="/dashboard">View Dashboard</a></li>
+</ul>
+</article>
+
+  <footer>
+    <div class="md:flex font-display width-limit">
+      <div class="md:flex-auto"><nav class="print:hidden">
+  <ul>
+    
+  </ul>
+</nav></div>
+    </div>
+  </footer>
+<div class="hidden relative mx-auto px-24 py-16 w-[1200px] h-[630px] text-white background-orange" id="link-preview">
+  <h1 class="text-shadow-lg mb-12 text-7xl/21 line-clamp-3">Rating Widget</h1>
+  <h2 class="text-shadow-md pr-24 text-5xl/18 line-clamp-3">Embed a rating widget on any page to collect user feedback</h2>
+  <img class="right-24 bottom-16 absolute size-24" style="filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.2));" src="//chimbori.com/media/favicon.png">
+</div>
+</body>
+
+</html>

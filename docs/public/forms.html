@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5">
+  <meta name="robots" content="noodp,noydir">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title itemprop="name">Form Submissions</title>
+  <meta name="description" itemprop="description" content="Collect form submissions from your static site with CSRF protection and spam detection">
+  <meta name="theme-color" content="#fe7a4d">
+
+  <meta property="og:url" content="https://wynglet.chimbori.dev/forms">
+  <meta property="og:title" content="Form Submissions">
+  <meta property="og:description" content="Collect form submissions from your static site with CSRF protection and spam detection">
+  <meta property="og:image" content="https://wynglet.chimbori.net/link-previews/v1?url=https://wynglet.chimbori.dev/forms">
+
+  <link rel="canonical" href="https://wynglet.chimbori.dev/forms">
+  <link rel="apple-touch-icon-precomposed" sizes="192x192" href="//chimbori.com/media/favicon.png">
+  <link rel="shortcut icon" type="image/x-icon" href="//chimbori.com/media/favicon.png">
+  <link rel="stylesheet" href="//chimbori.com/css/gen.css">
+  <link rel="alternate" type="application/atom+xml" title="Wynglet" href="//chimbori.com/feed.xml">
+  <meta name="go-import" content="wynglet.chimbori.dev git https://github.com/chimbori/wynglet src">
+
+  <script src="/htmx.min.js"></script>
+  <meta name="htmx-config" content='{"selfRequestsOnly":false}' />
+</head>
+
+<body hx-boost="true">
+  <header class="py-8 background-blue">
+    <div class="width-limit">
+      <a class="inline-block mb-4 font-display font-medium text-2xl" href="/">Wynglet</a><nav class="print:hidden">
+  <ul><li>
+      <form class="print:hidden inline white-placeholder" target="_blank" action="https://www.google.com/search" hx-boost="false" enterkeyhint="search">
+        <input type="search" name="q" size="14" placeholder="🔍 &nbsp; Search" class="px-3 btn-white">
+        <input type="hidden" name="sitesearch" value="chimbori.com">
+      </form>
+    </li>
+    <li>
+      <a target="_blank" href="https://github.com/chimbori/wynglet"
+        class="bg-linear-to-b from-zinc-50 hover:from-zinc-100 to-zinc-100 hover:to-zinc-200 shadow mr-2 px-3 py-2 rounded-lg text-black text-sm no-underline">
+        <img src="/github.svg" class="inline mr-1 size-4" alt="GitHub" />
+        <span hx-get="https://wynglet.chimbori.net/github/v1/chimbori/wynglet/stars" hx-trigger="load"></span> stars
+      </a>
+    </li>
+  </ul>
+</nav></div>
+  </header>
+  <article class="my-8 md:my-16 width-limit prose-lite"><h1 id="form-submissions">Form Submissions</h1>
+<p>Accept form submissions from your static site with built-in CSRF token protection, rate limiting, and spam detection.</p>
+<h2 id="overview">Overview</h2>
+<p>Wynglet provides a secure form submission API that allows your static site visitors to submit data without requiring a backend.</p>
+<p>Features:</p>
+<ul>
+<li><strong>CSRF Protection</strong>: Token-based anti-CSRF mechanism to prevent cross-site request forgery</li>
+<li><strong>Rate Limiting</strong>: Prevent spam with per-IP rate limits</li>
+<li><strong>Honeypot Fields</strong>: Detect automated form submissions</li>
+<li><strong>CORS Validation</strong>: Only accept requests from authorized domains</li>
+<li><strong>Redirect on Success</strong>: Customize where users are sent after submission</li>
+</ul>
+<h2 id="getting-started">Getting Started</h2>
+<h3 id="step-1-generate-a-token">Step 1: Generate a Token</h3>
+<p>Before users can submit a form, you need to generate a CSRF token.
+This is typically done when the page loads.</p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>fetch(<span style="color:#f1fa8c">&#39;https://wynglet.your-server.com/forms/v1/token&#39;</span>, {
+</span></span><span style="display:flex;"><span>  method<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;GET&#39;</span>
+</span></span><span style="display:flex;"><span>})
+</span></span><span style="display:flex;"><span>.then(response =&gt; response.json())
+</span></span><span style="display:flex;"><span>.then(data =&gt; {
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd;font-style:italic">document</span>.getElementById(<span style="color:#f1fa8c">&#39;token&#39;</span>).value <span style="color:#ff79c6">=</span> data.token;
+</span></span><span style="display:flex;"><span>})
+</span></span></code></pre><h3 id="step-2-create-your-form">Step 2: Create Your Form</h3>
+<p>Create a form on your page that includes:</p>
+<ul>
+<li>The CSRF token from Step 1</li>
+<li>A <code>_form_id</code> to identify which form this is</li>
+<li>Your custom form fields</li>
+<li>Optional: <code>_subject</code> for email subject line</li>
+<li>Optional: <code>_redirect</code> for redirect URL after submission</li>
+<li>Optional: <code>_honeypot</code> for spam detection</li>
+</ul>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">form</span> <span style="color:#50fa7b">method</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;POST&#34;</span> <span style="color:#50fa7b">action</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;https://wynglet.your-server.com/forms/v1/submit&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>  <!-- Required: CSRF token -->
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#ff79c6">input</span> <span style="color:#50fa7b">type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;hidden&#34;</span> <span style="color:#50fa7b">name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;_token&#34;</span> <span style="color:#50fa7b">id</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;token&#34;</span> <span style="color:#50fa7b">value</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <!-- Required: Form ID (identifies this form) -->
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#ff79c6">input</span> <span style="color:#50fa7b">type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;hidden&#34;</span> <span style="color:#50fa7b">name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;_form_id&#34;</span> <span style="color:#50fa7b">value</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;contact-form&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <!-- Optional: Email subject line -->
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#ff79c6">input</span> <span style="color:#50fa7b">type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;hidden&#34;</span> <span style="color:#50fa7b">name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;_subject&#34;</span> <span style="color:#50fa7b">value</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;New Contact Form Submission&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <!-- Optional: Redirect after successful submission -->
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#ff79c6">input</span> <span style="color:#50fa7b">type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;hidden&#34;</span> <span style="color:#50fa7b">name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;_redirect&#34;</span> <span style="color:#50fa7b">value</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;https://your-site.com/thank-you&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <!-- Optional: Honeypot field (hidden from users) -->
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#ff79c6">input</span> <span style="color:#50fa7b">type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;hidden&#34;</span> <span style="color:#50fa7b">name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;_honeypot&#34;</span> <span style="color:#50fa7b">value</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <!-- Your form fields -->
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#ff79c6">input</span> <span style="color:#50fa7b">type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;text&#34;</span> <span style="color:#50fa7b">name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;name&#34;</span> <span style="color:#50fa7b">placeholder</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;Your name&#34;</span> <span style="color:#50fa7b">required</span>&gt;
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#ff79c6">input</span> <span style="color:#50fa7b">type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;email&#34;</span> <span style="color:#50fa7b">name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;email&#34;</span> <span style="color:#50fa7b">placeholder</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;Your email&#34;</span> <span style="color:#50fa7b">required</span>&gt;
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#ff79c6">textarea</span> <span style="color:#50fa7b">name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;message&#34;</span> <span style="color:#50fa7b">placeholder</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;Your message&#34;</span> <span style="color:#50fa7b">required</span>&gt;&lt;/<span style="color:#ff79c6">textarea</span>&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#ff79c6">button</span> <span style="color:#50fa7b">type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;submit&#34;</span>&gt;Send&lt;/<span style="color:#ff79c6">button</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#ff79c6">form</span>&gt;
+</span></span></code></pre><h3 id="step-3-handle-form-data">Step 3: Handle Form Data</h3>
+<p>Form submissions are validated and stored in the Wynglet database.
+You can view them in the Dashboard.</p>
+<h2 id="security">Security</h2>
+<p>To prevent abuse and to conserve resources, Wynglet blocks all domains by default,
+until you explicitly authorize each domain you care about.</p>
+<p><a href="/dashboard">Manage your authorized domains in the Dashboard</a>.</p>
+<h2 id="rate-limiting">Rate Limiting</h2>
+<p>To prevent spam:</p>
+<ul>
+<li><strong>20 submissions per IP per form per hour</strong>: Prevents rapid-fire submissions from the same IP on the same form</li>
+</ul>
+<p>These limits help ensure quality submissions while preventing spam.</p>
+<h2 id="spam-detection">Spam Detection</h2>
+<h3 id="honeypot-fields">Honeypot Fields</h3>
+<p>The <code>_honeypot</code> field is a hidden field that should always be empty.
+If it contains data, the submission is likely automated spam and is rejected.</p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><!-- Hidden from real users, visible to bots -->
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">input</span> <span style="color:#50fa7b">type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;hidden&#34;</span> <span style="color:#50fa7b">name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;_honeypot&#34;</span> <span style="color:#50fa7b">value</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;&#34;</span>&gt;
+</span></span></code></pre><h3 id="cors-validation">CORS Validation</h3>
+<p>Requests must come from authorized domains. Requests from unrecognized origins are rejected.</p>
+<h3 id="form-id-validation">Form ID Validation</h3>
+<p>Each form submission must include a valid <code>_form_id</code> that has been previously registered.</p>
+<h2 id="configuration">Configuration</h2>
+<p>Configure form handling in your <code>wynglet.yml</code>:</p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#ff79c6">forms</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">rate-limit</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">per-ip-hour</span>: <span style="color:#bd93f9">20</span>
+</span></span></code></pre><p><strong>Configuration options:</strong></p>
+<ul>
+<li><code>per-ip-hour</code> — Maximum form submissions per IP address per hour (default: 20)</li>
+</ul>
+<h2 id="best-practices">Best Practices</h2>
+<ul>
+<li><strong>Always use CSRF tokens</strong>: Never accept form submissions without token validation</li>
+<li><strong>Use honeypot fields</strong>: Add hidden fields that bots are likely to fill in</li>
+<li><strong>Validate on both sides</strong>: Validate form data in Wynglet and on the client side</li>
+<li><strong>Use appropriate redirects</strong>: Redirect users to a thank-you page after successful submission</li>
+<li><strong>Monitor submissions</strong>: Regularly check the Dashboard for spam patterns</li>
+</ul>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<ul>
+<li><strong>Invalid token</strong>: Make sure you generate a fresh token for each page load</li>
+<li><strong>Domain not authorized</strong>: Ensure your domain is authorized in the Dashboard</li>
+<li><strong>Rate limit exceeded</strong>: Wait before resubmitting; rate limits reset after the time window</li>
+</ul>
+<h2 id="next-steps">Next Steps</h2>
+<ul>
+<li><a href="/installation">Installation</a></li>
+<li><a href="/">Home</a> — Start here</li>
+<li><a href="/security">Security &amp; Abuse Protection</a></li>
+<li><a href="/dashboard">Dashboard</a></li>
+</ul>
+</article>
+
+  <footer>
+    <div class="md:flex font-display width-limit">
+      <div class="md:flex-auto"><nav class="print:hidden">
+  <ul>
+    
+  </ul>
+</nav></div>
+    </div>
+  </footer>
+<div class="hidden relative mx-auto px-24 py-16 w-[1200px] h-[630px] text-white background-orange" id="link-preview">
+  <h1 class="text-shadow-lg mb-12 text-7xl/21 line-clamp-3">Form Submissions</h1>
+  <h2 class="text-shadow-md pr-24 text-5xl/18 line-clamp-3">Collect form submissions from your static site with CSRF protection and spam detection</h2>
+  <img class="right-24 bottom-16 absolute size-24" style="filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.2));" src="//chimbori.com/media/favicon.png">
+</div>
+</body>
+
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5">
+  <meta name="robots" content="noodp,noydir">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title itemprop="name">Dashboard UI</title>
+  <meta name="description" itemprop="description" content="Manage Wynglet from the web-based Dashboard">
+  <meta name="theme-color" content="#fe7a4d">
+
+  <meta property="og:url" content="https://wynglet.chimbori.dev/dashboard">
+  <meta property="og:title" content="Dashboard UI">
+  <meta property="og:description" content="Manage Wynglet from the web-based Dashboard">
+  <meta property="og:image" content="https://wynglet.chimbori.net/link-previews/v1?url=https://wynglet.chimbori.dev/dashboard">
+
+  <link rel="canonical" href="https://wynglet.chimbori.dev/dashboard">
+  <link rel="apple-touch-icon-precomposed" sizes="192x192" href="//chimbori.com/media/favicon.png">
+  <link rel="shortcut icon" type="image/x-icon" href="//chimbori.com/media/favicon.png">
+  <link rel="stylesheet" href="//chimbori.com/css/gen.css">
+  <link rel="alternate" type="application/atom+xml" title="Wynglet" href="//chimbori.com/feed.xml">
+  <meta name="go-import" content="wynglet.chimbori.dev git https://github.com/chimbori/wynglet src">
+
+  <script src="/htmx.min.js"></script>
+  <meta name="htmx-config" content='{"selfRequestsOnly":false}' />
+</head>
+
+<body hx-boost="true">
+  <header class="py-8 background-blue">
+    <div class="width-limit">
+      <a class="inline-block mb-4 font-display font-medium text-2xl" href="/">Wynglet</a><nav class="print:hidden">
+  <ul><li>
+      <form class="print:hidden inline white-placeholder" target="_blank" action="https://www.google.com/search" hx-boost="false" enterkeyhint="search">
+        <input type="search" name="q" size="14" placeholder="🔍 &nbsp; Search" class="px-3 btn-white">
+        <input type="hidden" name="sitesearch" value="chimbori.com">
+      </form>
+    </li>
+    <li>
+      <a target="_blank" href="https://github.com/chimbori/wynglet"
+        class="bg-linear-to-b from-zinc-50 hover:from-zinc-100 to-zinc-100 hover:to-zinc-200 shadow mr-2 px-3 py-2 rounded-lg text-black text-sm no-underline">
+        <img src="/github.svg" class="inline mr-1 size-4" alt="GitHub" />
+        <span hx-get="https://wynglet.chimbori.net/github/v1/chimbori/wynglet/stars" hx-trigger="load"></span> stars
+      </a>
+    </li>
+  </ul>
+</nav></div>
+  </header>
+  <article class="my-8 md:my-16 width-limit prose-lite"><h1 id="dashboard-ui">Dashboard UI</h1>
+<p>Manage Wynglet from the Dashboard UI at <code>https://wynglet.your-server.com/dashboard</code>.</p>
+<p>The Dashboard is available as an installable PWA (Progressive Web Application) that can be installed locally using any modern browser.</p>
+<h2 id="overview">Overview</h2>
+<p>The Dashboard provides centralized management for all Wynglet features, including:</p>
+<ul>
+<li>Viewing and managing generated content</li>
+<li>Authorizing domains</li>
+<li>Configuring per-domain settings</li>
+<li>Monitoring access and error logs</li>
+<li>Generating embed code for widgets</li>
+</ul>
+<h2 id="dashboard-sections">Dashboard Sections</h2>
+<h3 id="link-previews">Link Previews</h3>
+<p>Browse and manage all generated link preview images.</p>
+<ul>
+<li><strong>Browse images</strong>: View all generated preview images.</li>
+<li><strong>Delete images</strong>: Remove individual preview images to free up space.</li>
+<li><strong>View statistics</strong>: See access statistics for each image.</li>
+<li><strong>Inspect user agents</strong>: View a breakdown of which platforms.
+(Reddit, BlueSky, Facebook, Instagram, LinkedIn, Signal, Telegram, Slack, Discord, WhatsApp, iMessage, and many others)
+and bots have requested your images.</li>
+</ul>
+<h4 id="sitemap-import">Sitemap Import</h4>
+<p>Bulk pre-generate link previews for an entire site by importing a sitemap URL.</p>
+<ul>
+<li>The import runs concurrently in the background</li>
+<li>Monitor progress in real-time</li>
+<li>Cancel imports at any time</li>
+<li>Configure concurrency and URL limits in your <code>wynglet.yml</code></li>
+</ul>
+<h3 id="qr-codes">QR Codes</h3>
+<p>Browse and manage all generated QR codes.</p>
+<ul>
+<li><strong>Browse codes</strong>: View all generated QR codes</li>
+<li><strong>Delete codes</strong>: Remove QR codes you no longer need</li>
+<li><strong>Generate embed code</strong>: Get ready-to-use HTML for embedding QR codes on your pages</li>
+</ul>
+<h3 id="ratings">Ratings</h3>
+<p>View and analyze all collected ratings.</p>
+<ul>
+<li><strong>View ratings by URL</strong>: See all ratings collected for each page</li>
+<li><strong>Filter by timeline</strong>: View ratings received in the last 1 day, or 7 days, or 28 days, etc.</li>
+<li><strong>Embed generator</strong>: Generate ready-to-paste <code>&lt;iframe&gt;</code> code for rating widgets</li>
+<li><strong>Trend analysis</strong>: Monitor rating trends over time</li>
+</ul>
+<h3 id="domains">Domains</h3>
+<p>Manage the Authorized Domains allowlist.</p>
+<ul>
+<li><strong>Add domains</strong>: Authorize new domains to use Wynglet</li>
+<li><strong>Remove domains</strong>: Revoke access for domains</li>
+<li><strong>Debug mode</strong>: Toggle per-domain debug mode for detailed logging</li>
+</ul>
+<h3 id="logs">Logs</h3>
+<p>View recent error-level log entries.</p>
+<ul>
+<li><strong>Browse logs</strong>: View all error logs in chronological order</li>
+<li><strong>Filter logs</strong>: Search and filter logs by date, domain, or error type</li>
+<li><strong>Debug information</strong>: See detailed error messages to troubleshoot issues</li>
+</ul>
+<h2 id="pwa-installation">PWA Installation</h2>
+<p>The Dashboard can be installed as a Progressive Web Application (PWA) on your device:</p>
+<ol>
+<li>Open the Dashboard in your browser</li>
+<li>Look for an “Install” option (usually in the address bar or menu)</li>
+<li>Click “Install”</li>
+<li>The Dashboard will be installed and appear in your applications</li>
+</ol>
+<p>This allows you to:</p>
+<ul>
+<li>Access the Dashboard from your home screen</li>
+<li>Use it offline (cached data)</li>
+<li>Get a native app-like experience</li>
+</ul>
+<h2 id="dashboard-features">Dashboard Features</h2>
+<h3 id="embed-code-generators">Embed Code Generators</h3>
+<p>Several sections of the Dashboard include built-in embed code generators:</p>
+<ul>
+<li><strong>Rating Widget</strong>: Generate <code>&lt;iframe&gt;</code> code for any authorized URL</li>
+<li><strong>QR Codes</strong>: Generate <code>&lt;img&gt;</code> code for any authorized URL</li>
+</ul>
+<p>Just select your URL and copy the generated code to your clipboard.</p>
+<h3 id="search-and-filtering">Search and Filtering</h3>
+<p>Use the search boxes and filters in each section to quickly find what you’re looking for:</p>
+<ul>
+<li>Filter by URL</li>
+<li>Filter by date range</li>
+<li>Filter by domain</li>
+<li>Search by keyword</li>
+</ul>
+<h3 id="real-time-statistics">Real-time Statistics</h3>
+<p>Monitor how your content is being used:</p>
+<ul>
+<li>View access statistics for link previews</li>
+<li>See which platforms are requesting your images</li>
+<li>Track rating submissions over time</li>
+<li>Monitor error rates and troubleshoot issues</li>
+</ul>
+<h2 id="security">Security</h2>
+<p>The Dashboard is protected by HTTP Basic Authentication.
+You configure your credentials in the <code>wynglet.yml</code> configuration file:</p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#ff79c6">dashboard</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">username</span>: admin
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">password</span>: <span style="color:#f1fa8c">&#34;$2a$10$...&#34;</span>  <span style="color:#6272a4"># bcrypt-hashed password</span>
+</span></span></code></pre><p>Generate a new password hash using:</p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>wynglet --bcrypt
+</span></span></code></pre><h2 id="next-steps">Next Steps</h2>
+<ul>
+<li><a href="/">Home</a> — Start here</li>
+<li><a href="/installation">Installation</a></li>
+<li><a href="/link-previews">OpenGraph Link Previews</a></li>
+<li><a href="/qr-codes">QR Codes</a></li>
+<li><a href="/rating-widget">Rating Widget</a></li>
+</ul>
+</article>
+
+  <footer>
+    <div class="md:flex font-display width-limit">
+      <div class="md:flex-auto"><nav class="print:hidden">
+  <ul>
+    
+  </ul>
+</nav></div>
+    </div>
+  </footer>
+<div class="hidden relative mx-auto px-24 py-16 w-[1200px] h-[630px] text-white background-orange" id="link-preview">
+  <h1 class="text-shadow-lg mb-12 text-7xl/21 line-clamp-3">Dashboard UI</h1>
+  <h2 class="text-shadow-md pr-24 text-5xl/18 line-clamp-3">Manage Wynglet from the web-based Dashboard</h2>
+  <img class="right-24 bottom-16 absolute size-24" style="filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.2));" src="//chimbori.com/media/favicon.png">
+</div>
+</body>
+
+</html>

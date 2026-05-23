@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5">
+  <meta name="robots" content="noodp,noydir">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title itemprop="name">OpenGraph Link Preview Images</title>
+  <meta name="description" itemprop="description" content="Auto-generate OpenGraph social preview images for every page">
+  <meta name="theme-color" content="#fe7a4d">
+
+  <meta property="og:url" content="https://wynglet.chimbori.dev/link-previews">
+  <meta property="og:title" content="OpenGraph Link Preview Images">
+  <meta property="og:description" content="Auto-generate OpenGraph social preview images for every page">
+  <meta property="og:image" content="https://wynglet.chimbori.net/link-previews/v1?url=https://wynglet.chimbori.dev/link-previews">
+
+  <link rel="canonical" href="https://wynglet.chimbori.dev/link-previews">
+  <link rel="apple-touch-icon-precomposed" sizes="192x192" href="//chimbori.com/media/favicon.png">
+  <link rel="shortcut icon" type="image/x-icon" href="//chimbori.com/media/favicon.png">
+  <link rel="stylesheet" href="//chimbori.com/css/gen.css">
+  <link rel="alternate" type="application/atom+xml" title="Wynglet" href="//chimbori.com/feed.xml">
+  <meta name="go-import" content="wynglet.chimbori.dev git https://github.com/chimbori/wynglet src">
+
+  <script src="/htmx.min.js"></script>
+  <meta name="htmx-config" content='{"selfRequestsOnly":false}' />
+</head>
+
+<body hx-boost="true">
+  <header class="py-8 background-blue">
+    <div class="width-limit">
+      <a class="inline-block mb-4 font-display font-medium text-2xl" href="/">Wynglet</a><nav class="print:hidden">
+  <ul><li>
+      <form class="print:hidden inline white-placeholder" target="_blank" action="https://www.google.com/search" hx-boost="false" enterkeyhint="search">
+        <input type="search" name="q" size="14" placeholder="🔍 &nbsp; Search" class="px-3 btn-white">
+        <input type="hidden" name="sitesearch" value="chimbori.com">
+      </form>
+    </li>
+    <li>
+      <a target="_blank" href="https://github.com/chimbori/wynglet"
+        class="bg-linear-to-b from-zinc-50 hover:from-zinc-100 to-zinc-100 hover:to-zinc-200 shadow mr-2 px-3 py-2 rounded-lg text-black text-sm no-underline">
+        <img src="/github.svg" class="inline mr-1 size-4" alt="GitHub" />
+        <span hx-get="https://wynglet.chimbori.net/github/v1/chimbori/wynglet/stars" hx-trigger="load"></span> stars
+      </a>
+    </li>
+  </ul>
+</nav></div>
+  </header>
+  <article class="my-8 md:my-16 width-limit prose-lite"><h1 id="opengraph-link-preview-images">OpenGraph Link Preview Images</h1>
+<p>Generate OpenGraph link preview images in bulk for all your sites, without the use of a separate template editor or API integration.</p>
+<h2 id="overview">Overview</h2>
+<p>When you share a link on social media and messaging platforms—like Reddit, BlueSky, Facebook, Instagram, LinkedIn, Signal, Telegram, Slack, Discord, WhatsApp, iMessage, and many others—a preview image is displayed. This preview is generated from the OpenGraph meta tags on your page.</p>
+<p>Wynglet automatically generates these preview images by:</p>
+<ol>
+<li>Fetching your page</li>
+<li>Rendering a designated HTML element using Chrome Headless</li>
+<li>Taking a screenshot of it</li>
+<li>Serving and caching the image</li>
+</ol>
+<p>The source of truth for the image data &amp; design remains within your primary website, so you can use tools you are already familiar with &amp; assets that you already have.</p>
+<h2 id="getting-started">Getting Started</h2>
+<h3 id="option-1-use-the-default-template">Option 1: Use the Default Template</h3>
+<p>The easiest way to get started is with Wynglet’s default template. Just paste this meta tag into the <code>&lt;head&gt;</code> of your page:</p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">meta</span> <span style="color:#50fa7b">property</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;og:image&#34;</span> <span style="color:#50fa7b">content</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;https://wynglet.your-server.com/link-previews/v1?url=your-site.com/some/page&#34;</span>&gt;
+</span></span></code></pre><p>Then test it by posting your page URL to any social platform.</p>
+<h3 id="option-2-use-your-own-custom-template">Option 2: Use Your Own Custom Template</h3>
+<ol>
+<li>
+<p>Create a hidden element in your page with the design you want for the preview image:</p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">id</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;link-preview&#34;</span> <span style="color:#50fa7b">style</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;display: none; width: 1200px;&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#ff79c6">h1</span>&gt;Wynglet&lt;/<span style="color:#ff79c6">h1</span>&gt;
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#ff79c6">p</span>&gt;Self-hosted OpenGraph / social link preview image generation tool.&lt;/<span style="color:#ff79c6">p</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#ff79c6">div</span>&gt;
+</span></span></code></pre></li>
+<li>
+<p>Paste the meta tag into your page (using the default <code>#link-preview</code> selector):</p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">meta</span> <span style="color:#50fa7b">property</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;og:image&#34;</span> <span style="color:#50fa7b">content</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;https://wynglet.your-server.com/link-previews/v1?url=your-site.com/some/page&#34;</span>&gt;
+</span></span></code></pre></li>
+<li>
+<p>If you can’t use the default selector for any reason, specify an alternate one:</p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">meta</span> <span style="color:#50fa7b">property</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;og:image&#34;</span> <span style="color:#50fa7b">content</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;https://wynglet.your-server.com/link-previews/v1?url=your-site.com/some/page&amp;sel=.custom-selector&#34;</span>&gt;
+</span></span></code></pre></li>
+</ol>
+<h2 id="design-capabilities">Design Capabilities</h2>
+<p>Wynglet uses the full power of the Web platform for rendering preview images. You can use:</p>
+<ul>
+<li>Images and backgrounds</li>
+<li>SVG backgrounds</li>
+<li>Flexbox and CSS Grid</li>
+<li>Custom fonts</li>
+<li>Proprietary fonts</li>
+<li>Any CSS you can write</li>
+</ul>
+<p>Anything you can design for the Web, you can use to create a link preview image. You’re not limited to a WYSIWYG editor or a predefined set of templates.</p>
+<h2 id="security">Security</h2>
+<p>To prevent abuse and to conserve resources, Wynglet blocks all domains by default, until you explicitly authorize each domain you care about.</p>
+<p><a href="/dashboard">Manage your authorized domains in the Dashboard</a>.</p>
+<h2 id="how-it-works">How It Works</h2>
+<p>Here’s what happens when someone requests a link preview:</p>
+<ol>
+<li>Wynglet fetches the URL you provide</li>
+<li>Uses Chrome Headless to render the page and execute JavaScript</li>
+<li>Un-hides your designated preview element</li>
+<li>Takes a screenshot of that element</li>
+<li>Compresses and caches the image</li>
+<li>Serves it to the requesting platform</li>
+</ol>
+<h2 id="dashboard-integration">Dashboard Integration</h2>
+<p>Use the Dashboard’s <strong>Link Previews</strong> section to:</p>
+<ul>
+<li>Browse all generated link preview images</li>
+<li>Delete individual preview images</li>
+<li>View access statistics</li>
+<li>Inspect a breakdown of user agents (social platforms, bots, etc.) that have requested them</li>
+</ul>
+<h3 id="bulk-import-with-sitemap">Bulk Import with Sitemap</h3>
+<p>Pre-generate link previews for an entire site by importing a sitemap URL. The import runs concurrently in the background; you can monitor progress or cancel it at any time.</p>
+<h2 id="example">Example</h2>
+<p>Here’s an example of a preview image design:</p>
+<p><img src="https://wynglet.chimbori.dev/example.png" alt="Example"></p>
+<p>Test your Wynglet installation by posting your original page URL to any social platform and seeing the preview appear.</p>
+<h2 id="tips--best-practices">Tips &amp; Best Practices</h2>
+<ul>
+<li><strong>Cache TTL</strong>: Link preview images are cached for 720 hours (30 days) by default.
+You can adjust this in the configuration.</li>
+<li><strong>Performance</strong>: Consider using Wynglet behind a CDN for better performance at scale.</li>
+<li><strong>Dynamic Content</strong>: Wynglet fully supports dynamically-generated content as well as static sites.</li>
+<li><strong>Testing</strong>: Use your platform’s built-in link preview tools to debug your previews.
+Most platforms have preview debuggers to test how your links will appear when shared.</li>
+</ul>
+<h2 id="comparison-with-alternatives">Comparison with Alternatives</h2>
+<p>There are many paid SaaS tools for generating preview images:
+BannerBear, RenderForm, Templated.io, Imejis.io, Pablle, Orshot, Abyssale, etc.</p>
+<p>They all work roughly the same way: you design a template using their custom tools, then provide your data (title, description, etc.), and <strong>pay them per request</strong> to generate and serve images.</p>
+<p>This model comes with several drawbacks:</p>
+<ul>
+<li><strong>Have to learn new tools</strong>: You have to learn to use a proprietary template editor instead of using HTML/CSS you already know.</li>
+<li><strong>Limited design expressiveness</strong>: These proprietary tools expose only a fraction of what the Web platform offers.</li>
+<li><strong>Context switching</strong>: Anytime you need to change a layout, you visit a separate website.</li>
+<li><strong>Theme maintenance</strong>: Your preview templates can’t easily reference your website’s theme or keep up with changes
+colors, gradients, and logos must be manually copied.</li>
+<li><strong>Vendor lock-in</strong>: You depend on these companies staying in business; mergers and acquisitions have historically shut down such services.
+Pricing can vary arbitrarily after you’ve signed up.</li>
+<li><strong>Per-request billing</strong>: Costs scale with volume.
+If you have a large site with new, fresh content all the time, you’ll spend a fortune on these tools.</li>
+</ul>
+<p>Wynglet is different.</p>
+<ul>
+<li><strong>Use HTML/CSS</strong>: You can author your templates in languages you already know. Use all the Web design tools you use today.</li>
+<li><strong>Full design control</strong>: Access the entire Web platform’s capabilities (flexbox, grid, custom fonts, SVG, etc.)</li>
+<li><strong>Co-located templates</strong>: Update preview templates alongside your website where they live.</li>
+<li><strong>Shared themes</strong>: Reference the same colors, gradients, and logos as your website.
+When they change site-wide, your template automatically receives the same changes</li>
+<li><strong>Open source</strong>: Wynglet won’t go away randomly one day.
+It’s yours to run on your own infrastructure.</li>
+<li><strong>Free forever</strong>: One-time deployment cost, no ongoing per-request charges.</li>
+</ul>
+<h2 id="next-steps">Next Steps</h2>
+<ul>
+<li><a href="/installation">Installation</a></li>
+<li><a href="/">Home</a> — Start here</li>
+<li><a href="/dashboard">View Dashboard</a></li>
+</ul>
+</article>
+
+  <footer>
+    <div class="md:flex font-display width-limit">
+      <div class="md:flex-auto"><nav class="print:hidden">
+  <ul>
+    
+  </ul>
+</nav></div>
+    </div>
+  </footer>
+<div class="hidden relative mx-auto px-24 py-16 w-[1200px] h-[630px] text-white background-orange" id="link-preview">
+  <h1 class="text-shadow-lg mb-12 text-7xl/21 line-clamp-3">OpenGraph Link Preview Images</h1>
+  <h2 class="text-shadow-md pr-24 text-5xl/18 line-clamp-3">Auto-generate OpenGraph social preview images for every page</h2>
+  <img class="right-24 bottom-16 absolute size-24" style="filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.2));" src="//chimbori.com/media/favicon.png">
+</div>
+</body>
+
+</html>

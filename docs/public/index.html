@@ -8,12 +8,12 @@
   <meta name="robots" content="noodp,noydir">
   <meta name="mobile-web-app-capable" content="yes">
   <title itemprop="name">Wynglet</title>
-  <meta name="description" itemprop="description" content="The Dynamic Companion for your Static Sites: a self-hosted single-binary toolkit of embeddable services: OpenGraph preview images, QR codes, and Rating widgets">
+  <meta name="description" itemprop="description" content="The Dynamic Companion for your Static Sites: a self-hosted single-binary toolkit of embeddable services: OpenGraph preview images, form submissions, QR codes, Rating widgets, and GitHub stats">
   <meta name="theme-color" content="#fe7a4d">
 
   <meta property="og:url" content="https://wynglet.chimbori.dev/">
   <meta property="og:title" content="Wynglet">
-  <meta property="og:description" content="The Dynamic Companion for your Static Sites: a self-hosted single-binary toolkit of embeddable services: OpenGraph preview images, QR codes, and Rating widgets">
+  <meta property="og:description" content="The Dynamic Companion for your Static Sites: a self-hosted single-binary toolkit of embeddable services: OpenGraph preview images, form submissions, QR codes, Rating widgets, and GitHub stats">
   <meta property="og:image" content="https://wynglet.chimbori.net/link-previews/v1?url=https://wynglet.chimbori.dev/">
 
   <link rel="canonical" href="https://wynglet.chimbori.dev/">
@@ -50,286 +50,111 @@
   </ul>
 </nav></div>
   </header>
-  <article class="my-8 md:my-16 width-limit prose-lite"><h1 id="wynglet">Wynglet</h1>
-<p>The dynamic companion for your static site: a self-hosted toolkit that brings dynamic capabilities to static websites without depending on paid third-party services.</p>
-<p>Static site generators are great at producing fast, secure, cheap-to-host websites.
-But they have one inherent limitation: they’re static.
-Features like social preview images, QR codes, and rating widgets traditionally each require a separate paid SaaS subscription: each with its own account, pricing model, and data silo.</p>
-<p>Wynglet bundles all of these into a single containerized open-source binary:</p>
-<ul>
-<li>
-<p><strong><a href="#open-graph-link-previews">OpenGraph Link Previews</a></strong>:
-Auto-generate OpenGraph social preview images for every page, using your own HTML/CSS templates.</p>
-</li>
-<li>
-<p><strong><a href="#qr-codes">QR Codes</a></strong>:
-Generate and cache QR codes for any authorized URL.</p>
-</li>
-<li>
-<p><strong><a href="#rating-widget">Rating Widget</a></strong>:
-Embed a 👍/👎 or ⭐ rating widget on any page via a lightweight <code>&lt;iframe&gt;</code>.</p>
-</li>
-</ul>
-<p><strong>One instance serves many sites.</strong> A single Wynglet deployment can power all your static sites simultaneously.
-Every tool is gated by a domain allowlist: only explicitly authorized domains can embed or use your instance, preventing unauthorized use.</p>
-<p><strong>Self-hosted.</strong> Your data stays on your own infrastructure.
-You can host Wynglet on a cheap VPS from any provider (here’s $200 in credits with a <a href="https://www.digitalocean.com/?refcode=e76ea0927117">DigitalOcean referral code</a>).
-No vendor lock-in, no per-request billing, no privacy trade-offs.</p>
+  <article class="my-8 md:my-16 width-limit prose-lite"><p>The dynamic companion for your static site:
+a self-hosted toolkit that brings dynamic capabilities to static websites without depending on paid third-party services.</p>
+<p><strong>One instance serves many sites.</strong> A single Wynglet deployment powers all your static sites simultaneously,
+with a domain allow-list ensuring only authorized sites can use it.</p>
+<p><strong>Self-hosted.</strong> Your data stays on your infrastructure.
+No vendor lock-in, no per-request billing, no privacy compromises.</p>
 <p><strong>Open source.</strong> Apache 2.0 licensed, free forever.</p>
-<h2 id="open-graph-link-previews">Open Graph Link Previews</h2>
-<p>Wynglet is a quick way to auto-generate OpenGraph link preview images in bulk for all your sites, without the use of a separate template editor or API integration at no cost.
-The source of truth for the image data &amp; design remains within your primary website, so you can use tools you are already familiar with &amp; assets that</p>
-<p>To prevent abuse and to conserve resources, Wynglet blocks all domains by default, until you explicitly authorize each domain you care about.</p>
-<h3 id="use-the-default-template">Use the Default Template</h3>
-<p>Just one step: Paste the Wynglet <code>&lt;meta&gt;</code> tag into the original page, and you’re done!</p>
-<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">meta</span> <span style="color:#50fa7b">property</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;og:image&#34;</span> <span style="color:#50fa7b">content</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;https://wynglet.your-server.com/link-previews/v1?url=your-site.com/some/page&#34;</span>&gt;
-</span></span></code></pre><h3 id="use-your-own-templates">Use your Own Templates</h3>
-<ol>
-<li>
-<p>Create a new hidden element inside your existing Web page, using whatever framework or template engine you use today.
-E.g.</p>
-<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">id</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;link-preview&#34;</span> <span style="color:#50fa7b">style</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;display: none; width: 1200px;&#34;</span>&gt;
-</span></span><span style="display:flex;"><span>  &lt;<span style="color:#ff79c6">h1</span>&gt;Wynglet&lt;/<span style="color:#ff79c6">h1</span>&gt;
-</span></span><span style="display:flex;"><span>  &lt;<span style="color:#ff79c6">p</span>&gt;Self-hosted OpenGraph / social link preview image generation tool. Fully customizable, yet works out of the box with zero configuration.&lt;/<span style="color:#ff79c6">p</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;/<span style="color:#ff79c6">div</span>&gt;
-</span></span></code></pre></li>
-<li>
-<p>Use Wynglet to craft a URL, and paste the <code>&lt;meta&gt;</code> tag into the original page.</p>
-<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">meta</span> <span style="color:#50fa7b">property</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;og:image&#34;</span> <span style="color:#50fa7b">content</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;https://wynglet.your-server.com/link-previews/v1?url=your-site.com/some/page&#34;</span>&gt;
-</span></span></code></pre><p>If you can’t use the default selector (<code>#link-preview</code>) for any reason, you can provide an alternate one using the <code>&amp;sel=</code> parameter.</p>
-</li>
-<li>
-<p>There is no step 3.</p>
-</li>
-</ol>
-<h3 id="how-its-rendered">How it’s rendered</h3>
-<p><img src="https://wynglet.chimbori.dev/example.png" alt="Example"></p>
-<p>Test your Wynglet installation by posting your original page URL to any social platform.</p>
-<h3 id="how-it-works">How it works</h3>
-<p>Wynglet fetches the URL you provide to it, using a Chrome Headless instance, runs JavaScript to un-hide the hidden element, takes a screenshot of it, and serves it (while also caching &amp; compressing it).</p>
-<p>Wynglet works well with static sites (using any static site generator) as well as dynamically-generated sites (using any CMS or platform).</p>
-<h3 id="can-i-use">Can I use…</h3>
+<h1 id="wynglet-features">Wynglet Features</h1>
+<h2 id="auto-generated-opengraph-link-preview-images">Auto-generated OpenGraph Link Preview Images</h2>
+<p><a href="/link-previews">Learn more →</a></p>
 <ul>
-<li>Images? Yes.</li>
-<li>SVG backgrounds? Also, yes.</li>
-<li>Flexbox? Grid? Yes, of course.</li>
-<li>Custom fonts? Proprietary fonts? Absolutely.</li>
+<li>Auto-generate beautiful social media preview images using your own HTML/CSS templates.</li>
+<li>Design once in your website’s theme, then Wynglet generates previews automatically for every page.</li>
+<li>No need to learn proprietary tools or maintain separate design workflows.</li>
 </ul>
-<p>Why limit yourself to the customization possible in a random WYSIWYG editor, when you have the entire Web platform available to you!</p>
-<p>Anything you can design for the Web, you can use to create a link preview image.
-The infinite is possible at Zombocom.
-The unattainable is unknown at Zombocom.</p>
+<h2 id="form-submissions">Form Submissions</h2>
+<p><a href="/forms">Learn more →</a></p>
+<ul>
+<li>Collect form data from your site visitors with zero configuration required.</li>
+<li>Built-in security: CSRF token protection, automatic honeypot spam detection, and per-IP rate limiting.</li>
+<li>All submissions are validated, logged, and accessible through your dashboard.</li>
+</ul>
 <h2 id="qr-codes">QR Codes</h2>
-<p>Wynglet generates QR Codes for your authorized URLs that you can embed on your site wherever appropriate.</p>
-<p>Use this URL format:</p>
-<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">img</span> <span style="color:#50fa7b">src</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;https://wynglet.your-server.com/qrcode/v1?url=your-site.com/some/page&#34;</span>&gt;
-</span></span></code></pre><h2 id="rating-widget">Rating Widget</h2>
-<p>Wynglet includes an embeddable rating widget that your visitors can use to rate any page on your site.
-Ratings are not public, but are visible on your Wynglet Dashboard.
-It provides a lightweight mechanism to monitor the quality of content, e.g. for Help Articles.
-It supports two UI styles:</p>
+<p><a href="/qr-codes">Learn more →</a></p>
 <ul>
-<li><strong>Thumbs</strong> (<code>ui=thumbs</code>): 👍 / 👎 buttons <em>(default)</em></li>
-<li><strong>Stars</strong> (<code>ui=stars</code>): ⭐ 1–5 star rating</li>
+<li>Generate scannable QR codes for any URL.</li>
+<li>Perfect for linking from print materials, posters, business cards, and physical signage to your online content.</li>
+<li>Generated codes are automatically cached to minimize server load.</li>
 </ul>
-<p>Embed the widget on your page using an <code>&lt;iframe&gt;</code>:</p>
-<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">iframe</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#50fa7b">src</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;https://wynglet.your-server.com/rating/v1?ui=thumbs&amp;url=https://your-site.com/some/page&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#50fa7b">style</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;border:none; width:200px; height:50px;&#34;</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;/<span style="color:#ff79c6">iframe</span>&gt;
-</span></span></code></pre><p>Ratings are validated against the authorized domains allowlist.
-To prevent abuse, a single IP is limited to submitting one rating for a URL per 24 hours, and 10 ratings across all URLs per hour).</p>
-<p>Use the Dashboard’s <strong>Ratings</strong> section to view collected ratings and generate the correct <code>&lt;iframe&gt;</code> embed code for any authorized URL.</p>
-<h2 id="cli-utilities">CLI Utilities</h2>
-<p>Wynglet ships with a couple of built-in command-line helpers:</p>
+<h2 id="rating-widget">Rating Widget</h2>
+<p><a href="/rating-widget">Learn more →</a></p>
 <ul>
-<li>
-<p><strong>Generate a bcrypt password hash</strong> (for use in <code>wynglet.yml</code>):</p>
-<p>Enter your desired password when prompted.
-The output hash can be pasted directly into the <code>dashboard.password</code> field.</p>
-<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>wynglet --bcrypt
-</span></span></code></pre></li>
-<li>
-<p><strong>Health check</strong> (useful for container health checks):</p>
-<p>Pings the running service and exits <code>0</code> on success or <code>1</code> on failure.</p>
-<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>wynglet --healthcheck
-</span></span></code></pre></li>
+<li>Embed a lightweight rating interface (👍/👎 or ⭐ 1–5) to collect visitor feedback directly on your site.</li>
+<li>Privacy-focused, rate-limited to prevent abuse, and fully logged in your dashboard for analysis.</li>
 </ul>
-<h2 id="install--deploy">Install &amp; Deploy</h2>
+<h2 id="github-repository-stats">GitHub Repository Stats</h2>
+<p><a href="/github">Learn more →</a></p>
 <ul>
-<li>
-<p>We strongly recommend deploying using the official container image, which includes Chrome Headless for convenience.</p>
+<li>Display live GitHub repository statistics (stars, forks, issues, watchers) on your site without external JavaScript.</li>
+<li>Handles CORS appropriately, so you can use it from any of your authorized domains.</li>
+<li>Perfect for showcasing your open-source projects or highlighting popular repositories you maintain.</li>
+</ul>
+<h1 id="getting-started">Getting Started</h1>
+<p>Ready to get started? Follow these steps:</p>
+<ol>
+<li><strong><a href="/installation">Install Wynglet</a></strong> on your server</li>
+<li><strong>Configure</strong> your <code>wynglet.yml</code> file</li>
+<li><strong>Authorize domains</strong> in the Dashboard</li>
+<li><strong>Choose a feature</strong> to start with:
 <ul>
-<li>Thanks to the <a href="https://github.com/chromedp/chromedp">chromedp</a> project for making this possible!</li>
+<li><a href="/link-previews">OpenGraph Link Previews</a></li>
+<li><a href="/forms">Form Submissions</a></li>
+<li><a href="/qr-codes">QR Codes</a></li>
+<li><a href="/rating-widget">Rating Widget</a></li>
+<li><a href="/github">GitHub Stats</a></li>
 </ul>
 </li>
-<li>
-<p>Wynglet is designed to be used behind a TLS reverse proxy for SSL termination (among other things).</p>
+<li><strong>Manage everything</strong> from the <a href="/dashboard">Dashboard UI</a></li>
+</ol>
+<h2 id="quick-example">Quick Example</h2>
+<p>The simplest way to get started is with the default link preview template. Just paste this meta tag into your page:</p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">meta</span> <span style="color:#50fa7b">property</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;og:image&#34;</span> <span style="color:#50fa7b">content</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;https://wynglet.your-server.com/link-previews/v1?url=your-site.com/some/page&#34;</span>&gt;
+</span></span></code></pre><p>Then test it by sharing your page on social media. For more details, see <a href="/link-previews">OpenGraph Link Previews</a>.</p>
+<h2 id="setup--administration">Setup &amp; Administration</h2>
 <ul>
-<li>We recommend <a href="https://caddyserver.com/">Caddy</a>; see sample Caddyfile below.</li>
-<li>If you expect a lot of traffic, consider putting a CDN in front.</li>
+<li><a href="/installation">Installation &amp; Deployment</a> — Deploy Wynglet on your infrastructure</li>
+<li><a href="/dashboard">Dashboard UI</a> — Manage all features from the web interface</li>
+<li><a href="/security">Security &amp; Abuse Protection</a> — Domain authorization, rate limiting, CSRF tokens</li>
 </ul>
-</li>
-</ul>
-<h3 id="sample-composeyml-for-docker-and-podman">Sample <code>compose.yml</code> (for Docker and Podman)</h3>
-<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#ff79c6">services</span>:
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">wynglet</span>:
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">container_name</span>: wynglet
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">image</span>: ghcr.io/chimbori/wynglet:latest
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">volumes</span>:
-</span></span><span style="display:flex;"><span>      - $PWD/wynglet-data:/data
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">restart</span>: unless-stopped
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">depends_on</span>:
-</span></span><span style="display:flex;"><span>      - wynglet-db
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">wynglet-db</span>:
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">container_name</span>: wynglet-db
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">image</span>: postgres:18-alpine
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">environment</span>:
-</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">POSTGRES_DB</span>: wynglet
-</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">POSTGRES_USER</span>: chimbori
-</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">POSTGRES_PASSWORD</span>: chimbori
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">volumes</span>:
-</span></span><span style="display:flex;"><span>      - $PWD/wynglet-db-data:/var/lib/postgresql
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">restart</span>: unless-stopped
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">volumes</span>:
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">wynglet-data</span>:
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">wynglet-db-data</span>:
-</span></span></code></pre><h4 id="if-you-prefer-to-install-using-the-go-binary-on-raw-metal-use-go-install">If you prefer to install using the Go binary on raw metal, use <code>go install</code></h4>
-<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>go install wynglet.chimbori.dev@latest
-</span></span></code></pre><h3 id="sample-wyngletyml">Sample <code>wynglet.yml</code></h3>
-<p>Wynglet requires basic configuration to be provided via a config file.</p>
+<h2 id="domain-based-authorization">Domain-Based Authorization</h2>
+<p>Wynglet uses a <strong>deny-by-default</strong> security model to prevent unauthorized use:</p>
+<ol>
+<li><strong>All domains are blocked by default</strong>: You control which sites can use your instance</li>
+<li><strong>Allow-list-based access</strong>: Add authorized domains in the Dashboard</li>
+<li><strong>Every request is validated</strong>: Each API call checks the request origin</li>
+</ol>
+<p>This means:</p>
 <ul>
-<li>
-<p><strong>PostgreSQL Database URL</strong> <em>(required)</em></p>
-<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#ff79c6">database</span>:
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">url</span>: postgresql://chimbori:chimbori@wynglet-db:5432/wynglet
-</span></span></code></pre></li>
-<li>
-<p><strong>Dashboard credentials</strong> (encrypted via <code>bcrypt</code>) <em>(required)</em></p>
-<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#ff79c6">dashboard</span>:
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">username</span>: admin
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">password</span>: <span style="color:#f1fa8c">&#34;$2a$10$a8LnUkK1UiB.9yQrUp3wyuGsH1AAHhlHVy1cjIaaIUVAwCtGvaX7q&#34;</span> <span style="color:#6272a4"># &#34;test&#34;</span>
-</span></span></code></pre></li>
-<li>
-<p>Web config <em>(optional)</em></p>
-<p>Assuming there’s a reverse proxy in front of Wynglet, there should be no need to change the port here; just configure the reverse proxy to forward requests to port 9999.</p>
-<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#ff79c6">web</span>:
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">port</span>: <span style="color:#bd93f9">9999</span>
-</span></span></code></pre></li>
-<li>
-<p>Link Previews config <em>(optional)</em></p>
-<p>Configure Cache TTL if needed for testing (e.g. set to a low value like <code>1m</code>).</p>
-<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#ff79c6">link-previews</span>:
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">screenshot</span>:
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">timeout</span>: 20s
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">sitemap</span>:
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">concurrent_urls</span>: <span style="color:#bd93f9">4</span>  <span style="color:#6272a4"># Number of URLs processed in parallel during sitemap import</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">max_urls</span>: <span style="color:#bd93f9">1000</span>      <span style="color:#6272a4"># Maximum URLs fetched from a sitemap</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">cache</span>:
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">ttl</span>: 720h0m0s
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">max_size_bytes</span>: <span style="color:#bd93f9">1073741824</span>
-</span></span></code></pre></li>
-<li>
-<p>QR Codes config <em>(optional)</em></p>
-<p>Configure Cache TTL if needed for testing (e.g. set to a low value like <code>1m</code>).</p>
-<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#ff79c6">qr-codes</span>:
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">cache</span>:
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">ttl</span>: 720h0m0s
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">max_size_bytes</span>: <span style="color:#bd93f9">1073741824</span>
-</span></span></code></pre></li>
-<li>
-<p>Ratings config <em>(optional)</em></p>
-<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#ff79c6">ratings</span>:
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">retention: 8760h  # How long to keep rating data (default</span>: <span style="color:#bd93f9">365</span> days)
-</span></span></code></pre></li>
-<li>
-<p>Logs config <em>(optional)</em></p>
-<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#ff79c6">logs</span>:
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">retention: 720h  # How long to keep error logs (default</span>: <span style="color:#bd93f9">30</span> days)
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">pagination</span>:
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">limit</span>: <span style="color:#bd93f9">10</span>
-</span></span></code></pre></li>
-<li>
-<p>Dashboard pagination <em>(optional)</em></p>
-<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#ff79c6">dashboard</span>:
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">pagination</span>:
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">limit</span>: <span style="color:#bd93f9">10</span>
-</span></span></code></pre></li>
-<li>
-<p>Debug Mode <em>(optional)</em></p>
-<p>Turn on additional logging in Debug Mode.
-Debug mode can also be toggled per-domain from within the Dashboard UI.</p>
-<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#ff79c6">debug</span>: <span style="color:#ff79c6">true</span>
-</span></span></code></pre></li>
+<li>You can run one instance for multiple sites</li>
+<li>Malicious sites cannot use your instance</li>
+<li>You maintain complete control over who has access</li>
 </ul>
-<h3 id="sample-caddyfile">Sample <code>Caddyfile</code></h3>
-<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="font-weight:bold">wynglet.your-server.com</span> {
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">reverse_proxy</span> wynglet:<span style="color:#bd93f9">9999</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">encode</span> <span style="color:#f1fa8c">zstd</span> <span style="color:#f1fa8c">gzip</span>
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre><h1 id="dashboard-ui">Dashboard UI</h1>
-<p>You can manage Wynglet from the Dashboard UI at <code>https://wynglet.your-server.com/dashboard</code>.
-The Dashboard is available as an installable PWA (Progressive Web Application) that can be &ldquo;installed&rdquo; locally using any modern browser.</p>
-<p>The Dashboard includes the following sections:</p>
+<p>Learn more: <a href="/security">Security &amp; Abuse Protection</a></p>
+<h2 id="why-wynglet">Why Wynglet?</h2>
+<h3 id="no-new-tools-to-learn">No New Tools to Learn</h3>
+<p>Write HTML/CSS that you already know. No proprietary template editors or learning curves.</p>
+<h3 id="full-design-control">Full Design Control</h3>
+<p>Use the entire Web platform. Flexbox, Grid, SVG, custom fonts, images—anything you can design for the web.</p>
+<h3 id="no-context-switching">No Context Switching</h3>
+<p>Update templates in your website where they live, not in a separate service.</p>
+<h3 id="reuse-your-theme">Reuse Your Theme</h3>
+<p>Share colors, gradients, and logos between your site and previews without copy/pasting.</p>
+<h3 id="always-available">Always Available</h3>
+<p>Open source, runs on your infrastructure. No risk of the service disappearing.</p>
+<h3 id="no-per-request-billing">No Per-Request Billing</h3>
+<p>One-time deployment cost, no ongoing usage fees.</p>
+<h2 id="support">Support</h2>
 <ul>
-<li>
-<p><strong>Link Previews</strong>:
-Browse all generated link preview images, delete individual ones, view access statistics, and inspect a breakdown of user agents (social platforms, bots, etc.)
-that have requested them.</p>
-<ul>
-<li><strong>Sitemap Import</strong>:
-Bulk pre-generate link previews for an entire site by importing a sitemap URL.
-The import runs concurrently in the background; you can monitor progress or cancel it at any time.</li>
+<li><strong><a href="https://github.com/chimbori/wynglet/issues">GitHub Issues</a></strong>: Report bugs and request features</li>
+<li><strong><a href="https://chimbori.com/feedback">Feedback</a></strong>: Send feedback &amp; suggestions</li>
+<li><strong><a href="https://github.com/chimbori/wynglet">Source Code</a></strong>: View and contribute</li>
 </ul>
-</li>
-<li>
-<p><strong>QR Codes</strong>:
-Browse and delete generated QR codes.</p>
-</li>
-<li>
-<p><strong>Ratings</strong>:
-View collected ratings for any authorized URL.
-Use the built-in embed builder to generate ready-to-paste <code>&lt;iframe&gt;</code> code for your pages.</p>
-</li>
-<li>
-<p><strong>Domains</strong>:
-Manage the authorized domains allowlist.
-Add or remove domains and toggle per-domain debug mode.</p>
-</li>
-<li>
-<p><strong>Logs</strong>:
-View recent error-level log entries.</p>
-</li>
-</ul>
-<img src="screenshot-pwa.webp">
-<h1 id="license">License</h1>
-<p>This project is licensed under the Apache License 2.0.</p>
-<h1 id="comparison-with-alternatives">Comparison with Alternatives</h1>
-<p>There are a lot of paid SaaS tools in this space.</p>
-<ul>
-<li>BannerBear</li>
-<li>RenderForm</li>
-<li>Templated.io</li>
-<li>Imejis.io</li>
-<li>Pablle</li>
-<li>Orshot</li>
-<li>Abyssale</li>
-</ul>
-<p>They all work roughly the same way: you design a template using their custom tools, then provide them your data (title, description, etc.), and pay them per-request (or per-render) to create &amp; serve those images for you.</p>
-<p>This model works great if you do not have access to the source of the page, or have no influence over the developers who build your website.</p>
-<p>But now,</p>
-<ul>
-<li>You’ve got to learn a whole new tool.</li>
-<li>That tool exposes a certain amount of design expressiveness, but nowhere near what the Web platform offers natively.</li>
-<li>Anytime you need to change the preview image, you have to visit a completely separate website.</li>
-<li>Anytime your own webpage changes, you have to remember to update the templates to match the theme.</li>
-<li>There’s no way to share themes between your website &amp; these third-party tools: colors, gradients, logos must be copy/pasted manually.</li>
-<li>You have to rely on these companies being around long enough, and not disappearing completely after running out of money or being bought over by a VC.</li>
-<li>And you have to pay, based on volume.</li>
-</ul>
-<p>Wynglet is none of those things. All you need is the ability to write some HTML/CSS (no JavaScript necessary!) to design your preview image. And it’s free in perpetuity.</p>
+<h2 id="license">License</h2>
+<p>Wynglet is licensed under the <a href="https://github.com/chimbori/wynglet/blob/main/LICENSE.md">Apache License, Version 2.0</a>.
+Copyright 2025 onwards, Chimbori.</p>
 </article>
 
   <footer>
@@ -346,7 +171,7 @@ View recent error-level log entries.</p>
   </footer>
 <div class="hidden relative mx-auto px-24 py-16 w-[1200px] h-[630px] text-white background-orange" id="link-preview">
   <h1 class="text-shadow-lg mb-12 text-7xl/21 line-clamp-3">Wynglet</h1>
-  <h2 class="text-shadow-md pr-24 text-5xl/18 line-clamp-3">The Dynamic Companion for your Static Sites: a self-hosted single-binary toolkit of embeddable services: OpenGraph preview images, QR codes, and Rating widgets</h2>
+  <h2 class="text-shadow-md pr-24 text-5xl/18 line-clamp-3">The Dynamic Companion for your Static Sites: a self-hosted single-binary toolkit of embeddable services: OpenGraph preview images, form submissions, QR codes, Rating widgets, and GitHub stats</h2>
   <img class="right-24 bottom-16 absolute size-24" style="filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.2));" src="//chimbori.com/media/favicon.png">
 </div>
 </body>

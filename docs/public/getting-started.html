@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5">
+  <meta name="robots" content="noodp,noydir">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title itemprop="name">Getting Started with Wynglet</title>
+  <meta name="description" itemprop="description" content="Quick introduction to Wynglet and its five features: link previews, forms, QR codes, rating widgets, and GitHub stats">
+  <meta name="theme-color" content="#fe7a4d">
+
+  <meta property="og:url" content="https://wynglet.chimbori.dev/getting-started">
+  <meta property="og:title" content="Getting Started with Wynglet">
+  <meta property="og:description" content="Quick introduction to Wynglet and its five features: link previews, forms, QR codes, rating widgets, and GitHub stats">
+  <meta property="og:image" content="https://wynglet.chimbori.net/link-previews/v1?url=https://wynglet.chimbori.dev/getting-started">
+
+  <link rel="canonical" href="https://wynglet.chimbori.dev/getting-started">
+  <link rel="apple-touch-icon-precomposed" sizes="192x192" href="//chimbori.com/media/favicon.png">
+  <link rel="shortcut icon" type="image/x-icon" href="//chimbori.com/media/favicon.png">
+  <link rel="stylesheet" href="//chimbori.com/css/gen.css">
+  <link rel="alternate" type="application/atom+xml" title="Wynglet" href="//chimbori.com/feed.xml">
+  <meta name="go-import" content="wynglet.chimbori.dev git https://github.com/chimbori/wynglet src">
+
+  <script src="/htmx.min.js"></script>
+  <meta name="htmx-config" content='{"selfRequestsOnly":false}' />
+</head>
+
+<body hx-boost="true">
+  <header class="py-8 background-blue">
+    <div class="width-limit">
+      <a class="inline-block mb-4 font-display font-medium text-2xl" href="/">Getting Started with Wynglet</a><nav class="print:hidden">
+  <ul><li>
+      <form class="print:hidden inline white-placeholder" target="_blank" action="https://www.google.com/search" hx-boost="false" enterkeyhint="search">
+        <input type="search" name="q" size="14" placeholder="🔍 &nbsp; Search" class="px-3 btn-white">
+        <input type="hidden" name="sitesearch" value="chimbori.com">
+      </form>
+    </li>
+    <li>
+      <a target="_blank" href="https://github.com/chimbori/wynglet"
+        class="bg-linear-to-b from-zinc-50 hover:from-zinc-100 to-zinc-100 hover:to-zinc-200 shadow mr-2 px-3 py-2 rounded-lg text-black text-sm no-underline">
+        <img src="/github.svg" class="inline mr-1 size-4" alt="GitHub" />
+        <span hx-get="https://wynglet.chimbori.net/github/v1/chimbori/wynglet/stars" hx-trigger="load"></span> stars
+      </a>
+    </li>
+  </ul>
+</nav></div>
+  </header>
+  <article class="my-8 md:my-16 width-limit prose-lite"><h1 id="getting-started-with-wynglet">Getting Started with Wynglet</h1>
+<p>Wynglet is a self-hosted toolkit that brings dynamic capabilities to static websites without depending on paid third-party services.</p>
+<h2 id="what-is-wynglet">What is Wynglet?</h2>
+<p>Wynglet bundles five powerful features into a single containerized open-source binary:</p>
+<ul>
+<li><strong><a href="/link-previews">OpenGraph Link Previews</a></strong>: Auto-generate social preview images for every page using your own HTML/CSS templates</li>
+<li><strong><a href="/forms">Form Submissions</a></strong>: Collect form data with CSRF protection, spam detection, and rate limiting</li>
+<li><strong><a href="/qr-codes">QR Codes</a></strong>: Generate and cache QR codes for any authorized URL</li>
+<li><strong><a href="/rating-widget">Rating Widget</a></strong>: Embed 👍/👎 or ⭐ rating widgets on any page via a lightweight <code>&lt;iframe&gt;</code></li>
+<li><strong><a href="/github">GitHub Repository Stats</a></strong>: Display live GitHub statistics (stars, forks, issues, watchers)</li>
+</ul>
+<h2 id="why-wynglet">Why Wynglet?</h2>
+<p><strong>One instance serves many sites.</strong> A single Wynglet deployment can power all your static sites simultaneously.
+Every tool is gated by a domain allow-list: only explicitly authorized domains can embed or use your instance, preventing unauthorized use.</p>
+<p><strong>Self-hosted.</strong> Your data stays on your own infrastructure.
+You can host Wynglet on a cheap VPS from any provider.
+No vendor lock-in, no per-request billing, no privacy trade-offs.</p>
+<p><strong>Open source.</strong> Apache 2.0 licensed, free forever.</p>
+<h2 id="next-steps">Next Steps</h2>
+<ol>
+<li><strong><a href="/installation">Install Wynglet</a></strong> on your server</li>
+<li><strong>Configure</strong> your <code>wynglet.yml</code> file</li>
+<li><strong>Authorize domains</strong> in the Dashboard</li>
+<li><strong>Choose a feature</strong> to start with:
+<ul>
+<li>Learn about <a href="/link-previews">OpenGraph Link Previews</a></li>
+<li>Learn about <a href="/forms">Form Submissions</a></li>
+<li>Learn about <a href="/qr-codes">QR Codes</a></li>
+<li>Learn about <a href="/rating-widget">Rating Widget</a></li>
+<li>Learn about <a href="/github">GitHub Repository Stats</a></li>
+</ul>
+</li>
+<li><strong>Manage everything</strong> from the <a href="/dashboard">Dashboard UI</a></li>
+</ol>
+<h2 id="quick-example">Quick Example</h2>
+<p>The simplest way to get started is with the default link preview template. Just paste this meta tag into your page:</p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">meta</span> <span style="color:#50fa7b">property</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;og:image&#34;</span> <span style="color:#50fa7b">content</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;https://wynglet.your-server.com/link-previews/v1?url=your-site.com/some/page&#34;</span>&gt;
+</span></span></code></pre><p>Then test it by sharing your page on social media.</p>
+<p>For more details, see <a href="/link-previews">OpenGraph Link Previews</a>.</p>
+</article>
+
+  <footer>
+    <div class="md:flex font-display width-limit">
+      <div class="md:flex-auto"><nav class="print:hidden">
+  <ul>
+    
+  </ul>
+</nav></div>
+    </div>
+  </footer>
+<div class="hidden relative mx-auto px-24 py-16 w-[1200px] h-[630px] text-white background-orange" id="link-preview">
+  <h1 class="text-shadow-lg mb-12 text-7xl/21 line-clamp-3">Getting Started with Wynglet</h1>
+  <h2 class="text-shadow-md pr-24 text-5xl/18 line-clamp-3">Quick introduction to Wynglet and its five features: link previews, forms, QR codes, rating widgets, and GitHub stats</h2>
+  <img class="right-24 bottom-16 absolute size-24" style="filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.2));" src="//chimbori.com/media/favicon.png">
+</div>
+</body>
+
+</html>

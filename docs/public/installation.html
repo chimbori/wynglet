@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5">
+  <meta name="robots" content="noodp,noydir">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title itemprop="name">Installation &amp; Deployment</title>
+  <meta name="description" itemprop="description" content="How to install and deploy Wynglet">
+  <meta name="theme-color" content="#fe7a4d">
+
+  <meta property="og:url" content="https://wynglet.chimbori.dev/installation">
+  <meta property="og:title" content="Installation &amp; Deployment">
+  <meta property="og:description" content="How to install and deploy Wynglet">
+  <meta property="og:image" content="https://wynglet.chimbori.net/link-previews/v1?url=https://wynglet.chimbori.dev/installation">
+
+  <link rel="canonical" href="https://wynglet.chimbori.dev/installation">
+  <link rel="apple-touch-icon-precomposed" sizes="192x192" href="//chimbori.com/media/favicon.png">
+  <link rel="shortcut icon" type="image/x-icon" href="//chimbori.com/media/favicon.png">
+  <link rel="stylesheet" href="//chimbori.com/css/gen.css">
+  <link rel="alternate" type="application/atom+xml" title="Wynglet" href="//chimbori.com/feed.xml">
+  <meta name="go-import" content="wynglet.chimbori.dev git https://github.com/chimbori/wynglet src">
+
+  <script src="/htmx.min.js"></script>
+  <meta name="htmx-config" content='{"selfRequestsOnly":false}' />
+</head>
+
+<body hx-boost="true">
+  <header class="py-8 background-blue">
+    <div class="width-limit">
+      <a class="inline-block mb-4 font-display font-medium text-2xl" href="/">Wynglet</a><nav class="print:hidden">
+  <ul><li>
+      <form class="print:hidden inline white-placeholder" target="_blank" action="https://www.google.com/search" hx-boost="false" enterkeyhint="search">
+        <input type="search" name="q" size="14" placeholder="🔍 &nbsp; Search" class="px-3 btn-white">
+        <input type="hidden" name="sitesearch" value="chimbori.com">
+      </form>
+    </li>
+    <li>
+      <a target="_blank" href="https://github.com/chimbori/wynglet"
+        class="bg-linear-to-b from-zinc-50 hover:from-zinc-100 to-zinc-100 hover:to-zinc-200 shadow mr-2 px-3 py-2 rounded-lg text-black text-sm no-underline">
+        <img src="/github.svg" class="inline mr-1 size-4" alt="GitHub" />
+        <span hx-get="https://wynglet.chimbori.net/github/v1/chimbori/wynglet/stars" hx-trigger="load"></span> stars
+      </a>
+    </li>
+  </ul>
+</nav></div>
+  </header>
+  <article class="my-8 md:my-16 width-limit prose-lite"><h1 id="installation--deployment">Installation &amp; Deployment</h1>
+<p>Wynglet is designed to be easy to deploy and can run on any server or container platform.</p>
+<h2 id="container-deployment-recommended">Container Deployment (Recommended)</h2>
+<p>We strongly recommend deploying using the official container image, which includes Chrome Headless for convenience.</p>
+<h3 id="docker-compose-example">Docker Compose Example</h3>
+<p>Create a <code>compose.yml</code> file with the following content:</p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#ff79c6">services</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">wynglet</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">container_name</span>: wynglet
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">image</span>: ghcr.io/chimbori/wynglet:latest
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">volumes</span>:
+</span></span><span style="display:flex;"><span>      - $PWD/wynglet-data:/data
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">restart</span>: unless-stopped
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">depends_on</span>:
+</span></span><span style="display:flex;"><span>      - wynglet-db
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">wynglet-db</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">container_name</span>: wynglet-db
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">image</span>: postgres:18-alpine
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">environment</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">POSTGRES_DB</span>: wynglet
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">POSTGRES_USER</span>: chimbori
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">POSTGRES_PASSWORD</span>: chimbori
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">volumes</span>:
+</span></span><span style="display:flex;"><span>      - $PWD/wynglet-db-data:/var/lib/postgresql
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">restart</span>: unless-stopped
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">volumes</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">wynglet-data</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">wynglet-db-data</span>:
+</span></span></code></pre><p>Then deploy with:</p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>docker-compose up -d
+</span></span></code></pre><h2 id="binary-installation">Binary Installation</h2>
+<p>If you prefer to install using the Go binary on raw metal, use <code>go install</code>:</p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>go install wynglet.chimbori.dev@latest
+</span></span></code></pre><h2 id="reverse-proxy-setup">Reverse Proxy Setup</h2>
+<p>Wynglet is designed to be used behind a TLS reverse proxy for SSL termination (among other things).
+We recommend <a href="https://caddyserver.com/">Caddy</a>.</p>
+<h3 id="sample-caddyfile">Sample Caddyfile</h3>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="font-weight:bold">wynglet.your-server.com</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">reverse_proxy</span> wynglet:<span style="color:#bd93f9">9999</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">encode</span> <span style="color:#f1fa8c">zstd</span> <span style="color:#f1fa8c">gzip</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre><p>If you expect a lot of traffic, consider putting a CDN in front.</p>
+<h2 id="configuration">Configuration</h2>
+<p>Wynglet requires basic configuration to be provided via a <code>wynglet.yml</code> config file.</p>
+<h3 id="minimal-configuration">Minimal Configuration</h3>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#6272a4"># PostgreSQL Database URL (required)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">database</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">url</span>: postgresql://chimbori:chimbori@wynglet-db:5432/wynglet
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># Dashboard credentials (encrypted via bcrypt) (required)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">dashboard</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">username</span>: admin
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">password</span>: <span style="color:#f1fa8c">&#34;$2a$10$a8LnUkK1UiB.9yQrUp3wyuGsH1AAHhlHVy1cjIaaIUVAwCtGvaX7q&#34;</span> <span style="color:#6272a4"># &#34;test&#34;</span>
+</span></span></code></pre><h3 id="generate-a-dashboard-password">Generate a Dashboard Password</h3>
+<p>Use the bcrypt utility to generate a password hash:</p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>wynglet --bcrypt
+</span></span></code></pre><p>Enter your desired password when prompted.
+The output hash can be pasted directly into the <code>dashboard.password</code> field.</p>
+<h3 id="optional-configuration">Optional Configuration</h3>
+<p><strong>Web config:</strong></p>
+<p>Assuming there’s a reverse proxy in front of Wynglet, there should be no need to change the port here.
+Just configure the reverse proxy to forward requests to port 9999.</p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#ff79c6">web</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">port</span>: <span style="color:#bd93f9">9999</span>
+</span></span></code></pre><p><strong>Link Previews config:</strong></p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#ff79c6">link-previews</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">screenshot</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">timeout</span>: 20s
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">sitemap</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">concurrent_urls</span>: <span style="color:#bd93f9">4</span>  <span style="color:#6272a4"># Number of URLs processed in parallel during sitemap import</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">max_urls</span>: <span style="color:#bd93f9">1000</span>      <span style="color:#6272a4"># Maximum URLs fetched from a sitemap</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">cache</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">ttl</span>: 720h0m0s
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">max_size_bytes</span>: <span style="color:#bd93f9">1073741824</span>
+</span></span></code></pre><p><strong>QR Codes config:</strong></p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#ff79c6">qr-codes</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">cache</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">ttl</span>: 720h0m0s
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">max_size_bytes</span>: <span style="color:#bd93f9">1073741824</span>
+</span></span></code></pre><p><strong>Ratings config:</strong></p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#ff79c6">ratings</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">retention: 8760h  # How long to keep rating data (default</span>: <span style="color:#bd93f9">365</span> days)
+</span></span></code></pre><p><strong>Logs config:</strong></p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#ff79c6">logs</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">retention: 720h  # How long to keep error logs (default</span>: <span style="color:#bd93f9">30</span> days)
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">pagination</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">limit</span>: <span style="color:#bd93f9">10</span>
+</span></span></code></pre><p><strong>Dashboard pagination:</strong></p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#ff79c6">dashboard</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">pagination</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">limit</span>: <span style="color:#bd93f9">10</span>
+</span></span></code></pre><p><strong>Debug Mode:</strong></p>
+<p>Turn on additional logging in Debug Mode.
+Debug mode can also be toggled per-domain from within the Dashboard UI.</p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#ff79c6">debug</span>: <span style="color:#ff79c6">true</span>
+</span></span></code></pre><h2 id="health-check">Health Check</h2>
+<p>Use the health check utility for container health checks:</p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>wynglet --healthcheck
+</span></span></code></pre><p>This pings the running service and exits <code>0</code> on success or <code>1</code> on failure.</p>
+<h2 id="next-steps">Next Steps</h2>
+<p>Once Wynglet is installed and running:</p>
+<ol>
+<li>Access the <a href="/dashboard">Dashboard</a> at <code>https://wynglet.your-server.com/dashboard</code></li>
+<li><a href="/dashboard">Authorize your domains</a></li>
+<li><a href="/">Start here</a> with one of the features</li>
+</ol>
+</article>
+
+  <footer>
+    <div class="md:flex font-display width-limit">
+      <div class="md:flex-auto"><nav class="print:hidden">
+  <ul>
+    
+  </ul>
+</nav></div>
+    </div>
+  </footer>
+<div class="hidden relative mx-auto px-24 py-16 w-[1200px] h-[630px] text-white background-orange" id="link-preview">
+  <h1 class="text-shadow-lg mb-12 text-7xl/21 line-clamp-3">Installation &amp; Deployment</h1>
+  <h2 class="text-shadow-md pr-24 text-5xl/18 line-clamp-3">How to install and deploy Wynglet</h2>
+  <img class="right-24 bottom-16 absolute size-24" style="filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.2));" src="//chimbori.com/media/favicon.png">
+</div>
+</body>
+
+</html>

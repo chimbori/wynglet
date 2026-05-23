@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5">
+  <meta name="robots" content="noodp,noydir">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title itemprop="name">QR Codes</title>
+  <meta name="description" itemprop="description" content="Generate and cache QR codes for any URL">
+  <meta name="theme-color" content="#fe7a4d">
+
+  <meta property="og:url" content="https://wynglet.chimbori.dev/qr-codes">
+  <meta property="og:title" content="QR Codes">
+  <meta property="og:description" content="Generate and cache QR codes for any URL">
+  <meta property="og:image" content="https://wynglet.chimbori.net/link-previews/v1?url=https://wynglet.chimbori.dev/qr-codes">
+
+  <link rel="canonical" href="https://wynglet.chimbori.dev/qr-codes">
+  <link rel="apple-touch-icon-precomposed" sizes="192x192" href="//chimbori.com/media/favicon.png">
+  <link rel="shortcut icon" type="image/x-icon" href="//chimbori.com/media/favicon.png">
+  <link rel="stylesheet" href="//chimbori.com/css/gen.css">
+  <link rel="alternate" type="application/atom+xml" title="Wynglet" href="//chimbori.com/feed.xml">
+  <meta name="go-import" content="wynglet.chimbori.dev git https://github.com/chimbori/wynglet src">
+
+  <script src="/htmx.min.js"></script>
+  <meta name="htmx-config" content='{"selfRequestsOnly":false}' />
+</head>
+
+<body hx-boost="true">
+  <header class="py-8 background-blue">
+    <div class="width-limit">
+      <a class="inline-block mb-4 font-display font-medium text-2xl" href="/">Wynglet</a><nav class="print:hidden">
+  <ul><li>
+      <form class="print:hidden inline white-placeholder" target="_blank" action="https://www.google.com/search" hx-boost="false" enterkeyhint="search">
+        <input type="search" name="q" size="14" placeholder="🔍 &nbsp; Search" class="px-3 btn-white">
+        <input type="hidden" name="sitesearch" value="chimbori.com">
+      </form>
+    </li>
+    <li>
+      <a target="_blank" href="https://github.com/chimbori/wynglet"
+        class="bg-linear-to-b from-zinc-50 hover:from-zinc-100 to-zinc-100 hover:to-zinc-200 shadow mr-2 px-3 py-2 rounded-lg text-black text-sm no-underline">
+        <img src="/github.svg" class="inline mr-1 size-4" alt="GitHub" />
+        <span hx-get="https://wynglet.chimbori.net/github/v1/chimbori/wynglet/stars" hx-trigger="load"></span> stars
+      </a>
+    </li>
+  </ul>
+</nav></div>
+  </header>
+  <article class="my-8 md:my-16 width-limit prose-lite"><h1 id="qr-codes">QR Codes</h1>
+<p>Generate and cache QR codes for any authorized URL.
+Ideal for print media, business cards, product packaging, and anywhere you want to direct users to your website.</p>
+<h2 id="getting-started">Getting Started</h2>
+<p>Wynglet generates QR codes for your authorized URLs that you can embed on your site wherever appropriate.</p>
+<p>Use this URL format:</p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">img</span> <span style="color:#50fa7b">src</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;https://wynglet.your-server.com/qrcode/v1?url=your-site.com/some/page&#34;</span>&gt;
+</span></span></code></pre><p>That’s it! The QR code will be generated, cached, and served to your users.</p>
+<h2 id="how-it-works">How It Works</h2>
+<ol>
+<li>You request a QR code for a URL</li>
+<li>Wynglet checks if the domain is in your authorized allowlist</li>
+<li>Generates the QR code (or serves a cached version if available)</li>
+<li>The image is cached for fast subsequent requests</li>
+<li>Users can scan the QR code to visit the URL</li>
+</ol>
+<h2 id="security">Security</h2>
+<p>To prevent abuse and to conserve resources, Wynglet blocks all domains by default, until you explicitly authorize each domain you care about.</p>
+<p><a href="/dashboard">Manage your authorized domains in the Dashboard</a>.</p>
+<h2 id="use-cases">Use Cases</h2>
+<ul>
+<li><strong>Print Media</strong>: Add QR codes to brochures, flyers, and ads</li>
+<li><strong>Business Cards</strong>: Link to your contact information or website</li>
+<li><strong>Product Packaging</strong>: Direct customers to product pages or manuals</li>
+<li><strong>Email Campaigns</strong>: Add scannable links to email newsletters</li>
+<li><strong>Events</strong>: Use QR codes on event materials for registration or information</li>
+</ul>
+<h2 id="dashboard-integration">Dashboard Integration</h2>
+<p>Use the Dashboard’s <strong>QR Codes</strong> section to:</p>
+<ul>
+<li>Browse all generated QR codes</li>
+<li>Delete QR codes you no longer need</li>
+<li>Generate ready-to-use embed code for any authorized URL</li>
+</ul>
+<h2 id="caching">Caching</h2>
+<p>QR codes are cached for 30 days by default. You can adjust this in the configuration.</p>
+<p>Since QR codes for the same URL are always identical, caching provides significant performance benefits with minimal storage overhead.</p>
+<h2 id="configuration">Configuration</h2>
+<p>You can configure QR code caching in your <code>wynglet.yml</code>:</p>
+<pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span><span style="color:#ff79c6">qr-codes</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">cache</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">ttl</span>: 720h0m0s  <span style="color:#6272a4"># How long to cache generated QR codes</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">max_size_bytes</span>: <span style="color:#bd93f9">1073741824</span>  <span style="color:#6272a4"># Maximum cache size (1GB)</span>
+</span></span></code></pre><h2 id="next-steps">Next Steps</h2>
+<ul>
+<li><a href="/installation">Installation</a></li>
+<li><a href="/">Home</a> — Start here</li>
+<li><a href="/dashboard">View Dashboard</a></li>
+</ul>
+</article>
+
+  <footer>
+    <div class="md:flex font-display width-limit">
+      <div class="md:flex-auto"><nav class="print:hidden">
+  <ul>
+    
+  </ul>
+</nav></div>
+    </div>
+  </footer>
+<div class="hidden relative mx-auto px-24 py-16 w-[1200px] h-[630px] text-white background-orange" id="link-preview">
+  <h1 class="text-shadow-lg mb-12 text-7xl/21 line-clamp-3">QR Codes</h1>
+  <h2 class="text-shadow-md pr-24 text-5xl/18 line-clamp-3">Generate and cache QR codes for any URL</h2>
+  <img class="right-24 bottom-16 absolute size-24" style="filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.2));" src="//chimbori.com/media/favicon.png">
+</div>
+</body>
+
+</html>
