@@ -8,6 +8,13 @@ urls:
   touch-icon: //chimbori.com/media/favicon.png
   favicon: //chimbori.com/media/favicon.png
 theme-color: '#4743db'
+nav:
+  - url: https://github.com/chimbori/wynglet
+    title: Source
+  - url: https://github.com/chimbori/wynglet/issues
+    title: Issues
+  - url: https://chimbori.com/feedback
+    title: Feedback
 imports:
   - link-preview
   - go-import

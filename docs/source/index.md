@@ -2,13 +2,6 @@
 title: Wynglet
 description: "The Dynamic Companion for your Static Sites: a self-hosted single-binary toolkit of embeddable services: OpenGraph preview images, form submissions, QR codes, Rating widgets, and GitHub stats"
 template: app-page
-nav:
-- url: https://github.com/chimbori/wynglet
-  title: Source
-- url: https://github.com/chimbori/wynglet/issues
-  title: Issues
-- url: https://chimbori.com/feedback
-  title: Feedback
 ---
 
 # Wynglet

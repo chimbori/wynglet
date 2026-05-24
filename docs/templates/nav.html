@@ -28,7 +28,7 @@
 {{- end -}}
 
 {{- define "nav-common" -}}
-{{ range .Page.Nav }}
+{{ range .Site.Nav }}
 <li><a href="{{ .Url }}">{{- .Title -}}</a></li>
 {{- end -}}
 {{- end -}}
