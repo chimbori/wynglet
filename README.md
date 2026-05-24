@@ -11,7 +11,7 @@ Wynglet bundles all of these features into a single containerized open-source bi
 
 ## Auto-generated OpenGraph Link Preview Images
 
-[Learn more →](/link-previews)
+[Learn more →](https://wynglet.chimbori.dev/link-previews)
 
 - Auto-generate beautiful social media preview images using your own HTML/CSS templates.
 - Design once in your website’s theme, then Wynglet generates previews automatically for every page.
@@ -19,7 +19,7 @@ Wynglet bundles all of these features into a single containerized open-source bi
 
 ## Form Submissions
 
-[Learn more →](/forms)
+[Learn more →](https://wynglet.chimbori.dev/forms)
 
 - Collect form data from your site visitors with zero configuration required.
 - Built-in security: CSRF token protection, automatic honeypot spam detection, and per-IP rate limiting.
@@ -27,7 +27,7 @@ Wynglet bundles all of these features into a single containerized open-source bi
 
 ## QR Codes
 
-[Learn more →](/qr-codes)
+[Learn more →](https://wynglet.chimbori.dev/qr-codes)
 
 - Generate scannable QR codes for any URL.
 - Perfect for linking from print materials, posters, business cards, and physical signage to your online content.
@@ -35,14 +35,14 @@ Wynglet bundles all of these features into a single containerized open-source bi
 
 ## Rating Widget
 
-[Learn more →](/rating-widget)
+[Learn more →](https://wynglet.chimbori.dev/rating-widget)
 
 - Embed a lightweight rating interface (👍/👎 or ⭐ 1–5) to collect visitor feedback directly on your site.
 - Privacy-focused, rate-limited to prevent abuse, and fully logged in your dashboard for analysis.
 
 ## GitHub Repository Stats
 
-[Learn more →](/github)
+[Learn more →](https://wynglet.chimbori.dev/github)
 
 - Display live GitHub repository statistics (stars, forks, issues, watchers) on your site without external JavaScript.
 - Handles CORS appropriately, so you can use it from any of your authorized domains.
@@ -75,7 +75,7 @@ The simplest way to get started is with the default link preview template. Just 
 <meta property="og:image" content="https://wynglet.your-server.com/link-previews/v1?url=your-site.com/some/page">
 ```
 
-Then test it by sharing your page on social media. For more details, see [OpenGraph Link Previews](/link-previews).
+Then test it by sharing your page on social media. For more details, see [OpenGraph Link Previews](https://wynglet.chimbori.dev/link-previews).
 
 ## Getting Help
 
@@ -88,7 +88,7 @@ Then test it by sharing your page on social media. For more details, see [OpenGr
 
 Copyright 2025 onwards, Chimbori
 
-Licensed under the [Apache License, Version 2.0](LICENSE.md) (the "License");
+Licensed under the [Apache License, Version 2.0](https://github.com/chimbori/wynglet/blob/main/LICENSE.md) (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
