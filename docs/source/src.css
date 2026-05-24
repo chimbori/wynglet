@@ -1,0 +1,149 @@
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&family=Inconsolata:wght@200..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+@import 'tailwindcss';
+
+@theme {
+  /* Overwrite Tailwind defaults */
+  --font-sans: InterVariable, system-ui, sans-serif;
+  --font-display: 'Google Sans Flex', system-ui, sans-serif;
+  --font-mono: Inconsolata, monospace;
+}
+
+@layer base {
+  body {
+    @apply min-w-80 overflow-x-hidden font-sans leading-7
+      text-gray-800 dark:text-gray-300
+      bg-white dark:bg-gray-900;
+  }
+  p,
+  ol,
+  ul {
+    @apply overflow-auto; /* Disable margin collapsing. */
+  }
+  p:where(:not(:first-child)),
+  ol:where(:not(:first-child)),
+  ul:where(:not(:first-child)) {
+    @apply mt-4;
+  }
+  p:where(:not(:last-child)),
+  ol:where(:not(:last-child)),
+  ul:where(:not(:last-child)) {
+    @apply mb-4;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display font-medium text-gray-900 dark:text-gray-100;
+  }
+  h1 {
+    @apply text-4xl not-first:mt-12 mb-4;
+  }
+  h2 {
+    @apply text-3xl mt-8 mb-4;
+  }
+  h3 {
+    @apply text-2xl mt-8 mb-4;
+  }
+  h4 {
+    @apply text-xl mt-8 mb-4;
+  }
+  h5 {
+    @apply text-lg mt-4 mb-4;
+  }
+  h6 {
+    @apply text-base mt-4 mb-4;
+  }
+  ul {
+    @apply list-disc pl-4;
+  }
+  ol {
+    @apply list-decimal pl-6;
+  }
+  strong {
+    @apply font-semibold text-gray-900 dark:text-gray-100;
+  }
+  table {
+    img {
+      @apply inline-block;
+    }
+    th,
+    td {
+      @apply p-1 text-center;
+    }
+    tr:nth-child(even) {
+      @apply bg-gray-100 dark:bg-gray-800;
+    }
+    th {
+      @apply border-b;
+    }
+    .smaller {
+      font-size: 0.6rem;
+      line-height: 0.8rem;
+    }
+  }
+  table {
+    /* Don’t nest children inside this tag; Tailwind CSS minification breaks the CSS. */
+    @apply w-full border;
+  }
+
+  header {
+    @apply text-white text-left sm:text-center;
+    li {
+      @apply inline-block;
+      a {
+        @apply btn-white;
+      }
+    }
+  }
+  article {
+    @apply pb-8;
+
+    a:not(h1 a, h2 a, h3 a, h4 a, h5 a, h6 a):not(:has(> img)) {
+      /* Wrap the `:not` in a `:where` to avoid raising the specificity of this selector. */
+      @apply link;
+    }
+  }
+  footer {
+    @apply print:hidden py-4 md:py-12 text-gray-300
+      bg-gray-900 dark:bg-gray-950;
+  }
+  blockquote,
+  pre {
+    @apply highlighted-box;
+  }
+}
+
+@utility background-blue {
+  background: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
+}
+
+@utility white-placeholder {
+  input::placeholder,
+  textarea::placeholder {
+    @apply text-white;
+  }
+}
+
+@utility link {
+  @apply border-b no-underline
+    text-blue-500 dark:text-blue-300
+    border-blue-500 dark:border-blue-300;
+}
+
+@utility btn-pill {
+  @apply inline-block border-none rounded-full my-1 px-6 py-1 font-display no-underline;
+}
+
+@utility btn-white {
+  @apply btn-pill shadow-sm mr-1 text-white;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+@utility highlighted-box {
+  @apply my-6 px-6 py-4 rounded-xl max-w-full overflow-x-auto
+    text-gray-800 dark:text-blue-200
+    bg-blue-50 dark:bg-blue-950;
+}
