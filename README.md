@@ -1,36 +1,54 @@
 # Wynglet
 
-The dynamic companion for your static site: a self-hosted toolkit that brings dynamic capabilities to static websites without depending on paid third-party services.
+The dynamic companion for your static site:
+a self-hosted toolkit that brings dynamic capabilities to static websites without depending on paid third-party services.
 
 Static site generators are great at producing fast, secure, cheap-to-host websites.
 But they have one inherent limitation: they’re static.
 Features like auto-generated OpenGraph social preview images, forms, QR codes, etc. each require a back-end or a separate paid SaaS subscription: each with its own account, pricing model, and data silo.
 
-Wynglet bundles all of these into a single containerized open-source binary:
+Wynglet bundles all of these features into a single containerized open-source binary:
 
-## Features
+## Auto-generated OpenGraph Link Preview Images
 
-### OpenGraph Link Previews
+[Learn more →](/link-previews)
 
-Auto-generate social media preview images for every page. No template editor needed—just write HTML/CSS that you control.
-[Learn more →](https://wynglet.chimbori.dev/link-previews)
+- Auto-generate beautiful social media preview images using your own HTML/CSS templates.
+- Design once in your website’s theme, then Wynglet generates previews automatically for every page.
+- No need to learn proprietary tools or maintain separate design workflows.
 
-### QR Codes
+## Form Submissions
 
-Generate and cache QR codes for any authorized URL. Ideal for print media, business cards, and product packaging.
-[Learn more →](https://wynglet.chimbori.dev/qr-codes)
+[Learn more →](/forms)
 
-### Rating Widget
+- Collect form data from your site visitors with zero configuration required.
+- Built-in security: CSRF token protection, automatic honeypot spam detection, and per-IP rate limiting.
+- All submissions are validated, logged, and accessible through your dashboard.
 
-Embed a simple rating widget (👍/👎 or ⭐) on your pages to collect visitor feedback. Ratings are private but visible in the Dashboard.
-[Learn more →](https://wynglet.chimbori.dev/rating-widget)
+## QR Codes
 
-### Dashboard
+[Learn more →](/qr-codes)
 
-Manage all features from the web-based Dashboard at `https://wynglet.your-server.com/dashboard`. Available as a Progressive Web Application (PWA).
-[Learn more →](https://wynglet.chimbori.dev/dashboard)
+- Generate scannable QR codes for any URL.
+- Perfect for linking from print materials, posters, business cards, and physical signage to your online content.
+- Generated codes are automatically cached to minimize server load.
 
-## Quick Start
+## Rating Widget
+
+[Learn more →](/rating-widget)
+
+- Embed a lightweight rating interface (👍/👎 or ⭐ 1–5) to collect visitor feedback directly on your site.
+- Privacy-focused, rate-limited to prevent abuse, and fully logged in your dashboard for analysis.
+
+## GitHub Repository Stats
+
+[Learn more →](/github)
+
+- Display live GitHub repository statistics (stars, forks, issues, watchers) on your site without external JavaScript.
+- Handles CORS appropriately, so you can use it from any of your authorized domains.
+- Perfect for showcasing your open-source projects or highlighting popular repositories you maintain.
+
+# Getting Started
 
 For detailed installation and deployment instructions, see
 **[Installation & Deployment Guide](https://wynglet.chimbori.dev/installation)**.
@@ -40,7 +58,7 @@ Supported deployment methods:
 - **Docker Compose** (recommended) — includes Chrome Headless
 - Binary: Go binary installation
 
-**One instance serves many sites.** A single Wynglet deployment can power all your static sites simultaneously.
+**One instance serves multiple sites.** A single Wynglet deployment can power all your static sites simultaneously.
 Every feature is gated by a domain allowlist: only explicitly authorized domains can embed or use your instance, preventing unauthorized use.
 
 **Self-hosted.** Your data stays on your own infrastructure.
@@ -48,6 +66,16 @@ You can host Wynglet on a cheap VPS from any provider (here’s $200 in credits 
 No vendor lock-in, no per-request billing, no privacy trade-offs.
 
 **Open source.** Apache 2.0 licensed, free forever.
+
+## Quick Example
+
+The simplest way to get started is with the default link preview template. Just paste this meta tag into your page:
+
+```html
+<meta property="og:image" content="https://wynglet.your-server.com/link-previews/v1?url=your-site.com/some/page">
+```
+
+Then test it by sharing your page on social media. For more details, see [OpenGraph Link Previews](/link-previews).
 
 ## Getting Help
 
@@ -58,7 +86,7 @@ No vendor lock-in, no per-request billing, no privacy trade-offs.
 
 # License
 
-Copyright 2025, Chimbori
+Copyright 2025 onwards, Chimbori
 
 Licensed under the [Apache License, Version 2.0](LICENSE.md) (the "License");
 you may not use this file except in compliance with the License.

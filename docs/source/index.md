@@ -11,18 +11,16 @@ nav:
   title: Feedback
 ---
 
+# Wynglet
+
 The dynamic companion for your static site:
 a self-hosted toolkit that brings dynamic capabilities to static websites without depending on paid third-party services.
 
-**One instance serves many sites.** A single Wynglet deployment powers all your static sites simultaneously,
-with a domain allow-list ensuring only authorized sites can use it.
+Static site generators are great at producing fast, secure, cheap-to-host websites.
+But they have one inherent limitation: they’re static.
+Features like auto-generated OpenGraph social preview images, forms, QR codes, etc. each require a back-end or a separate paid SaaS subscription: each with its own account, pricing model, and data silo.
 
-**Self-hosted.** Your data stays on your infrastructure.
-No vendor lock-in, no per-request billing, no privacy compromises.
-
-**Open source.** Apache 2.0 licensed, free forever.
-
-# Wynglet Features
+Wynglet bundles all of these features into a single containerized open-source binary:
 
 ## Auto-generated OpenGraph Link Preview Images
 
@@ -65,18 +63,22 @@ No vendor lock-in, no per-request billing, no privacy compromises.
 
 # Getting Started
 
-Ready to get started? Follow these steps:
+For detailed installation and deployment instructions, see
+**[Installation & Deployment Guide](https://wynglet.chimbori.dev/installation)**.
 
-1. **[Install Wynglet](/installation)** on your server
-2. **Configure** your `wynglet.yml` file
-3. **Authorize domains** in the Dashboard
-4. **Choose a feature** to start with:
-   - [OpenGraph Link Previews](/link-previews)
-   - [Form Submissions](/forms)
-   - [QR Codes](/qr-codes)
-   - [Rating Widget](/rating-widget)
-   - [GitHub Stats](/github)
-5. **Manage everything** from the [Dashboard UI](/dashboard)
+Supported deployment methods:
+
+- **Docker Compose** (recommended) — includes Chrome Headless
+- Binary: Go binary installation
+
+**One instance serves multiple sites.** A single Wynglet deployment can power all your static sites simultaneously.
+Every feature is gated by a domain allowlist: only explicitly authorized domains can embed or use your instance, preventing unauthorized use.
+
+**Self-hosted.** Your data stays on your own infrastructure.
+You can host Wynglet on a cheap VPS from any provider (here’s $200 in credits with a [DigitalOcean referral code](https://www.digitalocean.com/?refcode=e76ea0927117)).
+No vendor lock-in, no per-request billing, no privacy trade-offs.
+
+**Open source.** Apache 2.0 licensed, free forever.
 
 ## Quick Example
 
@@ -88,35 +90,13 @@ The simplest way to get started is with the default link preview template. Just 
 
 Then test it by sharing your page on social media. For more details, see [OpenGraph Link Previews](/link-previews).
 
-## Setup & Administration
+## Getting Help
 
-- [Installation & Deployment](/installation) — Deploy Wynglet on your infrastructure
-- [Dashboard UI](/dashboard) — Manage all features from the web interface
-- [Security & Abuse Protection](/security) — Domain authorization, rate limiting, CSRF tokens
-
-## Domain-Based Authorization
-
-Wynglet uses a **deny-by-default** security model to prevent unauthorized use:
-
-1. **All domains are blocked by default**: You control which sites can use your instance
-2. **Allow-list-based access**: Add authorized domains in the Dashboard
-3. **Every request is validated**: Each API call checks the request origin
-
-This means:
-
-- You can run one instance for multiple sites
-- Malicious sites cannot use your instance
-- You maintain complete control over who has access
-
-Learn more: [Security & Abuse Protection](/security)
-
-## Support
-
+- **[Documentation](https://wynglet.chimbori.dev/)**: Full documentation and guides
 - **[GitHub Issues](https://github.com/chimbori/wynglet/issues)**: Report bugs and request features
-- **[Feedback](https://chimbori.com/feedback)**: Send feedback & suggestions
-- **[Source Code](https://github.com/chimbori/wynglet)**: View and contribute
+- **[Feedback](https://chimbori.com/feedback)**: Send general feedback
+- **[Source Code](https://github.com/chimbori/wynglet)**: View and contribute to the source
 
-## License
+# License
 
-Wynglet is licensed under the [Apache License, Version 2.0](https://github.com/chimbori/wynglet/blob/main/LICENSE.md).
 Copyright 2025 onwards, Chimbori.

@@ -50,14 +50,13 @@
   </ul>
 </nav></div>
   </header>
-  <article class="my-8 md:my-16 width-limit prose-lite"><p>The dynamic companion for your static site:
+  <article class="my-8 md:my-16 width-limit prose-lite"><h1 id="wynglet">Wynglet</h1>
+<p>The dynamic companion for your static site:
 a self-hosted toolkit that brings dynamic capabilities to static websites without depending on paid third-party services.</p>
-<p><strong>One instance serves many sites.</strong> A single Wynglet deployment powers all your static sites simultaneously,
-with a domain allow-list ensuring only authorized sites can use it.</p>
-<p><strong>Self-hosted.</strong> Your data stays on your infrastructure.
-No vendor lock-in, no per-request billing, no privacy compromises.</p>
-<p><strong>Open source.</strong> Apache 2.0 licensed, free forever.</p>
-<h1 id="wynglet-features">Wynglet Features</h1>
+<p>Static site generators are great at producing fast, secure, cheap-to-host websites.
+But they have one inherent limitation: they’re static.
+Features like auto-generated OpenGraph social preview images, forms, QR codes, etc. each require a back-end or a separate paid SaaS subscription: each with its own account, pricing model, and data silo.</p>
+<p>Wynglet bundles all of these features into a single containerized open-source binary:</p>
 <h2 id="auto-generated-opengraph-link-preview-images">Auto-generated OpenGraph Link Preview Images</h2>
 <p><a href="/link-previews">Learn more →</a></p>
 <ul>
@@ -93,55 +92,32 @@ No vendor lock-in, no per-request billing, no privacy compromises.</p>
 <li>Perfect for showcasing your open-source projects or highlighting popular repositories you maintain.</li>
 </ul>
 <h1 id="getting-started">Getting Started</h1>
-<p>Ready to get started? Follow these steps:</p>
-<ol>
-<li><strong><a href="/installation">Install Wynglet</a></strong> on your server</li>
-<li><strong>Configure</strong> your <code>wynglet.yml</code> file</li>
-<li><strong>Authorize domains</strong> in the Dashboard</li>
-<li><strong>Choose a feature</strong> to start with:
+<p>For detailed installation and deployment instructions, see
+<strong><a href="https://wynglet.chimbori.dev/installation">Installation &amp; Deployment Guide</a></strong>.</p>
+<p>Supported deployment methods:</p>
 <ul>
-<li><a href="/link-previews">OpenGraph Link Previews</a></li>
-<li><a href="/forms">Form Submissions</a></li>
-<li><a href="/qr-codes">QR Codes</a></li>
-<li><a href="/rating-widget">Rating Widget</a></li>
-<li><a href="/github">GitHub Stats</a></li>
+<li><strong>Docker Compose</strong> (recommended) — includes Chrome Headless</li>
+<li>Binary: Go binary installation</li>
 </ul>
-</li>
-<li><strong>Manage everything</strong> from the <a href="/dashboard">Dashboard UI</a></li>
-</ol>
+<p><strong>One instance serves multiple sites.</strong> A single Wynglet deployment can power all your static sites simultaneously.
+Every feature is gated by a domain allowlist: only explicitly authorized domains can embed or use your instance, preventing unauthorized use.</p>
+<p><strong>Self-hosted.</strong> Your data stays on your own infrastructure.
+You can host Wynglet on a cheap VPS from any provider (here’s $200 in credits with a <a href="https://www.digitalocean.com/?refcode=e76ea0927117">DigitalOcean referral code</a>).
+No vendor lock-in, no per-request billing, no privacy trade-offs.</p>
+<p><strong>Open source.</strong> Apache 2.0 licensed, free forever.</p>
 <h2 id="quick-example">Quick Example</h2>
 <p>The simplest way to get started is with the default link preview template. Just paste this meta tag into your page:</p>
 <pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">meta</span> <span style="color:#50fa7b">property</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;og:image&#34;</span> <span style="color:#50fa7b">content</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;https://wynglet.your-server.com/link-previews/v1?url=your-site.com/some/page&#34;</span>&gt;
 </span></span></code></pre><p>Then test it by sharing your page on social media. For more details, see <a href="/link-previews">OpenGraph Link Previews</a>.</p>
-<h2 id="setup--administration">Setup &amp; Administration</h2>
+<h2 id="getting-help">Getting Help</h2>
 <ul>
-<li><a href="/installation">Installation &amp; Deployment</a> — Deploy Wynglet on your infrastructure</li>
-<li><a href="/dashboard">Dashboard UI</a> — Manage all features from the web interface</li>
-<li><a href="/security">Security &amp; Abuse Protection</a> — Domain authorization, rate limiting, CSRF tokens</li>
-</ul>
-<h2 id="domain-based-authorization">Domain-Based Authorization</h2>
-<p>Wynglet uses a <strong>deny-by-default</strong> security model to prevent unauthorized use:</p>
-<ol>
-<li><strong>All domains are blocked by default</strong>: You control which sites can use your instance</li>
-<li><strong>Allow-list-based access</strong>: Add authorized domains in the Dashboard</li>
-<li><strong>Every request is validated</strong>: Each API call checks the request origin</li>
-</ol>
-<p>This means:</p>
-<ul>
-<li>You can run one instance for multiple sites</li>
-<li>Malicious sites cannot use your instance</li>
-<li>You maintain complete control over who has access</li>
-</ul>
-<p>Learn more: <a href="/security">Security &amp; Abuse Protection</a></p>
-<h2 id="support">Support</h2>
-<ul>
+<li><strong><a href="https://wynglet.chimbori.dev/">Documentation</a></strong>: Full documentation and guides</li>
 <li><strong><a href="https://github.com/chimbori/wynglet/issues">GitHub Issues</a></strong>: Report bugs and request features</li>
-<li><strong><a href="https://chimbori.com/feedback">Feedback</a></strong>: Send feedback &amp; suggestions</li>
-<li><strong><a href="https://github.com/chimbori/wynglet">Source Code</a></strong>: View and contribute</li>
+<li><strong><a href="https://chimbori.com/feedback">Feedback</a></strong>: Send general feedback</li>
+<li><strong><a href="https://github.com/chimbori/wynglet">Source Code</a></strong>: View and contribute to the source</li>
 </ul>
-<h2 id="license">License</h2>
-<p>Wynglet is licensed under the <a href="https://github.com/chimbori/wynglet/blob/main/LICENSE.md">Apache License, Version 2.0</a>.
-Copyright 2025 onwards, Chimbori.</p>
+<h1 id="license">License</h1>
+<p>Copyright 2025 onwards, Chimbori.</p>
 </article>
 
   <footer>
