@@ -83,6 +83,34 @@ The simplest way to get started is with the default link preview template. Just 
 
 Then test it by sharing your page on social media. For more details, see [OpenGraph Link Previews](/link-previews).
 
+# Tech Stack
+
+Wynglet is primarily Golang + PostgreSQL + HTMX + Templ (+ some custom TypeScript compiled to JavaScript).
+
+## Why Golang + PostgreSQL
+
+Go’s standard library offers excellent APIs for Web services, and is extremely lean on resources at runtime.
+
+- Memory-efficient: Go’s compiled binary and PostgreSQL’s optimized database engine require a fraction of the memory footprint of interpreted/JVM languages.
+- Easy to deploy: Wynglet requires Chrome as a dependency for OpenGraph rendering, but besides that has no other runtime dependencies, thanks to Go compiling it to a single static binary. No `CGO`.
+- Battle-tested: PostgreSQL has decades of production stability and reliability. I’ve tried Sqlite in other projects, and the consistently high throughput offered by PostgreSQL, even on cheap hardware, made it a better choice.
+- Cheap: A single Wynglet instance can run reliably on minimal hardware (even a $5/month VPS), making it ideal for self-hosted deployments.
+
+## Templ, Tailwind, & HTMX
+
+- Instead of Go stdlib’s `html/template`, I prefer [Templ](https://templ.guide/) for its type-safety, build-time validation, & runtime speed. Its language server integration offers a pretty awesome developer experience.
+- I used to be a [Tailwind](https://tailwindcss.com/) skeptic and had a stash of copy/paste-able SASS/CSS lying around, but after using Tailwind in several side projects, I’ve come to appreciate the developer experience. I still define some reusable classes (using `@apply`) but being able to apply consistent grid-based styles quickly has been a game-changer.
+- Although I have significant experience authoring production-grade JavaScript at scale (e.g. for Google.com and Gmail Web), the current Web ecosystem is needlessly complex. I wanted something simple for this project, and [HTMX](https://htmx.org) fit the bill perfectly.
+- I’m not dogmatic about it, though; there are valid use cases for custom JavaScript. This project uses [`esbuild`](https://esbuild.github.io/) to build TypeScript to JavaScript (`esbuild` itself is built in Go!), which makes it possible to avoid `npm` and `node_modules`.
+
+## sqlc and Goose
+
+- Wynglet uses [`sqlc`](https://sqlc.dev/) to use SQL as the canonical schema & query language. Instead of ORMs, `sqlc` generates Go code from SQL schemas & queries, and the rest of the project references the generated Go code.
+- Migrations are handled using [Goose](https://pressly.github.io/goose/). When updating a Wynglet installation, any required migrations are applied automatically at startup. No user intervention or separate database management is needed.
+- Only upgrades are supported; the database cannot be migrated backwards for restores. Take regular backups before upgrading Wynglet.
+
+If this interests you, I’d love for you to contribute to Wynglet!
+
 ## Getting Help
 
 - **[Documentation](https://wynglet.chimbori.dev/)**: Full documentation and guides

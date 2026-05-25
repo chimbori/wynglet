@@ -113,6 +113,30 @@ No vendor lock-in, no per-request billing, no privacy trade-offs.</p>
 <p>The simplest way to get started is with the default link preview template. Just paste this meta tag into your page:</p>
 <pre style="color:#f8f8f2;background-color:#282a36;-webkit-text-size-adjust:none;"><code><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">meta</span> <span style="color:#50fa7b">property</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;og:image&#34;</span> <span style="color:#50fa7b">content</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;https://wynglet.your-server.com/link-previews/v1?url=your-site.com/some/page&#34;</span>&gt;
 </span></span></code></pre><p>Then test it by sharing your page on social media. For more details, see <a href="/link-previews">OpenGraph Link Previews</a>.</p>
+<h1 id="tech-stack">Tech Stack</h1>
+<p>Wynglet is primarily Golang + PostgreSQL + HTMX + Templ (+ some custom TypeScript compiled to JavaScript).</p>
+<h2 id="why-golang--postgresql">Why Golang + PostgreSQL</h2>
+<p>Go’s standard library offers excellent APIs for Web services, and is extremely lean on resources at runtime.</p>
+<ul>
+<li>Memory-efficient: Go’s compiled binary and PostgreSQL’s optimized database engine require a fraction of the memory footprint of interpreted/JVM languages.</li>
+<li>Easy to deploy: Wynglet requires Chrome as a dependency for OpenGraph rendering, but besides that has no other runtime dependencies, thanks to Go compiling it to a single static binary. No <code>CGO</code>.</li>
+<li>Battle-tested: PostgreSQL has decades of production stability and reliability. I’ve tried Sqlite in other projects, and the consistently high throughput offered by PostgreSQL, even on cheap hardware, made it a better choice.</li>
+<li>Cheap: A single Wynglet instance can run reliably on minimal hardware (even a $5/month VPS), making it ideal for self-hosted deployments.</li>
+</ul>
+<h2 id="templ-tailwind--htmx">Templ, Tailwind, &amp; HTMX</h2>
+<ul>
+<li>Instead of Go stdlib’s <code>html/template</code>, I prefer <a href="https://templ.guide/">Templ</a> for its type-safety, build-time validation, &amp; runtime speed. Its language server integration offers a pretty awesome developer experience.</li>
+<li>I used to be a <a href="https://tailwindcss.com/">Tailwind</a> skeptic and had a stash of copy/paste-able SASS/CSS lying around, but after using Tailwind in several side projects, I’ve come to appreciate the developer experience. I still define some reusable classes (using <code>@apply</code>) but being able to apply consistent grid-based styles quickly has been a game-changer.</li>
+<li>Although I have significant experience authoring production-grade JavaScript at scale (e.g. for Google.com and Gmail Web), the current Web ecosystem is needlessly complex. I wanted something simple for this project, and <a href="https://htmx.org">HTMX</a> fit the bill perfectly.</li>
+<li>I’m not dogmatic about it, though; there are valid use cases for custom JavaScript. This project uses <a href="https://esbuild.github.io/"><code>esbuild</code></a> to build TypeScript to JavaScript (<code>esbuild</code> itself is built in Go!), which makes it possible to avoid <code>npm</code> and <code>node_modules</code>.</li>
+</ul>
+<h2 id="sqlc-and-goose">sqlc and Goose</h2>
+<ul>
+<li>Wynglet uses <a href="https://sqlc.dev/"><code>sqlc</code></a> to use SQL as the canonical schema &amp; query language. Instead of ORMs, <code>sqlc</code> generates Go code from SQL schemas &amp; queries, and the rest of the project references the generated Go code.</li>
+<li>Migrations are handled using <a href="https://pressly.github.io/goose/">Goose</a>. When updating a Wynglet installation, any required migrations are applied automatically at startup. No user intervention or separate database management is needed.</li>
+<li>Only upgrades are supported; the database cannot be migrated backwards for restores. Take regular backups before upgrading Wynglet.</li>
+</ul>
+<p>If this interests you, I’d love for you to contribute to Wynglet!</p>
 <h2 id="getting-help">Getting Help</h2>
 <ul>
 <li><strong><a href="https://wynglet.chimbori.dev/">Documentation</a></strong>: Full documentation and guides</li>
