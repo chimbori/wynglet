@@ -9,12 +9,20 @@ urls:
   favicon: favicon.svg
 theme-color: '#4743db'
 nav:
-  - url: https://github.com/chimbori/wynglet
-    title: Source
-  - url: https://github.com/chimbori/wynglet/issues
-    title: Issues
-  - url: https://chimbori.com/feedback
-    title: Feedback
+  - url: /
+    title: 🏠 Home
+  - url: /installation
+    title: Installation
+  - url: /link-previews
+    title: Open Graph
+  - url: /forms
+    title: Forms
+  - url: /qr-codes
+    title: QR Codes
+  - url: /rating-widget
+    title: Ratings
+  - url: /dashboard
+    title: Dashboard
 imports:
   - link-preview
   - go-import
