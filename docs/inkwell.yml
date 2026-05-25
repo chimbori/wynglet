@@ -5,8 +5,8 @@ urls:
   root: https://wynglet.chimbori.dev
   css: gen.min.css
   feed: //chimbori.com/feed.xml
-  touch-icon: //chimbori.com/media/favicon.png
-  favicon: //chimbori.com/media/favicon.png
+  touch-icon: favicon.svg
+  favicon: favicon.svg
 theme-color: '#4743db'
 nav:
   - url: https://github.com/chimbori/wynglet
