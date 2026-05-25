@@ -4,7 +4,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Content-Security-Policy" content="script-src 'self'">
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; style-src 'unsafe-inline'; script-src 'self'; connect-src 'self' https://wynglet.chimbori.net">
   <title>Example Form</title>
   <style>
     * {
@@ -13,8 +14,10 @@
 
     body {
       font-family: system-ui;
+      min-width: 320px;
       max-width: 800px;
       margin: 32px auto;
+      padding: 0 16px;
     }
 
     fieldset {
@@ -102,7 +105,7 @@
 <body>
   <h1>Example Form</h1>
 
-  <form id="contactForm" novalidate>
+  <form id="contactForm" name="contact-us" data-wynglet-form-url="https://wynglet.chimbori.net" novalidate>
     <!-- Hidden config fields -->
     <input type="hidden" name="_form_id" value="contact-us">
     <input type="hidden" name="_subject" value="New Contact Form Submission">
@@ -188,7 +191,7 @@
     </noscript>
     <div class="status" id="status"></div>
   </form>
-  <script src="example-form.js"></script>
+  <script src="forms.min.js"></script>
 </body>
 
 </html>

@@ -106,6 +106,8 @@ tasks:
       - esbuild --bundle --target=es2024 dashboard/dashboard.ts --outfile=embedfs/static/dashboard.min.js --minify --minify-identifiers
       - esbuild --bundle --target=es2024 dashboard/ratings.ts   --outfile=embedfs/static/ratings.js
       - esbuild --bundle --target=es2024 dashboard/ratings.ts   --outfile=embedfs/static/ratings.min.js   --minify --minify-identifiers
+      - esbuild --bundle --target=es2024 forms/forms.ts         --outfile=embedfs/static/forms.js
+      - esbuild --bundle --target=es2024 forms/forms.ts         --outfile=embedfs/static/forms.min.js     --minify --minify-identifiers
 
   update:
     desc: Update all dependencies
