@@ -33,6 +33,8 @@ func Init(mux *http.ServeMux) {
 	mux.HandleFunc("POST /forms/v1/submit", formSubmitHandler)
 }
 
+// Validates CORS origin, CSRF token, form data, and rate limits.
+// Records form submissions to the database with spam detection via honeypot fields.
 // POST /forms/v1/submit
 func formSubmitHandler(w http.ResponseWriter, r *http.Request) {
 	origin := r.Header.Get("Origin")
@@ -271,8 +273,8 @@ func formSubmitHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Returns a new CSRF token for use in form submissions.
 // GET /forms/v1/token
-// getTokenHandler handles GET requests to /forms/v1/token and returns a new CSRF token.
 func getTokenHandler(w http.ResponseWriter, r *http.Request) {
 	origin := r.Header.Get("Origin")
 	clientIP := getClientIP(r)

@@ -44,17 +44,16 @@ type ratingButton struct {
 //   - GET /rating/v1: Returns an embedded rating widget (iframe-safe)
 //   - POST /rating/v1/rate: Processes a rating submission
 func Init(mux *http.ServeMux) {
-	mux.HandleFunc("GET /rating/v1", handleRatingWidget)
-	mux.HandleFunc("POST /rating/v1/rate", handleRate)
+	mux.HandleFunc("GET /rating/v1", ratingsWidgetV1Handler)
+	mux.HandleFunc("POST /rating/v1/rate", ratingsSubmissionHandler)
 }
 
-// handleRatingWidget serves the interactive rating widget.
-// It validates the URL against the domain allowlist, selects the appropriate UI (thumbs or stars),
-// and renders the widget as a self-contained HTML page suitable for embedding in iframes.
-// Query parameters:
-//   - url: The URL to rate (required)
-//   - ui: The UI type, either "thumbs" or "stars" (optional, defaults to "thumbs")
-func handleRatingWidget(w http.ResponseWriter, req *http.Request) {
+// Renders an interactive rating widget suitable for embedding in iframes.
+// Selects UI (thumbs or stars) and validates the URL against the domain allowlist.
+// - url: The URL to rate (required)
+// - ui: The UI type, either "thumbs" or "stars" (optional, defaults to "thumbs")
+// GET /rating/v1
+func ratingsWidgetV1Handler(w http.ResponseWriter, req *http.Request) {
 	reqURL := req.URL.Query().Get("url")
 	ui := req.URL.Query().Get("ui")
 	queries := db.New(db.Pool)
@@ -155,14 +154,13 @@ func handleRatingWidget(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-// handleRate processes rating submissions from the widget.
-// It validates the URL and rating, checks for duplicates per IP (unless debug mode is enabled),
+// Validates the URL and rating, checks for duplicates per IP (unless debug mode is enabled),
 // records the rating in the database, and returns a success confirmation page.
-// Form parameters:
-//   - url: The URL that was rated
-//   - ui: The UI type used (thumbs or stars)
-//   - rating: The numeric rating value submitted
-func handleRate(w http.ResponseWriter, req *http.Request) {
+// - url: The URL that was rated
+// - ui: The UI type used (thumbs or stars)
+// - rating: The numeric rating value submitted
+// POST /rating/v1/rate
+func ratingsSubmissionHandler(w http.ResponseWriter, req *http.Request) {
 	if err := req.ParseForm(); err != nil {
 		slog.Error("failed to parse form", tint.Err(err),
 			"method", req.Method,

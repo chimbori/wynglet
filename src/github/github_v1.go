@@ -44,12 +44,15 @@ func Init(mux *http.ServeMux) error {
 	if err != nil {
 		return err
 	}
-	mux.HandleFunc("GET /github/v1/{user}/{repo}/{type}", handleGithubV1)
-	mux.HandleFunc("OPTIONS /github/v1/{user}/{repo}/{type}", handleGithubV1)
+	mux.HandleFunc("GET /github/v1/{user}/{repo}/{type}", githubV1Handler)
+	mux.HandleFunc("OPTIONS /github/v1/{user}/{repo}/{type}", githubV1Handler)
 	return nil
 }
 
-func handleGithubV1(w http.ResponseWriter, req *http.Request) {
+// Returns GitHub repository statistics (stars, forks, issues, watchers) with caching and CORS support.
+// GET /github/v1/{user}/{repo}/{type}
+// OPTIONS /github/v1/{user}/{repo}/{type}
+func githubV1Handler(w http.ResponseWriter, req *http.Request) {
 	setCORSHeaders(w)
 	if req.Method == http.MethodOptions {
 		w.WriteHeader(http.StatusNoContent)

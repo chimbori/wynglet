@@ -30,7 +30,8 @@ func init() {
 	compressionSem = make(chan struct{}, runtime.NumCPU()*4)
 }
 
-// GET /dashboard/link-previews - Render the link previews page
+// Renders the link previews dashboard page.
+// GET /dashboard/link-previews
 func linkPreviewsPageHandler(w http.ResponseWriter, req *http.Request) {
 	slog.Debug("linkPreviewsPageHandler", "url", req.Method+" "+req.URL.String())
 	page := 1
@@ -42,7 +43,8 @@ func linkPreviewsPageHandler(w http.ResponseWriter, req *http.Request) {
 	LinkPreviewsPageTempl(page).Render(req.Context(), w)
 }
 
-// GET /dashboard/link-previews/list - Get paginated link previews list
+// Returns paginated list of cached link previews.
+// GET /dashboard/link-previews/list
 func linkPreviewsListHandler(w http.ResponseWriter, req *http.Request) {
 	slog.Debug("linkPreviewsListHandler", "url", req.Method+" "+req.URL.String())
 
@@ -87,7 +89,8 @@ func linkPreviewsListHandler(w http.ResponseWriter, req *http.Request) {
 	LinkPreviewsListTempl(linkPreviews, page, totalCount).Render(ctx, w)
 }
 
-// DELETE /dashboard/link-previews/url?url=... - Delete a cached link preview
+// Deletes a cached link preview image and its database record.
+// DELETE /dashboard/link-previews/url?url=...
 func deleteLinkPreviewHandler(w http.ResponseWriter, req *http.Request) {
 	slog.Debug("deleteLinkPreviewHandler", "url", req.Method+" "+req.URL.String())
 
@@ -162,7 +165,8 @@ func deleteLinkPreviewHandler(w http.ResponseWriter, req *http.Request) {
 	LinkPreviewsListTempl(linkPreviews, 1, totalCount).Render(ctx, w)
 }
 
-// DELETE /dashboard/link-previews/all - Delete all cached link previews
+// Deletes all cached link preview images and their database records.
+// DELETE /dashboard/link-previews/all
 func deleteAllLinkPreviewsHandler(w http.ResponseWriter, req *http.Request) {
 	slog.Debug("deleteAllLinkPreviewsHandler", "url", req.Method+" "+req.URL.String())
 
@@ -195,8 +199,8 @@ func deleteAllLinkPreviewsHandler(w http.ResponseWriter, req *http.Request) {
 	LinkPreviewsListTempl([]db.LinkPreview{}, 1, 0).Render(ctx, w)
 }
 
-// GET /dashboard/link-previews/image?url={url}
 // Serves a resized and compressed version of the cached link preview image.
+// GET /dashboard/link-previews/image?url={url}
 func serveLinkPreviewHandler(w http.ResponseWriter, req *http.Request) {
 	slog.Debug("serveLinkPreviewHandler", "url", req.Method+" "+req.URL.String())
 
@@ -309,7 +313,8 @@ func serveLinkPreviewHandler(w http.ResponseWriter, req *http.Request) {
 		"hostname", u.Hostname())
 }
 
-// GET /dashboard/link-previews/stats - Get link preview statistics by domain as JSON
+// Returns stats on link previews cached by domain as JSON
+// GET /dashboard/link-previews/stats
 func linkPreviewsStatsHandler(w http.ResponseWriter, req *http.Request) {
 	queries := db.New(db.Pool)
 	stats, err := queries.GetLinkPreviewsByDomain(req.Context())
@@ -328,7 +333,8 @@ func linkPreviewsStatsHandler(w http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(w).Encode(stats)
 }
 
-// GET /dashboard/link-previews/user-agents?days=7 - Get canonical user agent distribution by day
+// Returns canonical user agent distribution by day as JSON
+// GET /dashboard/link-previews/user-agents
 func linkPreviewsUserAgentsHandler(w http.ResponseWriter, req *http.Request) {
 	queries := db.New(db.Pool)
 	days := parseDaysRange(req.URL.Query().Get("days"))

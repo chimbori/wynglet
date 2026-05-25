@@ -16,13 +16,13 @@ import (
 	"wynglet.chimbori.dev/db"
 )
 
-// formsPageHandler serves the Forms Dashboard page
+// Renders the Forms Dashboard page.
 // GET /dashboard/forms
 func formsPageHandler(w http.ResponseWriter, r *http.Request) {
 	FormsPageTempl().Render(r.Context(), w)
 }
 
-// formsListHandler returns HTML list of forms
+// Returns paginated list of forms with their submission counts.
 // GET /dashboard/forms/list
 func formsListHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
@@ -46,7 +46,7 @@ func formsListHandler(w http.ResponseWriter, r *http.Request) {
 	FormsListTempl(forms).Render(ctx, w)
 }
 
-// formDetailHandler shows submissions for a specific form
+// Displays submissions for a specific form with pagination.
 // GET /dashboard/forms/{form_id}
 func formDetailHandler(w http.ResponseWriter, r *http.Request) {
 	formID := r.PathValue("form_id")
@@ -112,7 +112,7 @@ func formDetailHandler(w http.ResponseWriter, r *http.Request) {
 	FormSubmissionsTempl(formID, submissions, page, total, conf.Config.Dashboard.Pagination.Limit).Render(ctx, w)
 }
 
-// formExportCSVHandler exports submissions as CSV
+// Exports form submissions as CSV.
 // GET /dashboard/forms/{form_id}/export.csv
 func formExportCSVHandler(w http.ResponseWriter, r *http.Request) {
 	formID := r.PathValue("form_id")
@@ -177,7 +177,7 @@ func formExportCSVHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// formDeleteHandler deletes a specific submission and returns the updated submissions table
+// Deletes a single form submission.
 // DELETE /dashboard/forms/{form_id}/{id}
 func formDeleteHandler(w http.ResponseWriter, r *http.Request) {
 	formID := r.PathValue("form_id")

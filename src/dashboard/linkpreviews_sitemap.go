@@ -12,10 +12,14 @@ import (
 	"wynglet.chimbori.dev/validation"
 )
 
+// Renders the sitemap import page.
+// GET /dashboard/link-previews/sitemap
 func sitemapPageHandler(w http.ResponseWriter, req *http.Request) {
 	SitemapImportPageTempl(linkpreviews.GetSitemapImportStatus(), "").Render(req.Context(), w)
 }
 
+// Starts a sitemap import job to generate previews for all URLs in a sitemap.
+// POST /dashboard/link-previews/sitemap
 func startSitemapImportHandler(w http.ResponseWriter, req *http.Request) {
 	if err := req.ParseForm(); err != nil {
 		slog.Error("failed to parse sitemap import form", tint.Err(err),
@@ -85,10 +89,14 @@ func startSitemapImportHandler(w http.ResponseWriter, req *http.Request) {
 	http.Redirect(w, req, "/dashboard/link-previews/sitemap", http.StatusSeeOther)
 }
 
+// Returns the current status of the sitemap import job.
+// GET /dashboard/link-previews/sitemap/status
 func sitemapStatusHandler(w http.ResponseWriter, req *http.Request) {
 	SitemapImportStatusTempl(linkpreviews.GetSitemapImportStatus()).Render(req.Context(), w)
 }
 
+// Cancels the current sitemap import job.
+// POST /dashboard/link-previews/sitemap/cancel
 func cancelSitemapImportHandler(w http.ResponseWriter, req *http.Request) {
 	linkpreviews.CancelSitemapImport()
 	SitemapImportStatusTempl(linkpreviews.GetSitemapImportStatus()).Render(req.Context(), w)

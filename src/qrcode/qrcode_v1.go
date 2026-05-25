@@ -30,13 +30,13 @@ func Init(mux *http.ServeMux) error {
 		return err
 	}
 
-	mux.HandleFunc("GET /qrcode/v1", handleQrCode)
+	mux.HandleFunc("GET /qrcode/v1", qrCodeV1Handler)
 	return nil
 }
 
-// GET /qrcode/v1?url={url}
 // Validates the URL, checks if it’s cached, generates QR Code, and serves it.
-func handleQrCode(w http.ResponseWriter, req *http.Request) {
+// GET /qrcode/v1
+func qrCodeV1Handler(w http.ResponseWriter, req *http.Request) {
 	reqUrl := req.URL.Query().Get("url")
 	queries := db.New(db.Pool)
 

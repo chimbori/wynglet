@@ -14,6 +14,7 @@ import (
 	"wynglet.chimbori.dev/db"
 )
 
+// Renders the ratings dashboard page.
 // GET /dashboard/ratings
 func ratingsPageHandler(w http.ResponseWriter, req *http.Request) {
 	slog.Debug("ratingsPageHandler", "url", req.Method+" "+req.URL.String())
@@ -28,6 +29,7 @@ func ratingsPageHandler(w http.ResponseWriter, req *http.Request) {
 	RatingsPageTempl(page, days).Render(req.Context(), w)
 }
 
+// Returns paginated list of ratings with filtering and sorting.
 // GET /dashboard/ratings/list?days=0&page=1&sortBy=rating&sortOrder=desc
 func ratingsListHandler(w http.ResponseWriter, req *http.Request) {
 	slog.Debug("ratingsListHandler", "url", req.Method+" "+req.URL.String())

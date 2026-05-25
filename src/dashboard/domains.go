@@ -11,7 +11,8 @@ import (
 	"wynglet.chimbori.dev/db"
 )
 
-// GET /dashboard/domains - List all domains
+// Renders the domains dashboard page with allow-list management.
+// GET /dashboard/domains
 func domainsPageHandler(w http.ResponseWriter, req *http.Request) {
 	ctx := req.Context()
 	queries := db.New(db.Pool)
@@ -28,7 +29,8 @@ func domainsPageHandler(w http.ResponseWriter, req *http.Request) {
 	DomainsPageTempl(domains).Render(ctx, w)
 }
 
-// PUT /dashboard/domains/domain - Add a new domain, or update existing one if present.
+// Adds a new domain or updates an existing one in the allow-list.
+// PUT /dashboard/domains/domain
 func putDomainHandler(w http.ResponseWriter, req *http.Request) {
 	ctx := req.Context()
 	queries := db.New(db.Pool)
@@ -87,7 +89,8 @@ func putDomainHandler(w http.ResponseWriter, req *http.Request) {
 	DomainsTempl(domains).Render(ctx, w)
 }
 
-// DELETE /dashboard/link-previews/domain?domain=example.com - Delete a domain
+// Removes a domain from the allow-list.
+// DELETE /dashboard/link-previews/domain?domain=example.com
 func deleteDomainHandler(w http.ResponseWriter, req *http.Request) {
 	ctx := req.Context()
 	queries := db.New(db.Pool)
@@ -130,7 +133,8 @@ func isAuthorized(authorizeAction string) *bool {
 	return nil
 }
 
-// POST /dashboard/domains/debug - Toggle debug mode for a domain
+// Toggles debug mode for a domain, enabling detailed logging.
+// POST /dashboard/domains/debug
 func toggleDebugModeHandler(w http.ResponseWriter, req *http.Request) {
 	ctx := req.Context()
 	queries := db.New(db.Pool)

@@ -10,6 +10,7 @@ import (
 	"wynglet.chimbori.dev/db"
 )
 
+// Renders the logs dashboard page with pagination.
 // GET /dashboard/logs
 func logsHandler(w http.ResponseWriter, req *http.Request) {
 	page := 1
@@ -21,6 +22,7 @@ func logsHandler(w http.ResponseWriter, req *http.Request) {
 	LogsTempl(conf.AppName, page).Render(req.Context(), w)
 }
 
+// Returns paginated log entries as JSON or HTML.
 // GET /dashboard/logs/data
 func logsDataHandler(w http.ResponseWriter, req *http.Request) {
 	queries := db.New(db.Pool)

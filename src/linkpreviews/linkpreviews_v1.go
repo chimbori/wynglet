@@ -33,13 +33,13 @@ func Init(mux *http.ServeMux) error {
 		return err
 	}
 
-	mux.HandleFunc("GET /link-previews/v1", handleLinkPreview)
+	mux.HandleFunc("GET /link-previews/v1", linkPreviewsV1Handler)
 	return nil
 }
 
-// GET /link-previews/v1?url={url}&sel={selector}
 // Validates the URL, checks if it’s cached, generates screenshots, and serves them.
-func handleLinkPreview(w http.ResponseWriter, req *http.Request) {
+// GET /link-previews/v1
+func linkPreviewsV1Handler(w http.ResponseWriter, req *http.Request) {
 	slog.Debug("handleLinkPreview", "url", req.Method+" "+req.URL.String())
 
 	reqUrl := req.URL.Query().Get("url")

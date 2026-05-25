@@ -9,7 +9,8 @@ import (
 	"wynglet.chimbori.dev/qrcode"
 )
 
-// GET /dashboard/qr-codes - List all QR Codes
+// Returns paginated list of cached QR codes.
+// GET /dashboard/qr-codes
 func listQrCodesHandler(w http.ResponseWriter, req *http.Request) {
 	ctx := req.Context()
 	queries := db.New(db.Pool)
@@ -25,7 +26,8 @@ func listQrCodesHandler(w http.ResponseWriter, req *http.Request) {
 	QrCodesPageTempl(qrCodes).Render(ctx, w)
 }
 
-// DELETE /dashboard/qr-codes/url?url={url} - Delete a cached QR Code
+// Deletes a cached QR code by URL.
+// DELETE /dashboard/qr-codes/url?url={url}
 func deleteQrCodeHandler(w http.ResponseWriter, req *http.Request) {
 	ctx := req.Context()
 	queries := db.New(db.Pool)

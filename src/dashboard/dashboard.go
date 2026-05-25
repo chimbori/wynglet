@@ -55,6 +55,7 @@ func Init(mux *http.ServeMux) {
 	mux.Handle("DELETE /dashboard/forms/{form_id}/{id}", chain.ThenFunc(formDeleteHandler))
 }
 
+// Renders the dashboard home page with navigation to all features.
 // GET /dashboard
 func homeHandler(w http.ResponseWriter, req *http.Request) {
 	HomeTempl(conf.AppName).Render(req.Context(), w)
