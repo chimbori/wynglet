@@ -112,6 +112,21 @@ Go’s standard library offers excellent APIs for Web services, and is extremely
 
 If this interests you, I’d love for you to contribute to Wynglet!
 
+## AI Usage
+
+As a professional software engineer for the last 25+ years (and 17+ years at Google),
+I value immensely the craft & joy of software engineering.
+I sweat the big parts & the small parts—the high-level architecture as well as each and every line of code—to make sure it’s clean, bug-free, and maintainable.
+
+That said, as all effective engineers should, I use the best tools available for the job.
+In the 1990s, that was Turbo C++; in the 2000s, Visual Studio; in 2010s, JetBrains; in 2025, that’s LLMs.
+I use AI unapologetically to ship features faster, locate tricky bugs, and ensure a high standard of security across my projects.
+
+I do not let LLMs commit any code on my behalf; I review every line of code before it is merged.
+If a function was LLM-generated, I typically fix up things by hand before committing anything.
+
+And irrespective of how that code got authored—either in a text editor, IDE, via LLMs, or by an external human contributor—you should feel free to hold me personally responsible for everything in this project.
+
 # License
 
 Copyright 2025 onwards, Chimbori
