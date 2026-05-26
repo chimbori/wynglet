@@ -38,7 +38,7 @@ func newChromedpContext(ctx context.Context) (context.Context, context.CancelFun
 	allocCtx, cancelAlloc := chromedp.NewExecAllocator(ctx, options...)
 	var cancelCtx context.CancelFunc
 	if conf.Config.Debug {
-		ctx, cancelCtx = chromedp.NewContext(allocCtx, chromedp.WithLogf(log.Printf))
+		ctx, cancelCtx = chromedp.NewContext(allocCtx, chromedp.WithDebugf(log.Printf))
 	} else {
 		ctx, cancelCtx = chromedp.NewContext(allocCtx)
 	}
