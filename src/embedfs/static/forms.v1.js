@@ -105,7 +105,11 @@
         });
         if (!submitResponse.ok) {
           const errorText = await submitResponse.text();
-          throw new Error(`Submission failed: ${submitResponse.status} ${errorText}`);
+          this.showError(`Submission failed: ${submitResponse.status} ${errorText}`);
+          if (this.submitBtn) {
+            this.submitBtn.disabled = false;
+          }
+          return;
         }
         const result = await submitResponse.json();
         if (result.ok) {
@@ -116,12 +120,15 @@
           }
           await this.fetchToken();
         } else {
-          throw new Error("Unexpected response from server");
+          this.showError("Unexpected response from server");
+          if (this.submitBtn) {
+            this.submitBtn.disabled = false;
+          }
+          return;
         }
       } catch (error) {
         console.error("Form submission error:", error);
-        const errorMessage = error instanceof Error ? error.message : "Unknown error";
-        this.showError(errorMessage);
+        this.showError(error instanceof Error ? error.message : "Unknown error");
         if (this.submitBtn) {
           this.submitBtn.disabled = false;
         }
