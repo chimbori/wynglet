@@ -99,16 +99,7 @@ func TestTakeScreenshot_HiddenWithClass(t *testing.T) {
 	defer cancel()
 
 	// HTML with a hidden class - simulates real-world scenario
-	url := `data:text/html,<html>
-		<head>
-			<style>
-				.hidden { display: none !important; }
-			</style>
-		</head>
-		<body>
-			<div id='content' class='hidden' style='width:200px;height:100px;background:blue;'>Hidden by Class</div>
-		</body>
-	</html>`
+	url := "data:text/html,<html><head><style>.hidden { display: none !important; }</style></head><body><div id='content' class='hidden' style='width:200px;height:100px;background:blue;'>Hidden by Class</div></body></html>"
 	selector := "#content"
 
 	screenshot, err := TakeScreenshot(ctx, url, selector)
@@ -159,21 +150,11 @@ func TestTakeScreenshot_ComplexHiddenScenario(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 	defer cancel()
 
-	// HTML with multiple hiding mechanisms: class, CSS, and inline styles
-	url := `data:text/html,<html>
-		<head>
-			<style>
-				.hidden { display: none !important; }
-				#content { visibility: hidden !important; }
-			</style>
-		</head>
-		<body>
-			<div id='content' class='hidden' style='width:200px;height:100px;background:orange;display:none;'>Multi-hidden Content</div>
-		</body>
-	</html>`
-	selector := "#content"
+	// HTML with multiple hiding mechanisms: CSS class and inline styles with !important
+	// The element is hidden by both a class (.hidden) and inline styles (display:none, visibility:hidden)
+	url := "data:text/html,<html><body style='background:white;'><style>.hidden { display: none !important; }</style><div id='content' class='hidden' style='width:200px;height:100px;background:orange;visibility:hidden;'>Multi-hidden Content</div></body></html>"
 
-	screenshot, err := TakeScreenshot(ctx, url, selector)
+	screenshot, err := TakeScreenshot(ctx, url, "#content")
 	if err != nil {
 		t.Fatalf("Expected no error for complex hidden element, got: %s", err.Error())
 	}

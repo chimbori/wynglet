@@ -68,7 +68,7 @@ func TakeScreenshot(ctx context.Context, url, selector string) (png []byte, err 
 	js := fmt.Sprintf(`(function() {
 		var el = document.querySelector(%s);
 		if (el) {
-			// 1. Remove the `hidden` class, if one is present.
+			// 1. Remove the 'hidden' class, if one is present.
 			el.classList.remove('hidden');
 			// 2. Force inline style with !important
 			el.style.cssText = 'display: block !important; visibility: visible !important;';
