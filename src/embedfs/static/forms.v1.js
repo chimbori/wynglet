@@ -46,7 +46,11 @@
           credentials: "omit"
         });
         if (!tokenResponse.ok) {
-          this.showError("Failed to obtain submission token");
+          if (tokenResponse.status === 429) {
+            this.showError("Submissions from your IP address are being throttled. Please wait a while before trying again.");
+          } else {
+            this.showError("Failed to obtain submission token");
+          }
           if (this.submitBtn) {
             this.submitBtn.disabled = true;
           }
@@ -104,8 +108,12 @@
           }
         });
         if (!submitResponse.ok) {
-          const errorText = await submitResponse.text();
-          this.showError(`Submission failed: ${submitResponse.status} ${errorText}`);
+          if (submitResponse.status === 429) {
+            this.showError("Submissions from your IP address are being throttled. Please wait a while before trying again.");
+          } else {
+            const errorText = await submitResponse.text();
+            this.showError(`Submission failed: ${submitResponse.status} ${errorText}`);
+          }
           if (this.submitBtn) {
             this.submitBtn.disabled = false;
           }
