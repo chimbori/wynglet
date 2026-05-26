@@ -102,6 +102,10 @@ func TakeScreenshot(ctx context.Context, url, selector string) (png []byte, err 
 		return nil, err
 	}
 
+	if len(buf) == 0 {
+		return nil, fmt.Errorf("empty screenshot")
+	}
+
 	return buf, nil
 }
 
