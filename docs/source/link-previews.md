@@ -101,9 +101,10 @@ Pre-generate link previews for an entire site by importing a sitemap URL. The im
 
 ## Example
 
-Here’s an example of a preview image design:
+Here’s the live version of the automatically-generated OpenGraph for this page:
 
-![Example](https://wynglet.chimbori.dev/example.png)
+<img src="https://wynglet.chimbori.net/link-previews/v1?sel=%23link-preview-alt&url=https://wynglet.chimbori.dev/link-previews"
+  class="rounded-4xl" alt="Example">
 
 Test your Wynglet installation by posting your original page URL to any social platform and seeing the preview appear.
 
