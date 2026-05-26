@@ -64,11 +64,16 @@ func TakeScreenshot(ctx context.Context, url, selector string) (png []byte, err 
 	}
 
 	// Un-hide the selected element before attempting a screenshot.
+	// Uses three approaches (cumulative) to ensure visibility.
 	js := fmt.Sprintf(`(function() {
 		var el = document.querySelector(%s);
 		if (el) {
-			el.style.visibility = '';
-			el.style.display = 'block';
+			// 1. Remove the `hidden` class, if one is present.
+			el.classList.remove('hidden');
+			// 2. Force inline style with !important
+			el.style.cssText = 'display: block !important; visibility: visible !important;';
+			// 3. Use setAttribute with style override
+			el.setAttribute('style', 'display: block !important; visibility: visible !important;');
 			return true;
 		}
 		return false;

@@ -88,6 +88,103 @@ func TestTakeScreenshot_HiddenElement(t *testing.T) {
 	assertValidPNG(t, screenshot)
 }
 
+func TestTakeScreenshot_HiddenWithClass(t *testing.T) {
+	// Test that elements hidden with a CSS class are made visible
+	// This validates Option 1: Remove the 'hidden' class
+	if testing.Short() {
+		t.Skip("Skipping test that requires Chrome/Chromium in short mode")
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
+
+	// HTML with a hidden class - simulates real-world scenario
+	url := `data:text/html,<html>
+		<head>
+			<style>
+				.hidden { display: none !important; }
+			</style>
+		</head>
+		<body>
+			<div id='content' class='hidden' style='width:200px;height:100px;background:blue;'>Hidden by Class</div>
+		</body>
+	</html>`
+	selector := "#content"
+
+	screenshot, err := TakeScreenshot(ctx, url, selector)
+	if err != nil {
+		t.Fatalf("Expected no error for element hidden with class, got: %s", err.Error())
+	}
+
+	if len(screenshot) == 0 {
+		t.Fatal("Expected non-empty screenshot data for element hidden with class")
+	}
+
+	assertValidPNG(t, screenshot)
+}
+
+func TestTakeScreenshot_HiddenWithImportantStyle(t *testing.T) {
+	// Test that elements hidden with !important inline styles are made visible
+	// This validates Option 2: Force inline style with !important override
+	if testing.Short() {
+		t.Skip("Skipping test that requires Chrome/Chromium in short mode")
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
+
+	// HTML with !important styles - tests the cssText override approach
+	url := "data:text/html,<html><body><div id='content' style='width:200px;height:100px;background:green;display:none !important; visibility:hidden !important;'>Hidden with !important</div></body></html>"
+	selector := "#content"
+
+	screenshot, err := TakeScreenshot(ctx, url, selector)
+	if err != nil {
+		t.Fatalf("Expected no error for element with !important styles, got: %s", err.Error())
+	}
+
+	if len(screenshot) == 0 {
+		t.Fatal("Expected non-empty screenshot data for element with !important styles")
+	}
+
+	assertValidPNG(t, screenshot)
+}
+
+func TestTakeScreenshot_ComplexHiddenScenario(t *testing.T) {
+	// Test a complex scenario combining multiple hiding techniques
+	// This validates that all three approaches work together
+	if testing.Short() {
+		t.Skip("Skipping test that requires Chrome/Chromium in short mode")
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
+
+	// HTML with multiple hiding mechanisms: class, CSS, and inline styles
+	url := `data:text/html,<html>
+		<head>
+			<style>
+				.hidden { display: none !important; }
+				#content { visibility: hidden !important; }
+			</style>
+		</head>
+		<body>
+			<div id='content' class='hidden' style='width:200px;height:100px;background:orange;display:none;'>Multi-hidden Content</div>
+		</body>
+	</html>`
+	selector := "#content"
+
+	screenshot, err := TakeScreenshot(ctx, url, selector)
+	if err != nil {
+		t.Fatalf("Expected no error for complex hidden element, got: %s", err.Error())
+	}
+
+	if len(screenshot) == 0 {
+		t.Fatal("Expected non-empty screenshot data for complex hidden element")
+	}
+
+	assertValidPNG(t, screenshot)
+}
+
 func TestTakeScreenshot_MissingSelector(t *testing.T) {
 	ctx := context.Background()
 	url := "https://example.com"
