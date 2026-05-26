@@ -3,15 +3,18 @@
  *
  * Handles form submission for all Wynglet forms on a page.
  *
- * Usage: Add the `data-wynglet-form-url` attribute to any form:
- * <form data-wynglet-form-url="https://wynglet.example.com" name="contact-form">
- *   <!-- form fields -->
+ * Usage: Add the `data-wynglet-form-url` attribute to any form and include a hidden `_form_id` field:
+ * <form data-wynglet-form-url="https://wynglet.example.com">
+ *   <input type="hidden" name="_form_id" value="contact-form" required>
+ *   <input type="hidden" name="_token" required>
+ *   <!-- + human-visible form fields -->
  * </form>
  *
  * The script will:
  * 1. Scan for all forms with `data-wynglet-form-url` attribute.
- * 2. Fetch CSRF tokens for each form (use separate `name` attributes for multiple forms).
- * 3. Handle form submission and display status messages. (add a text element that matches the selector `.status`).
+ * 2. Validate that the form has a `_form_id` hidden field.
+ * 3. Fetch CSRF tokens for each form using the form ID.
+ * 4. Submit the form and display the status in a text element matching selector `.status`.
  */
 interface FormSubmissionResponse {
   ok: boolean;
@@ -21,24 +24,29 @@ interface FormSubmissionResponse {
 class WyngletForm {
   private form: HTMLFormElement;
   private baseUrl: string;
+  private formIdInput: HTMLInputElement | null;
+  private tokenInput: HTMLInputElement | null;
   private submitBtn: HTMLButtonElement | null;
   private statusDiv: HTMLElement | null;
-  private tokenInput: HTMLInputElement | null;
 
   constructor(formElement: HTMLFormElement) {
     this.form = formElement;
     this.baseUrl = formElement.getAttribute('data-wynglet-form-url') || '';
+    this.formIdInput = formElement.querySelector('input[name="_form_id"]');
+    this.tokenInput = formElement.querySelector('input[name="_token"]');
     this.submitBtn = formElement.querySelector('button[type="submit"]');
     this.statusDiv = formElement.querySelector('.status');
-    this.tokenInput = formElement.querySelector('input[name="_token"]');
 
     if (!this.baseUrl) {
-      console.warn('Form is missing data-wynglet-form-url attribute', formElement);
+      console.warn('Form is missing `data-wynglet-form-url` attribute', formElement);
       return;
     }
-
     if (!this.tokenInput) {
-      console.warn('Form is missing token input field', formElement);
+      console.warn('Form is missing `token` input field', formElement);
+      return;
+    }
+    if (!this.formIdInput) {
+      console.error('Form is missing required `_form_id` hidden field', formElement);
       return;
     }
 
@@ -48,7 +56,16 @@ class WyngletForm {
 
   private async fetchToken(): Promise<void> {
     try {
-      const formId = this.form.getAttribute('name') || 'default-form';
+      if (!this.formIdInput || !this.formIdInput.value) {
+        console.error('Form ID field is empty or missing');
+        this.showError('Form configuration error');
+        if (this.submitBtn) {
+          this.submitBtn.disabled = true;
+        }
+        return;
+      }
+
+      const formId = this.formIdInput.value;
       const tokenUrl = `${this.baseUrl}/forms/v1/token?form_id=${formId}`;
 
       const tokenResponse = await fetch(tokenUrl, {

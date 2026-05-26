@@ -1,23 +1,29 @@
 (() => {
-  // forms/forms.ts
+  // forms/forms.v1.ts
   var WyngletForm = class {
     form;
     baseUrl;
+    formIdInput;
+    tokenInput;
     submitBtn;
     statusDiv;
-    tokenInput;
     constructor(formElement) {
       this.form = formElement;
       this.baseUrl = formElement.getAttribute("data-wynglet-form-url") || "";
+      this.formIdInput = formElement.querySelector('input[name="_form_id"]');
+      this.tokenInput = formElement.querySelector('input[name="_token"]');
       this.submitBtn = formElement.querySelector('button[type="submit"]');
       this.statusDiv = formElement.querySelector(".status");
-      this.tokenInput = formElement.querySelector('input[name="_token"]');
       if (!this.baseUrl) {
-        console.warn("Form is missing data-wynglet-form-url attribute", formElement);
+        console.warn("Form is missing `data-wynglet-form-url` attribute", formElement);
         return;
       }
       if (!this.tokenInput) {
-        console.warn("Form is missing token input field", formElement);
+        console.warn("Form is missing `token` input field", formElement);
+        return;
+      }
+      if (!this.formIdInput) {
+        console.error("Form is missing required `_form_id` hidden field", formElement);
         return;
       }
       this.form.addEventListener("submit", (e) => this.handleSubmit(e));
@@ -25,7 +31,15 @@
     }
     async fetchToken() {
       try {
-        const formId = this.form.getAttribute("name") || "default-form";
+        if (!this.formIdInput || !this.formIdInput.value) {
+          console.error("Form ID field is empty or missing");
+          this.showError("Form configuration error");
+          if (this.submitBtn) {
+            this.submitBtn.disabled = true;
+          }
+          return;
+        }
+        const formId = this.formIdInput.value;
         const tokenUrl = `${this.baseUrl}/forms/v1/token?form_id=${formId}`;
         const tokenResponse = await fetch(tokenUrl, {
           method: "GET",
