@@ -116,6 +116,12 @@
   }
 }
 
+@utility btn-blue {
+  @apply btn-pill shadow-sm
+    bg-blue-500 disabled:bg-gray-300
+    text-white disabled:text-white;
+}
+
 @utility background-blue {
   background: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
 }
@@ -134,7 +140,8 @@
 }
 
 @utility btn-pill {
-  @apply inline-block border-none rounded-full my-1 px-6 py-1 font-display no-underline;
+  @apply inline-block border-none rounded-full my-1 px-6 py-1 font-display no-underline
+    cursor-pointer disabled:cursor-not-allowed;
 }
 
 @utility btn-white {

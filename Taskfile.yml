@@ -130,8 +130,8 @@ tasks:
     desc: Build docs using Inkwell
     dir: 'docs'
     cmds:
-      - tailwindcss --input source/src.css --output source/gen.css
-      - tailwindcss --input source/src.css --output source/gen.min.css --minify
+      - tailwindcss --content "source/**/*.md" --input source/src.css --output source/gen.css
+      - tailwindcss --content "source/**/*.md" --input source/src.css --output source/gen.min.css --minify
       - inkwell serve
 
   setup:

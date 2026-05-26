@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5">
+  <meta name="robots" content="noodp,noydir">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title itemprop="name">Feedback</title>
+  <meta name="description" itemprop="description" content="Send feedback, report bugs, or request features for Wynglet">
+  <meta name="theme-color" content="#4743db">
+
+  <meta property="og:url" content="https://wynglet.chimbori.dev/feedback">
+  <meta property="og:title" content="Feedback">
+  <meta property="og:description" content="Send feedback, report bugs, or request features for Wynglet">
+  <meta property="og:image" content="https://wynglet.chimbori.net/link-previews/v1?url=https://wynglet.chimbori.dev/feedback">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="" rel="stylesheet">
+
+  <link rel="canonical" href="https://wynglet.chimbori.dev/feedback">
+  <link rel="apple-touch-icon-precomposed" sizes="192x192" href="favicon.svg">
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.svg">
+  <link rel="stylesheet" href="gen.min.css">
+  <link rel="alternate" type="application/atom+xml" title="Wynglet" href="//chimbori.com/feed.xml">
+  <meta name="go-import" content="wynglet.chimbori.dev git https://github.com/chimbori/wynglet src">
+
+  <script src="/htmx.min.js"></script>
+  <meta name="htmx-config" content='{"selfRequestsOnly":false}' />
+</head>
+
+<body hx-boost="true">
+  <header class="py-8 background-blue">
+    <div class="mx-2 md:mx-auto px-2">
+      <a class="inline-block mb-4 font-display font-medium text-2xl" href="/">Wynglet</a><nav class="print:hidden">
+  <ul>
+<li><a href="/">🏠 Home</a></li>
+<li><a href="/installation">Installation</a></li>
+<li><a href="/link-previews">Open Graph</a></li>
+<li><a href="/forms">Forms</a></li>
+<li><a href="/qr-codes">QR Codes</a></li>
+<li><a href="/rating-widget">Ratings</a></li>
+<li><a href="/dashboard">Dashboard</a></li><li>
+      <form class="print:hidden inline white-placeholder" target="_blank" action="https://www.google.com/search" hx-boost="false" enterkeyhint="search">
+        <input type="search" name="q" size="14" placeholder="🔍 &nbsp; Search" class="px-3 btn-white">
+        <input type="hidden" name="sitesearch" value="wynglet.chimbori.dev">
+      </form>
+    </li>
+    <li>
+      <a target="_blank" href="https://github.com/chimbori/wynglet"
+        class="bg-linear-to-b from-zinc-50 hover:from-zinc-100 to-zinc-100 hover:to-zinc-200 shadow mr-2 px-3 py-2 rounded-lg text-black text-sm no-underline">
+        <img src="/github.svg" class="inline mr-1 size-4" alt="GitHub" />
+        <span hx-get="https://wynglet.chimbori.net/github/v1/chimbori/wynglet/stars" hx-trigger="load"></span> stars
+      </a>
+    </li>
+  </ul>
+</nav></div>
+  </header>
+  <article class="mx-2 md:mx-auto my-8 md:my-16 px-2 max-w-3xl"><h1 id="send-feedback">Send Feedback</h1>
+<p>Have a bug to report, a feature idea, or just want to share your thoughts? We’d love to hear from you!</p>
+<div class="highlighted-box">
+This form is powered by the Forms feature in Wynglet itself, so this is a Live Demo as well as an actual part of the documentation!
+</div>
+<form data-wynglet-form-url="https://wynglet.chimbori.net" novalidate class="max-w-2xl">
+  <input type="hidden" name="_form_id" value="wynglet-feedback">
+  <input type="hidden" name="_subject" value="New Wynglet Feedback Submission">
+  <input type="hidden" name="_honeypot" value="">
+  <input type="hidden" name="_token" value="">
+  <fieldset class="my-4">
+    <legend class="block mb-4 font-bold">Type of Feedback <span class="text-red-600">*</span></legend>
+    <div class="space-y-2">
+      <label class="block">
+        <input type="radio" name="feedback_type" value="bug-report" required class="mr-2"> Bug Report
+      </label>
+      <label class="block">
+        <input type="radio" name="feedback_type" value="feature-request" class="mr-2"> Feature Request
+      </label>
+      <label class="block">
+        <input type="radio" name="feedback_type" value="general-feedback" class="mr-2"> General Feedback
+      </label>
+    </div>
+  </fieldset>
+  <fieldset class="my-4">
+    <label for="name" class="block mb-2">Name</label>
+    <input type="text" id="name" name="name" class="px-4 py-2 border border-gray-300 rounded-lg w-full" placeholder="Your name (optional)">
+  </fieldset>
+  <fieldset class="my-4">
+    <label for="email" class="block mb-2">Email <span class="text-red-600">*</span></label>
+    <input type="email" id="email" name="email" required class="px-4 py-2 border border-gray-300 rounded-lg w-full" placeholder="your.email@example.com">
+  </fieldset>
+  <fieldset class="my-4">
+    <label for="message" class="block mb-2">Message <span class="text-red-600">*</span></label>
+    <textarea id="message" name="message" required class="px-4 py-2 border border-gray-300 rounded-lg w-full min-h-[120px]" placeholder="Tell us what's on your mind..."></textarea>
+  </fieldset>
+  <div class="my-6">
+    <button type="submit" disabled class="btn-blue">Send Feedback</button>
+  </div>
+  <div class="hidden mt-4 p-4 border-l-4 rounded status"></div>
+</form>
+<style>
+.status.success {
+  @apply block bg-green-50 border-l-green-400 text-green-900;
+}
+.status.error {
+  @apply block bg-red-50 border-l-orange-500 text-red-900;
+}
+</style>
+<script src="https://wynglet.chimbori.net/static/forms.v1.min.js"></script>
+</article>
+
+  <footer>
+    <div class="md:flex mx-2 md:mx-auto px-2 max-w-3xl font-display">
+      <div class="md:flex-auto"><nav class="print:hidden">
+  <ul>
+    
+<li><a href="/">🏠 Home</a></li>
+<li><a href="/installation">Installation</a></li>
+<li><a href="/link-previews">Open Graph</a></li>
+<li><a href="/forms">Forms</a></li>
+<li><a href="/qr-codes">QR Codes</a></li>
+<li><a href="/rating-widget">Ratings</a></li>
+<li><a href="/dashboard">Dashboard</a></li>
+  </ul>
+</nav></div>
+    </div>
+  </footer>
+<div class="hidden relative mx-auto px-24 py-16 w-[1200px] h-[630px] text-white background-orange" id="link-preview">
+  <h1 class="text-shadow-lg mb-12 text-7xl/21 line-clamp-3">Feedback</h1>
+  <h2 class="text-shadow-md pr-24 text-5xl/18 line-clamp-3">Send feedback, report bugs, or request features for Wynglet</h2>
+  <img class="right-24 bottom-16 absolute size-24" style="filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.2));" src="favicon.svg">
+</div>
+</body>
+
+</html>

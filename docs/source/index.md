@@ -115,7 +115,7 @@ If this interests you, I’d love for you to contribute to Wynglet!
 
 - **[Documentation](https://wynglet.chimbori.dev/)**: Full documentation and guides
 - **[GitHub Issues](https://github.com/chimbori/wynglet/issues)**: Report bugs and request features
-- **[Feedback](https://chimbori.com/feedback)**: Send general feedback
+- **[Feedback](/feedback)**: Send Feedback
 - **[Source Code](https://github.com/chimbori/wynglet)**: View and contribute to the source
 
 # License

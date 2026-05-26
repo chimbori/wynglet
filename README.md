@@ -81,7 +81,7 @@ Then test it by sharing your page on social media. For more details, see [OpenGr
 
 - **[Documentation](https://wynglet.chimbori.dev/)**: Full documentation and guides
 - **[GitHub Issues](https://github.com/chimbori/wynglet/issues)**: Report bugs and request features
-- **[Feedback](https://chimbori.com/feedback)**: Send general feedback
+- **[Feedback](https://wynglet.chimbori.dev/feedback)**: Send Feedback
 - **[Source Code](https://github.com/chimbori/wynglet)**: View and contribute to the source
 
 # Tech Stack

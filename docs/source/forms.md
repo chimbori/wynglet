@@ -8,6 +8,8 @@ template: app-page
 
 Accept form submissions from your static site with built-in CSRF token protection, rate limiting, and spam detection.
 
+Check out a [live example](/feedback) right here within the documentation!
+
 ## Overview
 
 Wynglet provides a secure form submission API that allows your static site visitors to submit data without requiring a backend.
