@@ -162,13 +162,13 @@ class WyngletForm {
 
       if (result.ok) {
         this.showSuccess('Thank you! Your message has been sent.');
+        if (this.submitBtn) {
+          this.submitBtn.disabled = true;
+        }
         this.form.reset();
         if (this.tokenInput) {
           this.tokenInput.value = '';
         }
-
-        // Fetch a new token for potential resubmission
-        await this.fetchToken();
       } else {
         this.showError('Unexpected response from server');
         if (this.submitBtn) {
