@@ -38,7 +38,7 @@
 }
 
 @utility btn-common {
-  @apply px-4 py-1 rounded-3xl inline-block
+  @apply px-4 py-1 rounded-3xl inline-block border-none
     cursor-pointer disabled:cursor-not-allowed
     font-display font-semibold whitespace-nowrap transition-all
     disabled:border-0
@@ -218,6 +218,10 @@
     svg {
       @apply size-8;
     }
+  }
+  .btn-github {
+    @apply bg-linear-to-b from-zinc-50 hover:from-zinc-100 to-zinc-100 hover:to-zinc-200
+      shadow mr-2 px-3 py-2 rounded-lg text-black text-sm no-underline;
   }
   .footer-links {
     p,

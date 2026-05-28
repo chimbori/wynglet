@@ -4,18 +4,32 @@ templ IndexTempl() {
 	<!DOCTYPE html>
 	<html lang="en">
 		<head>
-			<title>Wynglet</title>
+			<title>Wynglet - Dynamic Features for Static Sites</title>
 			<meta name="viewport" content="width=device-width,initial-scale=1"/>
+			<meta name="description" content="Wynglet: A self-hosted toolkit for static sites. Add dynamic features like forms, link previews, QR codes, and ratings without third-party services."/>
 			<link rel="preload" href="/static/InterVariable.woff2" as="font" crossorigin="" type="font/woff2"/>
 			<link rel="preload" href="/static/GoogleSansFlex.woff2" as="font" crossorigin="" type="font/woff2"/>
 			<link rel="manifest" href="/app.webmanifest"/>
 			<link rel="stylesheet" href="/static/gen.min.css"/>
 			<link rel="icon" href="/static/favicon.svg"/>
+			<script src="/static/htmx.min.js"></script>
+			<meta name="htmx-config" content='{"selfRequestsOnly":false}'/>
 		</head>
-		<body class="text-base mx-auto">
-			<main>
-				<h1 class="text-2xl mt-16 mb-4">Wynglet</h1>
-				<p class="text-6xl text-center mt-12">🦋</p>
+		<body>
+			<main class="mx-auto p-16 max-w-3xl min-w-md text-center">
+				<p class="mb-8 text-8xl">🦋</p>
+				<h1 class="mb-8 text-4xl font-bold">Wynglet</h1>
+				<p class="my-16 text-xl">
+					A self-hosted toolkit that brings dynamic capabilities to static websites.
+					Add OpenGraph link preview images, forms, QR codes, and ratings without third-party services.
+				</p>
+				<div class="my-8">
+					<a class="btn-submit mx-4" target="_blank" href="https://wynglet.chimbori.dev/">Learn more</a>
+					<a class="btn-github" target="_blank" href="https://github.com/chimbori/wynglet">
+						<img src="/static/github.svg" class="inline mr-1 size-4" alt="GitHub"/>
+						<span hx-get="https://wynglet.chimbori.net/github/v1/chimbori/wynglet/stars" hx-trigger="load"></span> stars
+					</a>
+				</div>
 			</main>
 		</body>
 	</html>
