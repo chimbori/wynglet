@@ -1,6 +1,6 @@
 debug: true
 title: Wynglet
-description: 'The Dynamic Companion for your Static Sites: a self-hosted single-binary toolkit of embeddable services: OpenGraph preview images, QR codes, and Rating widgets'
+description: 'A self-hosted toolkit that brings dynamic capabilities to static websites. Add OpenGraph link preview images, forms, QR codes, and ratings without third-party services.'
 urls:
   root: https://wynglet.chimbori.dev
   css: gen.min.css
