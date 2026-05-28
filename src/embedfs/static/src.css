@@ -1,6 +1,6 @@
 @import 'tailwindcss';
 
-@source "**/*.{md,html,templ}";
+@source "../../**/*.{md,html,templ}";
 
 @font-face {
   font-family: InterVariable;
