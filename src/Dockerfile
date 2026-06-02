@@ -15,7 +15,7 @@ COPY . .
 RUN go build \
   -o wynglet \
   -trimpath \
-  -ldflags="-w -s -X 'wynglet.chimbori.dev/conf.BuildTimestamp=$(TZ=":America/Los_Angeles" date +"%Y-%m-%d %H:%M:%S")'"
+  -ldflags="-w -s -X 'wynglet.chimbori.dev/conf.BuildTimestamp=$(TZ="America/Los_Angeles" date +"%Y-%m-%d %H:%M:%S")'"
 
 # Copy to deployable image, with Chrome Headless
 
