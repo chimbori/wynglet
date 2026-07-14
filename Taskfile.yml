@@ -8,14 +8,14 @@ tasks:
   run:
     desc: Run the binary
     deps: [sqlc, templ, css, fmt, esbuild]
-    dir: 'src'
+    dir: src
     cmds:
       - go run . -config="{{.CONFIG_YML}}"
 
   build:
     desc: Build a binary targeting the current OS
     deps: [fmt, esbuild]
-    dir: 'src'
+    dir: src
     cmds:
       - |-
         CGO_ENABLED=0 \
@@ -25,19 +25,19 @@ tasks:
 
   test:
     desc: Run all tests
-    dir: 'src'
+    dir: src
     cmds:
       - go test -count=1 ./...
 
   testv:
     desc: Run all tests, with verbose output
-    dir: 'src'
+    dir: src
     cmds:
       - go test -v -count=1 ./...
 
   fmt:
     desc: Reformat all source files, including templates
-    dir: 'src'
+    dir: src
     cmds:
       - go mod tidy
       - gofumpt -l -w .
@@ -46,16 +46,13 @@ tasks:
 
   lint:
     desc: Lint sources
-    dir: 'src'
+    dir: src
     cmds:
       - golangci-lint run
 
   sqlc:
     desc: Regenerate SQLC-generated sources
-    dir: 'src'
-    env:
-      CGO_CFLAGS: '-DHAVE_STRCHRNUL -mmacosx-version-min=15.4'
-      MACOSX_DEPLOYMENT_TARGET: '15.4'
+    dir: src
     cmds:
       - sqlc generate
 
@@ -84,14 +81,14 @@ tasks:
 
   templ:
     desc: Regenerate Templ templates
-    dir: 'src'
+    dir: src
     cmds:
       - templ generate
       - templ fmt .
 
   css:
     desc: Regenerate CSS (minified & pretty-printed)
-    dir: 'src'
+    dir: src
     cmds:
       - tailwindcss --input embedfs/static/src.css --output embedfs/static/gen.css
       - tailwindcss --input embedfs/static/src.css --output embedfs/static/gen.min.css --minify
@@ -100,7 +97,7 @@ tasks:
 
   esbuild:
     desc: Bundle and minify TypeScript with esbuild
-    dir: 'src'
+    dir: src
     cmds:
       - esbuild --bundle --target=es2024 dashboard/dashboard.ts --outfile=embedfs/static/dashboard.js
       - esbuild --bundle --target=es2024 dashboard/dashboard.ts --outfile=embedfs/static/dashboard.min.js --minify --minify-identifiers
@@ -111,7 +108,7 @@ tasks:
 
   update:
     desc: Update all dependencies
-    dir: 'src'
+    dir: src
     deps: [fmt]
     cmds:
       - go get -u -t ./...
@@ -122,7 +119,7 @@ tasks:
   install:
     desc: Build and install the binary
     deps: [fmt]
-    dir: 'src'
+    dir: src
     cmds:
       - go install .
 
@@ -136,10 +133,7 @@ tasks:
 
   setup:
     desc: Setup pre-requisites on a new machine
-    dir: 'src'
-    env:
-      CGO_CFLAGS: '-DHAVE_STRCHRNUL -mmacosx-version-min=15.4'
-      MACOSX_DEPLOYMENT_TARGET: '15.4'
+    dir: src
     cmds:
       - brew install tailwindcss libpq esbuild
       - brew link libpq --force
